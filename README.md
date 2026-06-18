@@ -44,6 +44,13 @@ Then the right skill activates automatically when you ask Claude to generate or 
 .NET project. You can also copy any `skills/<name>/` folder into your project's `.claude/skills/`
 directory to use it without the plugin.
 
+## Other assistants — Cursor, GitHub Copilot, Codex
+
+The same knowledge is available for other AI coding assistants under
+[`integrations/`](integrations/): condensed, self-contained guides in each tool's native format
+(Cursor `.mdc` rules, Copilot `.instructions.md`, Codex `AGENTS.md`) that link back to the reference
+files here for depth. See [`integrations/README.md`](integrations/README.md) for where to drop each one.
+
 ## Versioning
 
 Content tracks **SelectPdf v26.3** ("2026 Vol 3"). API signatures and feature availability are taken
