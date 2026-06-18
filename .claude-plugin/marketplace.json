@@ -1,0 +1,21 @@
+{
+  "name": "selectpdf",
+  "owner": {
+    "name": "SelectPdf",
+    "url": "https://selectpdf.com"
+  },
+  "metadata": {
+    "description": "AI tools for SelectPdf — skills, agents and references that teach AI coding assistants to use the SelectPdf .NET library and online API correctly.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "selectpdf",
+      "source": "./plugins/selectpdf",
+      "description": "Expert skills for the SelectPdf .NET library — HTML to PDF, PDF creation and editing, forms, signatures, accessible PDF/UA and PDF/A, for both the commercial Select.Pdf library and the free Select.HtmlToPdf Community Edition.",
+      "version": "26.3.0",
+      "category": "development",
+      "keywords": ["pdf", "html-to-pdf", "dotnet", "csharp", "vb.net", "selectpdf", "pdf-generation"]
+    }
+  ]
+}
