@@ -12,10 +12,22 @@
     {
       "name": "selectpdf",
       "source": "./plugins/selectpdf",
-      "description": "Expert skills for the SelectPdf .NET library — HTML to PDF, PDF creation and editing, forms, signatures, accessible PDF/UA and PDF/A, for both the commercial Select.Pdf library and the free Select.HtmlToPdf Community Edition.",
-      "version": "26.3.0",
+      "description": "Expert skills for the SelectPdf .NET libraries: SelectPdf.Universal (cross-platform: Windows, Linux, macOS on Apple Silicon, Docker) and the classic Select.Pdf library for Windows, each with its free Community Edition. HTML to PDF, Word to PDF, PDF creation and editing, merge, AcroForms, digital signatures and validation, redaction, encryption, PDF to text/image, accessible tagged PDF/UA and PDF/A, ZUGFeRD / Factur-X. C# and VB.NET.",
+      "version": "26.4.0",
       "category": "development",
-      "keywords": ["pdf", "html-to-pdf", "dotnet", "csharp", "vb.net", "selectpdf", "pdf-generation"]
+      "keywords": [
+        "cross-platform",
+        "csharp",
+        "docker",
+        "dotnet",
+        "html-to-pdf",
+        "linux",
+        "pdf",
+        "pdf-generation",
+        "selectpdf",
+        "vb.net",
+        "word-to-pdf"
+      ]
     }
   ]
 }

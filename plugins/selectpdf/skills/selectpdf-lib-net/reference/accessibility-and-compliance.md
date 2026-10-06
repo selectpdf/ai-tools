@@ -1,4 +1,4 @@
-# Accessible (tagged) PDF and compliance — PDF/UA, PDF/A, PDF/X
+# Accessible (tagged) PDF and compliance — PDF/UA, PDF/A, PDF/X, e-invoices
 
 Generate tagged accessible PDF (PDF/UA-1), PDF/A archival documents (including PDF/A-3), and PDF/X output from HTML with the commercial Select.Pdf .NET library.
 
@@ -71,6 +71,96 @@ converter.Options.Language = "en-US"
 
 Dim doc As PdfDocument = converter.ConvertUrl("https://www.example.com/invoice")
 doc.Save("invoice-pdfa3a.pdf")
+doc.Close()
+```
+
+## ZUGFeRD / Factur-X electronic invoices (v26.4)
+
+`PdfDocument.AddZugferdInvoice` turns a PDF/A-3 document into a hybrid electronic invoice: it embeds the invoice XML as a PDF/A-3 associated file, names it as the standards require (`factur-x.xml`, or `xrechnung.xml` for the XRechnung profile), and writes the ZUGFeRD / Factur-X identification metadata that invoice software looks for. The carrier must be a **PDF/A-3** document, so set `PdfStandard` to `PdfA3B`, `PdfA3U` or `PdfA3A` on the conversion first (`PdfA3A` also makes the visible invoice accessible, which the standards recommend).
+
+- `ZugferdProfile` — the data profile of the XML: `Minimum`, `BasicWL`, `Basic`, `En16931`, `Extended`, `XRechnung`.
+- `PdfAttachmentRelationship` — how the XML relates to the visible page: `Alternative` when both carry exactly the same invoice content (mandatory in Germany for Basic, EN 16931, Extended and XRechnung); `Data` when the page carries more than the XML (always the case for Minimum and Basic WL); `Source` when the page was generated from the XML.
+- `ZugferdSchema` (optional 4th argument) — `FacturX10` (default, current) or `Zugferd20` (deprecated; only for recipients that still require it).
+- Overloads take the XML as a `Stream` or as a file path.
+
+Electronic invoices are a feature of the **commercial** library (not the Community Edition).
+
+```csharp
+using System.IO;
+using SelectPdf;
+
+HtmlToPdf converter = new HtmlToPdf();
+
+// the invoice standards require a PDF/A-3 carrier
+converter.Options.PdfStandard = PdfStandard.PdfA3B;
+PdfDocument doc = converter.ConvertUrl("https://example.com/invoice");
+
+using (FileStream xml = File.OpenRead("factur-x.xml"))
+{
+    doc.AddZugferdInvoice(xml, ZugferdProfile.En16931,
+        PdfAttachmentRelationship.Alternative);
+}
+
+doc.Save("invoice.pdf");
+doc.Close();
+```
+
+```vbnet
+Imports System.IO
+Imports SelectPdf
+
+Dim converter As New HtmlToPdf()
+
+' the invoice standards require a PDF/A-3 carrier
+converter.Options.PdfStandard = PdfStandard.PdfA3B
+Dim doc As PdfDocument = converter.ConvertUrl("https://example.com/invoice")
+
+Using xml As FileStream = File.OpenRead("factur-x.xml")
+    doc.AddZugferdInvoice(xml, ZugferdProfile.En16931, _
+        PdfAttachmentRelationship.Alternative)
+End Using
+
+doc.Save("invoice.pdf")
+doc.Close()
+```
+
+## Custom XMP metadata (v26.4)
+
+A PDF/A document may only carry metadata from schemas the standard predefines, unless the schema itself is described inside the XMP packet. `PdfDocument.AddXmpExtensionSchema(prefix, namespaceUri, schemaName, properties)` writes both halves, the schema declaration and the property values, so the document stays PDF/A conformant. `properties` is an `IDictionary<string, string>` mapping each property name to its value; each is declared as an external text property. For invoices use `AddZugferdInvoice`, which writes the required schema itself. Commercial library only.
+
+```csharp
+using System.Collections.Generic;
+using SelectPdf;
+
+HtmlToPdf converter = new HtmlToPdf();
+converter.Options.PdfStandard = PdfStandard.PdfA3B;
+PdfDocument doc = converter.ConvertUrl("https://example.com/report");
+
+doc.AddXmpExtensionSchema("acme", "https://example.com/ns/acme/1.0/", "Acme document metadata",
+    new Dictionary<string, string>
+    {
+        { "DocumentId", "R-2026-0042" },
+        { "Department", "Finance" }
+    });
+
+doc.Save("report.pdf");
+doc.Close();
+```
+
+```vbnet
+Imports System.Collections.Generic
+Imports SelectPdf
+
+Dim converter As New HtmlToPdf()
+converter.Options.PdfStandard = PdfStandard.PdfA3B
+Dim doc As PdfDocument = converter.ConvertUrl("https://example.com/report")
+
+Dim properties As New Dictionary(Of String, String)()
+properties.Add("DocumentId", "R-2026-0042")
+properties.Add("Department", "Finance")
+doc.AddXmpExtensionSchema("acme", "https://example.com/ns/acme/1.0/", "Acme document metadata", properties)
+
+doc.Save("report.pdf")
 doc.Close()
 ```
 

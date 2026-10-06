@@ -4,13 +4,15 @@
 > `AGENTS.md` (e.g. `For SelectPdf .NET work, follow ./docs/selectpdf-lib-net.md`).
 
 Use when generating or manipulating PDFs with the commercial SelectPdf library
-(`Select.Pdf` / `Select.Pdf.NetCore`). Self-hosted PDF toolkit for .NET, current as of v26.3. Full
+(`Select.Pdf` / `Select.Pdf.NetCore`). Self-hosted PDF toolkit for .NET, current as of v26.4. Full
 depth (every topic, C# + VB.NET) is in the reference files linked at the bottom — open the relevant one
 before writing non-trivial code.
 
 **Wrong edition?** Free Community Edition (`Select.HtmlToPdf`, HTML→PDF only, 5-page cap) → use the
 `selectpdf-lib-htmltopdf-net` guidance. Online REST API (`api.selectpdf.com`) → a `selectpdf-api-*`
 file. Check the `.csproj`: `Select.Pdf*` = this, `Select.HtmlToPdf*` = Community.
+
+**Cross-platform?** Linux, macOS on Apple Silicon, Docker, `SelectPdf.Universal`, or `using SelectPdf.Universal;` → use `selectpdf-lib-universal-net` instead (the APIs are close but not identical).
 
 ## Install
 
@@ -28,7 +30,7 @@ Install-Package Select.Pdf.NetCore.Blink
 Install-Package Select.Pdf.NetCore.Chromium.Windows
 ```
 
-Windows x86/x64 only (native engine deps); no Linux/macOS build. Blink needs .NET Fx 4.6.1+ / Core / 5–10.
+Classic packages: Windows x86/x64 only. For Linux (x64, ARM64), macOS on Apple Silicon or Docker → `SelectPdf.Universal` (`selectpdf-lib-universal-net`); one license covers both. Blink needs .NET Fx 4.6.1+ / Core / 5–10.
 
 ## License key
 
@@ -81,10 +83,12 @@ Engines via `Options.RenderingEngine`: `WebKit` (default, embedded), `WebKitRest
 - Tagged PDF/UA or PDF/A-3 → requires the **Chromium** (or Blink) engine and the **commercial** library.
 - "Trial" markings → license key unset or set too late.
 - File locked / not flushed → missing `doc.Close()`.
+- Page needs WebGL → off by default since v26.4; set `Options.WebGlEnabled = true`.
+- ZUGFeRD / Factur-X → set `Options.PdfStandard = PdfStandard.PdfA3B` (or 3U/3A) first, then `doc.AddZugferdInvoice(...)`.
 
 ## Faithfulness
 
-Only use APIs/options/enums documented in the reference files (sourced from the v26.3 SDK reference and
+Only use APIs/options/enums documented in the reference files (sourced from the v26.3 SDK reference, updated for v26.4, and
 official samples). Don't invent members, overloads, enum values, or defaults.
 
 ## Full reference (open the relevant file)
@@ -101,7 +105,7 @@ Base: `https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/
 - `security-and-signatures.md` — encryption, permissions, viewer prefs, digital signatures
 - `forms-and-extras.md` — AcroForms fill/create, compressor (Select.Pdf.Extras)
 - `extract-text-image-search.md` — PDF→text, search, PDF→image
-- `accessibility-and-compliance.md` — tagged PDF/UA-1, PDF/A-3, PDF/A, PDF/X (v26.3)
+- `accessibility-and-compliance.md` — tagged PDF/UA-1, PDF/A-3, PDF/A, PDF/X; ZUGFeRD / Factur-X, custom XMP (v26.4)
 - `html-to-image.md` — render pages to PNG/JPG
 - `deployment-azure-troubleshooting.md` — deployment, Azure, concurrency, troubleshooting
 - `api-cheatsheet.md` — quick lookup of classes, enums, options

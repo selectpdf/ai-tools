@@ -5,15 +5,16 @@ description: >-
   (Select.Pdf or Select.Pdf.NetCore NuGet packages). Use for HTML-to-PDF conversion, building PDFs
   from text/images/shapes/tables/templates, merging/splitting/stamping existing PDFs, AcroForms and
   digital signatures, encryption and permissions, PDF-to-text and PDF-to-image extraction, and
-  accessible tagged PDF/UA-1 and PDF/A-3 output. Trigger whenever a .NET app needs to create or
-  manipulate PDFs in-process with SelectPdf. This is the local library, NOT the online REST API
-  (for that, see the selectpdf-api-* skills).
+  accessible tagged PDF/UA-1 and PDF/A-3 output, and ZUGFeRD / Factur-X e-invoices. Trigger whenever a
+  .NET app on Windows uses the classic SelectPdf library (namespace SelectPdf). For Linux, macOS,
+  Docker or the SelectPdf.Universal namespace, use selectpdf-lib-universal-net instead. This is the
+  local library, NOT the online REST API (for that, see the selectpdf-api-* skills).
 ---
 
 # SelectPdf .NET Library (commercial)
 
 Expert guidance for the **commercial Select.Pdf** library — the full, self-hosted PDF toolkit for
-.NET. No external service, no print drivers: everything runs in-process. Current as of **v26.3**.
+.NET on Windows. No external service and no print drivers. Current as of **v26.4**.
 
 ## Pick the right skill first
 
@@ -21,6 +22,10 @@ Expert guidance for the **commercial Select.Pdf** library — the full, self-hos
   PDF creation, editing, forms, signatures, security, extraction, accessibility/compliance.
 - **Free Community Edition** — if the project uses `Select.HtmlToPdf` / `Select.HtmlToPdf.NetCore`
   (HTML→PDF only, capped at 5 pages), use the **`selectpdf-lib-htmltopdf-net`** skill instead.
+- **Cross-platform (SelectPdf.Universal)** — if the project references `SelectPdf.Universal` /
+  `SelectPdf.Universal.Native.*`, uses `using SelectPdf.Universal;`, or must run on **Linux, macOS on
+  Apple Silicon or Docker**, use the **`selectpdf-lib-universal-net`** skill (free edition:
+  `selectpdf-lib-htmltopdf-universal-net`). The APIs are close but not identical; do not mix them.
 - **Online REST API** — if the project calls `api.selectpdf.com` over HTTP (any language), this is
   the wrong skill; use a `selectpdf-api-*` skill.
 
@@ -53,8 +58,9 @@ Install-Package Select.Pdf.NetCore.Blink
 Install-Package Select.Pdf.NetCore.Chromium.Windows
 ```
 
-> **Platform:** the engines have native dependencies and run on **Windows x86/x64 only** — there is
-> no Linux/macOS build. The Blink engine requires .NET Framework 4.6.1+ (or .NET Core / 5–10).
+> **Platform:** the classic packages run on **Windows x86/x64 only**. For Linux (x64, ARM64), macOS on
+> Apple Silicon or Docker, use **SelectPdf.Universal** (see `selectpdf-lib-universal-net`); one license
+> covers both. The Blink engine requires .NET Framework 4.6.1+ (or .NET Core / 5–10).
 
 ## License key
 
@@ -155,7 +161,7 @@ Load the matching reference file for full prose, options and C#/VB samples.
 | Encryption, passwords, permissions, viewer preferences, digital signatures | `reference/security-and-signatures.md` |
 | Create and fill AcroForms; PDF compression (Select.Pdf.Extras) | `reference/forms-and-extras.md` |
 | Extract text from a PDF, search text, render PDF pages to images | `reference/extract-text-image-search.md` |
-| Accessible tagged PDF / PDF/UA-1, PDF/A-3, PDF/A, PDF/X compliance (v26.3) | `reference/accessibility-and-compliance.md` |
+| Accessible tagged PDF / PDF/UA-1, PDF/A-3, PDF/A, PDF/X; ZUGFeRD / Factur-X e-invoices and custom XMP metadata (v26.4) | `reference/accessibility-and-compliance.md` |
 | Render a web page to PNG/JPG | `reference/html-to-image.md` |
 | Deployment, Azure, performance/concurrency, troubleshooting common errors | `reference/deployment-azure-troubleshooting.md` |
 | Quick lookup of key classes, enums and option names | `reference/api-cheatsheet.md` |
@@ -174,10 +180,15 @@ Load the matching reference file for full prose, options and C#/VB samples.
 - **"Trial" markings / 5-page cap** → license key not set, or set too late. Set
   `GlobalProperties.LicenseKey` before any other SelectPdf call.
 - **Document not flushed / file locked** → you forgot `doc.Close()`.
+- **Page needs WebGL (3D charts, maps)** → WebGL is off by default since v26.4; set
+  `Options.WebGlEnabled = true`.
+- **ZUGFeRD / Factur-X invoice** → the document must be PDF/A-3 (`Options.PdfStandard = PdfStandard.PdfA3B`
+  or `PdfA3U`/`PdfA3A`) before calling `doc.AddZugferdInvoice(...)`. See
+  `reference/accessibility-and-compliance.md`.
 
 ## Faithfulness
 
 Only use APIs, enums and options that appear in these reference files (sourced verbatim from the
-SelectPdf v26.3 SDK reference and official samples). Do not invent members, overloads or option
-names. When in doubt, consult `reference/api-cheatsheet.md` or the online docs at
-https://selectpdf.com/pdf-library/.
+SelectPdf v26.3 SDK reference and official samples, updated for v26.4 from the SDK source). Do not
+invent members, overloads or option names. When in doubt, consult `reference/api-cheatsheet.md` or the
+online docs at https://selectpdf.com/pdf-library-classic/.

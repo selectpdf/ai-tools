@@ -5,11 +5,13 @@
 
 Use when converting HTML/URLs to PDF with the free `Select.HtmlToPdf` Community Edition. Same rendering
 engine as the commercial library, restricted to **HTML→PDF** and **5 pages per document**. Current as
-of v26.3. Full depth (C# + VB.NET) is in the reference files linked below.
+of v26.4. Full depth (C# + VB.NET) is in the reference files linked below.
 
 **Wrong edition?** Commercial (`Select.Pdf`), or need PDF creation/editing, forms, signatures,
 extraction, or >5 pages → use the `selectpdf-lib-net` guidance. Online REST API → a `selectpdf-api-*`
 file. Check the `.csproj`: `Select.HtmlToPdf*` = this, `Select.Pdf*` = commercial.
+
+**Cross-platform?** Linux, macOS on Apple Silicon, Docker, `SelectPdf.HtmlToPdf.Universal`, or `using SelectPdf.Universal;` → use `selectpdf-lib-htmltopdf-universal-net` instead (same 5-page limit).
 
 ## Install
 
@@ -25,7 +27,7 @@ Install-Package Select.HtmlToPdf.NetCore.Blink
 Install-Package Select.HtmlToPdf.NetCore.Chromium.Windows
 ```
 
-Windows x86/x64 only (native engine deps); no Linux/macOS build. Blink needs .NET Fx 4.6.1+ / Core / 5–10.
+Classic packages: Windows x86/x64 only. For Linux (x64, ARM64), macOS on Apple Silicon or Docker → the free `SelectPdf.HtmlToPdf.Universal` package (`selectpdf-lib-htmltopdf-universal-net`). Blink needs .NET Fx 4.6.1+ / Core / 5–10.
 
 ## The 5-page limit
 
@@ -71,10 +73,11 @@ Engines via `Options.RenderingEngine`: `WebKit` (default, embedded), `WebKitRest
   `PostLoadingScript`.
 - Relative images/CSS from an HTML string → pass base URL: `ConvertHtmlString(html, baseUrl)`.
 - File locked / not flushed → missing `doc.Close()`.
+- Page needs WebGL → off by default since v26.4; set `Options.WebGlEnabled = true`.
 
 ## Faithfulness
 
-Only use APIs/options/enums documented in the reference files (sourced from the v26.3 CE SDK reference
+Only use APIs/options/enums documented in the reference files (sourced from the v26.3 CE SDK reference, updated for v26.4,
 and samples). Don't invent members or defaults, and don't use commercial-only features (PDF
 creation/editing, forms, signatures, extraction, accessibility).
 

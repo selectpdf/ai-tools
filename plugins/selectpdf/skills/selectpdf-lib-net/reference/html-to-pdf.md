@@ -555,7 +555,7 @@ doc.Close()
 
 ## Partial page conversion
 
-Convert only a specific section of a page by setting `VisibleWebElementId` to the HTML element's ID (the element can be an image, table, table row, div, text, etc.). Note: for HTML to PDF, partial rendering is supported only by the **WebKit** and **WebKit Restricted** rendering engines; it is not applied with the **Blink** or **Chromium** engines.
+Convert only a specific section of a page. Set `VisibleWebElementId` to the HTML element's ID (the element can be an image, table, table row, div, text, etc.); it is honored by **every** rendering engine. With the **Blink** or **Chromium** engine you can instead set `VisibleWebElementSelector` to any CSS selector the engine understands (for example `"#content"`, `".infobox"` or `"table.wikitable tbody"`): the matched element is lifted out of the page and rendered on its own. A selector that matches nothing fails the conversion rather than converting the whole page. The WebKit engines cannot take a selector; use `VisibleWebElementId` with them. (Since v26.4, partial conversion produces PDF on the Blink and Chromium engines too; before, it applied only to WebKit / WebKit Restricted.)
 
 ```csharp
 using SelectPdf;
@@ -563,11 +563,12 @@ using SelectPdf;
 // instantiate a html to pdf converter object
 HtmlToPdf converter = new HtmlToPdf();
 
-// only WebKit / WebKitRestricted apply partial conversion in HTML-to-PDF
-converter.Options.RenderingEngine = RenderingEngine.WebKit;
-
-// specify the id of the section that will be converted to pdf
+// convert only the element with this id (every engine)
 converter.Options.VisibleWebElementId = elementId;
+
+// or, with the Blink or Chromium engine, pick the element with a CSS selector:
+// converter.Options.RenderingEngine = RenderingEngine.Chromium;
+// converter.Options.VisibleWebElementSelector = "table.wikitable tbody";
 
 // create a new pdf document converting an url
 PdfDocument doc = converter.ConvertUrl(url);
@@ -585,11 +586,12 @@ Imports SelectPdf
 ' instantiate a html to pdf converter object
 Dim converter As New HtmlToPdf()
 
-' only WebKit / WebKitRestricted apply partial conversion in HTML-to-PDF
-converter.Options.RenderingEngine = RenderingEngine.WebKit
-
-' specify the id of the section that will be converted to pdf
+' convert only the element with this id (every engine)
 converter.Options.VisibleWebElementId = elementId
+
+' or, with the Blink or Chromium engine, pick the element with a CSS selector:
+' converter.Options.RenderingEngine = RenderingEngine.Chromium
+' converter.Options.VisibleWebElementSelector = "table.wikitable tbody"
 
 ' create a new pdf document converting an url
 Dim doc As PdfDocument = converter.ConvertUrl(url)
@@ -705,7 +707,9 @@ doc.Close()
 
 `HtmlToPdfOptions` (reached via `converter.Options`) and `HtmlToPdf` expose many more members. Notable ones from the options review:
 
-- `RenderingEngine` — selects the HTML rendering engine: `WebKit`, `WebKitRestricted`, `Blink`, or `Chromium`. (Partial conversion via `VisibleWebElementId` applies only with WebKit / WebKit Restricted.)
+- `RenderingEngine` — selects the HTML rendering engine: `WebKit`, `WebKitRestricted`, `Blink`, or `Chromium`. (Partial conversion: `VisibleWebElementId` works with every engine; `VisibleWebElementSelector` with Blink and Chromium.)
+- `ManagedContentTrimming` (default true) — with the Chromium engine, the last page is cut where the content ends, on documents of any length, so there is no trailing blank page. Set it to false to keep the full last page. `ManagedContentTrimmingMode` chooses how the end of the content is found: `Ink` (default; measures the last painted content) or `Marker` (an invisible marker placed after the content).
+- `WebGlEnabled` (default false since v26.4) — WebGL is off on the browser engines; set it to true only for pages that need WebGL. 2D canvas renders the same either way.
 - `Header` / `Footer` and `DisplayHeader` / `DisplayFooter` (on `HtmlToPdf`) — custom header/footer content and visibility.
 - `Authentication` — credentials for web pages that require authentication.
 - `ProxyOptions` — proxy settings for fetching the page.

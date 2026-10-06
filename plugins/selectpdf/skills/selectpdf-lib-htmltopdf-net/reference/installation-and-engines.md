@@ -28,7 +28,7 @@ Install exactly one **main library** package, chosen by target framework, and op
 
 ## Supported platforms and frameworks
 
-The library runs on Windows only; the `.NetCore` packages do not run on Linux, macOS, or Xamarin. `Select.HtmlToPdf.NetCore` covers .NET Framework 4.6.1 / 4.7.2, .NET Core 2.0+ through .NET Standard 2.0, and .NET 5 – .NET 10; `Select.HtmlToPdf` covers legacy .NET Framework 2.0 – 4.5. The Chromium.Windows packages are built AnyCPU and bundle the x86 Chromium runtime, so they support both x86 and x64 host processes. When installing from downloaded assemblies instead of NuGet, reference `Select.HtmlToPdf.dll` and place the companion `Select.Html.dep` file in the same folder (the bin directory).
+The classic library runs on Windows only; the `.NetCore` packages do not run on Linux, macOS, or Xamarin. For **Linux (x64, ARM64), macOS on Apple Silicon or Docker**, use the free cross-platform **SelectPdf.HtmlToPdf.Universal** package instead (plus one `SelectPdf.Universal.Native.<rid>` package per runtime; namespace `SelectPdf.Universal`; same 5-page limit) and the `selectpdf-lib-htmltopdf-universal-net` skill. `Select.HtmlToPdf.NetCore` covers .NET Framework 4.6.1 / 4.7.2, .NET Core 2.0+ through .NET Standard 2.0, and .NET 5 – .NET 10; `Select.HtmlToPdf` covers legacy .NET Framework 2.0 – 4.5. The Chromium.Windows packages are built AnyCPU and bundle the x86 Chromium runtime, so they support both x86 and x64 host processes. When installing from downloaded assemblies instead of NuGet, reference `Select.HtmlToPdf.dll` and place the companion `Select.Html.dep` file in the same folder (the bin directory).
 
 ## License key
 

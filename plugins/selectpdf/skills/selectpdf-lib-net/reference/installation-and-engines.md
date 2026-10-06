@@ -8,7 +8,7 @@ Install exactly one **main library** package, chosen by target framework and bit
 
 ## Supported platforms and frameworks
 
-The library runs on **Windows only** (not Linux, macOS, or Xamarin) and requires **full trust** because it makes native API calls. The `.NetCore` packages cover .NET Framework 4.6.1 / 4.7.2, .NET Core 2.0+ through .NET Standard 2.0, and .NET 5 – .NET 10; the legacy `Select.Pdf` packages cover .NET Framework 2.0 – 4.5. Both AnyCPU and x64 variants exist — if an `.x64` package is used, the application must target x64 and run in an x64 worker process.
+The classic library runs on **Windows only** (not Linux, macOS, or Xamarin) and requires **full trust** because it makes native API calls. For **Linux (x64, ARM64), macOS on Apple Silicon or Docker**, use **SelectPdf.Universal** instead (`SelectPdf.Universal` plus one `SelectPdf.Universal.Native.<rid>` package per runtime; namespace `SelectPdf.Universal`) and the `selectpdf-lib-universal-net` skill. The `.NetCore` packages cover .NET Framework 4.6.1 / 4.7.2, .NET Core 2.0+ through .NET Standard 2.0, and .NET 5 – .NET 10; the legacy `Select.Pdf` packages cover .NET Framework 2.0 – 4.5. Both AnyCPU and x64 variants exist — if an `.x64` package is used, the application must target x64 and run in an x64 worker process.
 
 ## Setting the license key
 

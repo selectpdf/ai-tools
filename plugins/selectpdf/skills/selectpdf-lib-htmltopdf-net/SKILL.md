@@ -4,7 +4,9 @@ description: >-
   Convert HTML and URLs to PDF in .NET (C# / VB.NET) with the free Select.HtmlToPdf Community Edition
   (Select.HtmlToPdf or Select.HtmlToPdf.NetCore NuGet packages). Use for HTML-to-PDF conversion with
   page setup, headers/footers, page numbering, links, bookmarks, web authentication, cookies, HTTP
-  headers and proxy. Trigger when a .NET app needs free HTML-to-PDF with SelectPdf. The Community
+  headers and proxy. Trigger when a .NET app on Windows needs free HTML-to-PDF with the classic
+  SelectPdf Community Edition (namespace SelectPdf). For Linux, macOS, Docker or the
+  SelectPdf.HtmlToPdf.Universal package, use selectpdf-lib-htmltopdf-universal-net instead. The Community
   Edition is HTML→PDF only and capped at 5 pages per document — for PDF creation/editing, forms,
   signatures or larger output use the commercial selectpdf-lib-net skill; for the online REST API use
   a selectpdf-api-* skill.
@@ -13,8 +15,8 @@ description: >-
 # SelectPdf HTML-to-PDF — Community Edition (free)
 
 Expert guidance for the **free Select.HtmlToPdf Community Edition** — the same rendering engine as the
-commercial library, restricted to **HTML→PDF conversion** and **5 pages per document**. Current as of
-**v26.3**.
+commercial library, restricted to **HTML→PDF conversion** and **5 pages per document**. Runs on
+Windows. Current as of **v26.4**.
 
 ## Pick the right skill first
 
@@ -23,6 +25,10 @@ commercial library, restricted to **HTML→PDF conversion** and **5 pages per do
 - **Commercial library** — if the project uses `Select.Pdf` / `Select.Pdf.NetCore`, or needs PDF
   creation, editing, merge/split, forms, signatures, encryption, extraction, accessible/PDF-A output,
   or documents longer than 5 pages, use the **`selectpdf-lib-net`** skill instead.
+- **Cross-platform free edition (SelectPdf.HtmlToPdf.Universal)** — if the project references
+  `SelectPdf.HtmlToPdf.Universal` / `SelectPdf.Universal.Native.*`, uses `using SelectPdf.Universal;`, or
+  must run on **Linux, macOS on Apple Silicon or Docker**, use the
+  **`selectpdf-lib-htmltopdf-universal-net`** skill. Same 5-page limit.
 - **Online REST API** — if the project calls `api.selectpdf.com` over HTTP, use a `selectpdf-api-*`
   skill.
 
@@ -52,8 +58,10 @@ Install-Package Select.HtmlToPdf.NetCore.Blink
 Install-Package Select.HtmlToPdf.NetCore.Chromium.Windows
 ```
 
-> **Platform:** Windows x86/x64 only (native engine dependencies); no Linux/macOS build. The Blink
-> engine requires .NET Framework 4.6.1+ (or .NET Core / 5–10).
+> **Platform:** the classic packages run on **Windows x86/x64 only**. For Linux (x64, ARM64), macOS on
+> Apple Silicon or Docker, use the free **SelectPdf.HtmlToPdf.Universal** package (see
+> `selectpdf-lib-htmltopdf-universal-net`). The Blink engine requires .NET Framework 4.6.1+ (or .NET
+> Core / 5–10).
 
 ## The 5-page limit
 
@@ -148,10 +156,13 @@ Selectable via `converter.Options.RenderingEngine`:
 - **Relative images/CSS not loading from an HTML string** → pass a base URL as the 2nd argument of
   `ConvertHtmlString(html, baseUrl)`.
 - **Document not flushed / file locked** → you forgot `doc.Close()`.
+- **Page needs WebGL (3D charts, maps)** → WebGL is off by default since v26.4; set
+  `Options.WebGlEnabled = true`.
 
 ## Faithfulness
 
 Only use APIs, enums and options that appear in these reference files (sourced verbatim from the
-SelectPdf Community Edition v26.3 SDK reference and official samples). Do not invent members or
-options, and do not document commercial-only features (PDF creation/editing, forms, signatures,
-extraction, accessibility) in this skill. Online docs: https://selectpdf.com/html-to-pdf/docs/.
+SelectPdf Community Edition v26.3 SDK reference and official samples, updated for v26.4 from the SDK
+source). Do not invent members or options, and do not document commercial-only features (PDF
+creation/editing, forms, signatures, extraction, accessibility, e-invoices) in this skill. Online docs:
+https://selectpdf.com/html-to-pdf/docs-classic/.

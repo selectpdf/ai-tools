@@ -9,12 +9,17 @@ self-contained** guide (install, quickstart, mental model, engines, gotchas, a s
 **links to the full reference files on GitHub** for depth — so there is one place to maintain the deep
 content.
 
-Two editions, mirrored across every tool:
+Four guides, mirrored across every tool:
 
 | File stem | Library | Package |
 |---|---|---|
-| `selectpdf-lib-net` | commercial Select.Pdf | `Select.Pdf` / `Select.Pdf.NetCore` |
-| `selectpdf-lib-htmltopdf-net` | free Community Edition (HTML→PDF, 5-page cap) | `Select.HtmlToPdf` / `Select.HtmlToPdf.NetCore` |
+| `selectpdf-lib-universal-net` | SelectPdf.Universal, cross-platform commercial (Windows, Linux, macOS on Apple Silicon, Docker) | `SelectPdf.Universal` + `SelectPdf.Universal.Native.<rid>` |
+| `selectpdf-lib-htmltopdf-universal-net` | free cross-platform Community Edition (HTML→PDF, 5-page cap) | `SelectPdf.HtmlToPdf.Universal` + `SelectPdf.Universal.Native.<rid>` |
+| `selectpdf-lib-net` | classic commercial Select.Pdf (Windows) | `Select.Pdf` / `Select.Pdf.NetCore` |
+| `selectpdf-lib-htmltopdf-net` | classic free Community Edition (Windows, HTML→PDF, 5-page cap) | `Select.HtmlToPdf` / `Select.HtmlToPdf.NetCore` |
+
+Install only the guide(s) for the package your project references; each one names the right sibling if
+the project turns out to use another edition.
 
 ## Cursor — `cursor/*.mdc`
 
