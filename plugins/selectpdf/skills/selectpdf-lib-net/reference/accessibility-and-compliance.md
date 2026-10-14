@@ -8,6 +8,8 @@ Tagged (accessible) PDF and PDF/A-3 output use the **Chromium** or **Blink** ren
 
 Set `HtmlToPdfOptions.Tagged` to `true` to produce a tagged, accessible (PDF/UA) document. The converter takes the logical structure tree — headings, paragraphs, lists, tables, figures with alternate text, links, and the reading order — directly from the rendering engine's accessible output, and marks decorative content (backgrounds, rules, watermarks) as artifacts so assistive technologies skip it. Set `HtmlToPdfOptions.Title` and `HtmlToPdfOptions.Language` (both required for an accessible PDF) to describe the document. Tagging requires the Chromium or Blink engine; accessibility quality depends on the source HTML (images need `alt`, headings used in order, proper table markup, etc.).
 
+Since v26.5, tagged (PDF/UA-1) and PDF/A-3a conversions of real-world pages conform: the page's decorative paint (backgrounds, borders, separators) is marked as an artifact, content the engine left outside the structure is attached to the element it belongs to, a picture drawn twice is described once, and grouping elements hold their content the way the standard requires (checked with veraPDF on GitHub, the W3C home page and Wikipedia in English, Chinese, Arabic, Hebrew and Japanese). An HTML `<figure>` around one picture is tagged as that picture, with the picture's alternate text and the caption inside it; a figure around no picture or several is tagged as a group with its caption as a paragraph.
+
 ```csharp
 HtmlToPdf converter = new HtmlToPdf();
 

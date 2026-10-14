@@ -1,6 +1,6 @@
 # Authentication, cookies, HTTP headers, POST and proxy
 
-Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Web page authentication
 

@@ -1,6 +1,6 @@
 # Links, bookmarks, table of contents and open actions
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Links in HTML to PDF
 
@@ -113,21 +113,136 @@ This sample code shows how the html to pdf converter can automatically generate 
 
 ## Table of contents
 
-SelectPdf Html To Pdf Converter generates easily internal links ("Links in HTML to PDF" (links-bookmarks-toc.md)) and bookmarks ("Automatic bookmarks" (links-bookmarks-toc.md)). Using these 2 features, a simple table of contents is automatically generated if the page being converted has a section at the top with internal links to all major sections.
+The html to pdf converter can give a document a table of contents with page numbers, through `HtmlToPdfOptions.TableOfContents`. The `PdfTableOfContentsOptions.Mode` property chooses how it is built:
 
-A little more complicated is to generate page numbers for the table of contents. To be able to do that, the "Web element locations" (web-elements-and-auth.md) feature will be used together with a few more settings and web element IDs patterns.
+- `PdfTableOfContentsMode.FillExisting` - the page already has a table of contents (internal links to its sections); each entry gets a leader and the number of the page its section is on.
+- `PdfTableOfContentsMode.InsertHtml` - the table of contents is written into the page from its headings, styled by the page's CSS, then numbered.
+- `PdfTableOfContentsMode.GeneratePages` - the table of contents is drawn on pages of its own, inserted into the pdf document, with the fonts, colors and spacing set in the options.
 
-The table of contents (TOC) must already exist at the top of the web page and the items from the table of contents must link to the appropriate sections from the document (like in the test document below). The TOC elements must also have the following CSS classes or ID styles:
+In every mode the page numbers are the numbers the document shows: they start at the `PdfFooter.FirstPageNumber` of the displayed footer, and pages inserted by `PdfTableOfContentsMode.GeneratePages` are counted. Leaders and numbers are decorative in a tagged document, so accessible (PDF/UA) and archival (PDF/A) documents stay conformant. JavaScript must be enabled.
 
-- All TOC elements (both titles from the actual table of contents, but also the link targets - where the user goes when clicking on a TOC link) must have a specific CSS class ("toc" in our example).
-- All TOC titles must have similar IDs: TOC_Title{0} (TOC_Title1 to TOC_Title13 in our example).
-- All TOC targets (document content) must have similar IDs: TOC_Target{0} (TOC_Target1 to TOC_Target13 in our example).
+### Numbering the page's own table of contents
 
-All these elements locations are retrieved during the conversion to PDF and those locations are used to get the content page numbers to display them in the table of contents. The font for the page numbers can be specified in code. Also, that style of the line that links the TOC titles with the page numbers.
+Set `PdfTableOfContentsOptions.ContainerSelector` to the element that holds the table of contents. Every **<a href="#id">** link inside it gets a leader and the number of the page its target is on, drawn at the end of the line where the link's text ends and right-aligned to the container, so the table keeps the look the page gives it. A link whose target is not in the document gets no number.
 
-### Sample Code
+```csharp
+HtmlToPdf converter = new HtmlToPdf();
+converter.Options.TableOfContents.Mode = PdfTableOfContentsMode.FillExisting;
+converter.Options.TableOfContents.ContainerSelector = "#toc";
+converter.Options.TableOfContents.Leader = PdfTableOfContentsLeader.Dots;
 
-This sample shows how the html to pdf converter can generate page numbers for a table of contents using SelectPdf Pdf Library for .NET.
+string url = "https://www.example.com/document2.html";
+PdfDocument doc = converter.ConvertUrl(url);
+doc.Save("toc.pdf");
+doc.Close();
+```
+
+```vbnet
+Dim converter As New HtmlToPdf()
+converter.Options.TableOfContents.Mode = PdfTableOfContentsMode.FillExisting
+converter.Options.TableOfContents.ContainerSelector = "#toc"
+converter.Options.TableOfContents.Leader = PdfTableOfContentsLeader.Dots
+
+Dim url As String = "https://www.example.com/document2.html"
+Dim doc As PdfDocument = converter.ConvertUrl(url)
+doc.Save("toc.pdf")
+doc.Close()
+```
+
+### Writing the table of contents into the page
+
+`PdfTableOfContentsOptions.HeadingSelectors` lists the headings, one selector per level. The table is written at the start of the page, at its end or inside a placeholder element (`PdfTableOfContentsOptions.HtmlPlacement`), as a **<nav class="selectpdf-toc">** with an optional **<h2 class="selectpdf-toc-title">** and nested **<ol>** lists whose items have the classes **selectpdf-toc-entry** and **selectpdf-toc-level-N**, so the page's CSS can style it. It gets a page of its own (`PdfTableOfContentsOptions.PageBreak`).
+
+```csharp
+HtmlToPdf converter = new HtmlToPdf();
+PdfTableOfContentsOptions toc = converter.Options.TableOfContents;
+toc.Mode = PdfTableOfContentsMode.InsertHtml;
+toc.HeadingSelectors = new string[] { "h1", "h2" };
+toc.Title = "Table of Contents";
+converter.Options.CustomCSS = "nav.selectpdf-toc li { font-size: 14px; }";
+
+string url = "https://www.example.com/document3.html";
+PdfDocument doc = converter.ConvertUrl(url);
+doc.Save("toc.pdf");
+doc.Close();
+```
+
+```vbnet
+Dim converter As New HtmlToPdf()
+Dim toc As PdfTableOfContentsOptions = converter.Options.TableOfContents
+toc.Mode = PdfTableOfContentsMode.InsertHtml
+toc.HeadingSelectors = New String() {"h1", "h2"}
+toc.Title = "Table of Contents"
+converter.Options.CustomCSS = "nav.selectpdf-toc li { font-size: 14px; }"
+
+Dim url As String = "https://www.example.com/document3.html"
+Dim doc As PdfDocument = converter.ConvertUrl(url)
+doc.Save("toc.pdf")
+doc.Close()
+```
+
+### Generating table of contents pages
+
+The table is drawn on pages inserted at the start, after the first page or at the end (`PdfTableOfContentsOptions.PagePosition`), with the page size, margins, header and footer of the converted pages. Each entry is a link to its heading. The title has its own font, color and alignment, and each level its own font, color, indent and spacing (`PdfTableOfContentsLevelStyle`); `PdfTableOfContentsOptions.NumberEntries` numbers the entries.
+
+```csharp
+HtmlToPdf converter = new HtmlToPdf();
+PdfTableOfContentsOptions toc = converter.Options.TableOfContents;
+toc.Mode = PdfTableOfContentsMode.GeneratePages;
+toc.HeadingSelectors = new string[] { "h1", "h2" };
+toc.PagePosition = PdfTableOfContentsPagePosition.AfterFirstPage;
+toc.Title = "Table of Contents";
+toc.TitleAlign = PdfTextHorizontalAlign.Center;
+toc.NumberEntries = true;
+toc.LevelStyles = new PdfTableOfContentsLevelStyle[]
+{
+    new PdfTableOfContentsLevelStyle
+    {
+        Font = PdfFont.CreateStandardFont(PdfStandardFont.TimesBold, 13),
+        SpacingBefore = 10,
+    },
+    new PdfTableOfContentsLevelStyle
+    {
+        Font = PdfFont.CreateStandardFont(PdfStandardFont.TimesRoman, 11),
+        Indent = 20,
+    },
+};
+
+string url = "https://www.example.com/document3.html";
+PdfDocument doc = converter.ConvertUrl(url);
+doc.Save("toc.pdf");
+doc.Close();
+```
+
+```vbnet
+Dim converter As New HtmlToPdf()
+Dim toc As PdfTableOfContentsOptions = converter.Options.TableOfContents
+toc.Mode = PdfTableOfContentsMode.GeneratePages
+toc.HeadingSelectors = New String() {"h1", "h2"}
+toc.PagePosition = PdfTableOfContentsPagePosition.AfterFirstPage
+toc.Title = "Table of Contents"
+toc.TitleAlign = PdfTextHorizontalAlign.Center
+toc.NumberEntries = True
+toc.LevelStyles = New PdfTableOfContentsLevelStyle() {
+    New PdfTableOfContentsLevelStyle With {
+        .Font = PdfFont.CreateStandardFont(PdfStandardFont.TimesBold, 13),
+        .SpacingBefore = 10
+    },
+    New PdfTableOfContentsLevelStyle With {
+        .Font = PdfFont.CreateStandardFont(PdfStandardFont.TimesRoman, 11),
+        .Indent = 20
+    }
+}
+
+Dim url As String = "https://www.example.com/document3.html"
+Dim doc As PdfDocument = converter.ConvertUrl(url)
+doc.Save("toc.pdf")
+doc.Close()
+```
+
+### Custom layouts: drawing the numbers yourself
+
+For a layout the modes above do not cover, the page numbers can be drawn by your own code: the "Web element locations" (web-elements-and-auth.md) feature reports where the table's entries and their targets landed in the pdf, and the entries and their targets are given the CSS class "toc" and paired IDs (TOC_Title1 / TOC_Target1, and so on), so the page of each target is known. This is how the table of contents was numbered before the `HtmlToPdfOptions.TableOfContents` option existed.
 
 ```csharp
         	// number of items in the table of contents (TOC)

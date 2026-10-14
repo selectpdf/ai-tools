@@ -4,7 +4,7 @@
 > `AGENTS.md` (e.g. `For SelectPdf .NET work, follow ./docs/selectpdf-lib-net.md`).
 
 Use when generating or manipulating PDFs with the commercial SelectPdf library
-(`Select.Pdf` / `Select.Pdf.NetCore`). Self-hosted PDF toolkit for .NET, current as of v26.4. Full
+(`Select.Pdf` / `Select.Pdf.NetCore`). Self-hosted PDF toolkit for .NET, current as of v26.5. Full
 depth (every topic, C# + VB.NET) is in the reference files linked at the bottom — open the relevant one
 before writing non-trivial code.
 
@@ -88,7 +88,7 @@ Engines via `Options.RenderingEngine`: `WebKit` (default, embedded), `WebKitRest
 
 ## Faithfulness
 
-Only use APIs/options/enums documented in the reference files (sourced from the v26.3 SDK reference, updated for v26.4, and
+Only use APIs/options/enums documented in the reference files (sourced from the v26.3 SDK reference, updated for v26.4 and v26.5, and
 official samples). Don't invent members, overloads, enum values, or defaults.
 
 ## Full reference (open the relevant file)

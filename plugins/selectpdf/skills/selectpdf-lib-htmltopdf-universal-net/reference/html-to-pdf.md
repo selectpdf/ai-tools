@@ -1,6 +1,6 @@
 # HTML to PDF conversion
 
-Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## The HTML to PDF converter
 
@@ -80,6 +80,56 @@ Sample code that shows how to convert raw html code to pdf using Free Select.Pdf
             doc.Close()
 ```
 
+`PdfDocument` implements `IDisposable`, so a `using` statement closes the document too. Calling `Close` and disposing the document are the same; doing both is safe.
+
+```csharp
+using (PdfDocument doc = converter.ConvertUrl(url))
+{
+    doc.Save("Sample.pdf");
+}
+```
+
+```vbnet
+Using doc As PdfDocument = converter.ConvertUrl(url)
+    doc.Save("Sample.pdf")
+End Using
+```
+
+### Documents longer than 5 pages
+
+When the converted content is longer than 5 pages, the Community Edition keeps the first 5 and the conversion still succeeds. To know whether pages were left out, compare `HtmlToPdfResult.PdfPageCountBeforeLimit`, the number of pages the content produced, with `HtmlToPdfResult.PdfPageCount`, the number of pages in the document, after the conversion:
+
+```csharp
+HtmlToPdf converter = new HtmlToPdf();
+PdfDocument doc = converter.ConvertUrl(url);
+
+HtmlToPdfResult result = converter.ConversionResult;
+if (result.PdfPageCountBeforeLimit > result.PdfPageCount)
+{
+    int missing = result.PdfPageCountBeforeLimit - result.PdfPageCount;
+    Console.WriteLine(missing + " page(s) were not included.");
+}
+
+doc.Save("Sample.pdf");
+doc.Close();
+```
+
+```vbnet
+Dim converter As New HtmlToPdf()
+Dim doc As PdfDocument = converter.ConvertUrl(url)
+
+Dim result As HtmlToPdfResult = converter.ConversionResult
+If result.PdfPageCountBeforeLimit > result.PdfPageCount Then
+    Dim missing As Integer = result.PdfPageCountBeforeLimit - result.PdfPageCount
+    Console.WriteLine(missing & " page(s) were not included.")
+End If
+
+doc.Save("Sample.pdf")
+doc.Close()
+```
+
+The licensed **SelectPdf.Universal** package has no page limit; there the two values are always equal.
+
 ### Html to Pdf Converter Properties
 
 `HtmlToPdf.Options` - controls the html to pdf conversion process and the generated pdf document properties.
@@ -148,7 +198,7 @@ Using Select.Pdf Html to Pdf Converter for .NET any html code can be converted t
 
 To convert a raw html string to pdf, `HtmlToPdf` class exposes the `HtmlToPdf.ConvertHtmlString(string)` and `HtmlToPdf.ConvertHtmlString(string, string)` methods.
 
-The first method, that has only the *url* parameter, can be used to convert html strings that don't have external references to javascript, css files or images. In case the html string contains references to external resources specified using relative paths, the second method needs to be used. `HtmlToPdf.ConvertHtmlString(string, string)` contains an additional parameter: *baseUrl*. The *baseUrl* parameter allows the converter to resolve relative urls. Basically, *baseUrl + relative image/css url = full absolute url*.
+The first method, that has only the *url* parameter, can be used to convert html strings that don't have external references to javascript, css files or images. In case the html string contains references to external resources specified using relative paths, the second method needs to be used. `HtmlToPdf.ConvertHtmlString(string, string)` contains an additional parameter: *baseUrl*. The *baseUrl* parameter allows the converter to resolve relative urls. Basically, *baseUrl + relative image/css url = full absolute url*. When *baseUrl* is an http or https url it is also the page's own address: the html is served as the response for that url, so the page's origin is the base url's site and web fonts, fetch requests, module scripts and cookies of that site work exactly as they do when the page is converted by url (a page loaded from a temporary file would make those requests cross-origin). A `base` element inside the html still takes precedence over the parameter.
 
 ### Sample Code
 
@@ -675,7 +725,11 @@ Select.Pdf Html to Pdf Converter has an internal browser that renders the web pa
 
 Because a web page generally has a different width compared with a standard pdf page, the content is scaled to fit the pdf page. As an example, most web sites are optimized for browsers with page widths of at least 1024px or 1280px. A standard A4 page has 595 x 842 points. 1 point is 1/72 inch. 1 pixel is 1/96 inch. This means that an A4 page width is 793px. Because the web page width (1024px or more) is larger than this pdf page width, the rendered content is scaled down to fit the pdf page width.
 
-The converter renders the web page in the internal browser at `HtmlToPdfOptions.WebPageWidth` pixels wide, then scales the result so that width maps to the pdf page content width (the page width minus the left and right margins). A smaller `HtmlToPdfOptions.WebPageWidth` therefore produces larger content in the pdf, and a larger value produces smaller content. Content wider than `HtmlToPdfOptions.WebPageWidth` is not cut off: it is scaled down further, so that the widest content fits the pdf page. Content that is taller than one pdf page flows onto additional pages automatically.
+The converter renders the web page in the internal browser at `HtmlToPdfOptions.WebPageWidth` pixels wide, then scales the result so that width maps to the pdf page content width (the page width minus the left and right margins). A smaller `HtmlToPdfOptions.WebPageWidth` therefore produces larger content in the pdf, and a larger value produces smaller content. Content that is taller than one pdf page flows onto additional pages automatically.
+
+Content wider than `HtmlToPdfOptions.WebPageWidth` is cut at the right edge, the way a browser cuts it when it prints. To keep a wide table or a long preformatted line in the pdf, let the page lay it out narrower (for example `white-space: pre-wrap` or a narrower table), or raise `HtmlToPdfOptions.WebPageWidth` to the width the content needs. Or set `HtmlToPdfOptions.FitWideContent` to true: a page that lays out wider than the web page width is then laid out at the width the content needs (at most four times the web page width) and the whole page is scaled down to the pdf page, so the wide content appears complete, smaller. It is off by default because an element the page keeps off screen (a menu at `left: 100%`, a carousel) widens the layout the same way.
+
+The width applies with print media as well, so a page that brings its own print stylesheet is laid out `HtmlToPdfOptions.WebPageWidth` pixels wide and scaled to the page - smaller than a browser prints it. To print such a page at 100%, set `HtmlToPdfOptions.WebPageWidth` to the width of the paper between the margins in pixels, at 96 pixels per inch: 793 for an A4 page in portrait with no margins.
 
 ### Sample Code
 
@@ -820,6 +874,8 @@ Some web pages might contain large html tables that will split over several page
 
 This can be done setting a CSS property for the *thead* element of the html table. The property that needs to be set is: *display: table-header-group*.
 
+The header is repeated when the page is rendered with the print media type, so also set `HtmlToPdfOptions.CssMediaType` to `HtmlToPdfCssMediaType.Print`. With the default screen media type the header appears only on the first page of the table.
+
 ### Sample Code
 
 The following html table will repeat the table header at the top of each pdf page when converted to pdf.
@@ -850,6 +906,42 @@ The following html table will repeat the table header at the top of each pdf pag
    </tr>
   </tbody>
 </table>
+```
+
+The converter renders the page with the print media type, so the header repeats on every page.
+
+```csharp
+	// instantiate a html to pdf converter object
+    HtmlToPdf converter = new HtmlToPdf();
+
+    // repeat the table headers: render with css @media print
+    converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print;
+
+    // create a new pdf document converting the html
+    PdfDocument doc = converter.ConvertHtmlString(html);
+
+    // save pdf document
+    doc.Save("Sample.pdf");
+
+    // close pdf document
+    doc.Close();
+```
+
+```vbnet
+	' instantiate a html to pdf converter object
+    Dim converter As New HtmlToPdf()
+
+    ' repeat the table headers: render with css @media print
+    converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print
+
+    ' create a new pdf document converting the html
+    Dim doc As PdfDocument = converter.ConvertHtmlString(html)
+
+    ' save pdf document
+    doc.Save("Sample.pdf")
+
+    ' close pdf document
+    doc.Close()
 ```
 
 ## Links
@@ -1186,7 +1278,7 @@ Regulations that cover personal, medical or financial data - HIPAA, GDPR, PCI DS
 
 ### AES-256 is the default
 
-Setting a password is enough: the document is encrypted with AES and a 256-bit key (revision 6 of the pdf security handler, `PdfEncryptionKeySize.EncryptKey256BitRevision6` with `PdfEncryptionAlgorithm.AES`). This applies to a new document and to the html to pdf converter's `HtmlToPdfOptions.SecurityOptions`.
+Setting a password is enough: the document is encrypted with AES and a 256-bit key (revision 6 of the pdf security handler, `PdfEncryptionKeySize.EncryptKey256BitRevision6` with `PdfEncryptionAlgorithm.AES`). This applies to a new document and to the html to pdf converter's `HtmlToPdfOptions.SecurityOptions`. The document is written as PDF 1.7 and declares the handler as an Adobe extension (level 8), which is how Acrobat writes it; only AES-256-GCM writes the document as PDF 2.0.
 
 Every current pdf viewer opens these documents. Viewers older than Adobe Acrobat X (2010) do not; if you must support them, choose AES with a 128-bit key rather than RC4.
 
@@ -1292,6 +1384,8 @@ The converter always embeds the fonts needed to render the document, so the text
 
 `HtmlToPdfOptions.JpegCompressionLevel` - Gets or sets the compression level of images in the generated pdf document.
 
+`HtmlToPdfOptions.ImagesMaxResolution` - The highest resolution, in pixels per inch, an image is kept at: images drawn at a higher resolution are resampled down to it. The default value is 0, which keeps every image at its resolution.
+
 `HtmlToPdfOptions.LazyImagesLoadingEnabled` - Scrolls through the page before it is converted, so images and content that load when they are scrolled into view are present in the pdf document. The default value is True.
 
 `HtmlToPdfOptions.LazyImagesLoadingDelay` - The delay in milliseconds after each scroll step when `HtmlToPdfOptions.LazyImagesLoadingEnabled` is True. The default value is 40 ms. Increase it for pages whose lazy content loads slowly.
@@ -1332,7 +1426,7 @@ The converter always embeds the fonts needed to render the document, so the text
 
 `HtmlToPdfOptions.PdfPageSize` - This property controls the size of the generated document pages. This was covered in more details in "Page settings" (html-to-pdf.md) section.
 
-`HtmlToPdfOptions.PdfStandard` - Defines the pdf standard used by the generated pdf document. This is an instance of `PdfStandard` type. Use it to generate archival documents (PDF/A-1b, PDF/A-2b, PDF/A-3b, PDF/A-3u, PDF/A-4, PDF/A-4e or PDF/A-4f) or PDF/X-1a print documents.
+`HtmlToPdfOptions.PdfStandard` - Defines the pdf standard used by the generated pdf document. This is an instance of `PdfStandard` type. Use it to generate archival documents (PDF/A-1b, PDF/A-2b, PDF/A-2u, PDF/A-3b, PDF/A-3u, PDF/A-4, PDF/A-4e or PDF/A-4f) or PDF/X-1a print documents.
 
 `HtmlToPdfOptions.PostLoadingScript` - JavaScript code injected into the converted page and run after the page has loaded and after its own scripts.
 
@@ -1342,7 +1436,7 @@ The converter always embeds the fonts needed to render the document, so the text
 
 `HtmlToPdfOptions.RenderPageOnTimeout` - Renders the page as far as it has loaded when `HtmlToPdfOptions.NavigationTimeout` expires, instead of failing the conversion. The default value is False. This was covered in more details in "Conversion delay and timeouts" (html-to-pdf.md) section.
 
-`HtmlToPdfOptions.RenderingEngine` - Selects the HTML rendering engine used by the converter. The only value is `RenderingEngine.Chromium`, which is also the default, so this normally does not need to be set. This was covered in more details in the "The Chromium engine" (installation-and-deployment.md) section.
+`HtmlToPdfOptions.RenderingEngine` - Selects where the Chromium rendering engine used by the converter runs: `RenderingEngine.Chromium`, the default, runs it on this machine, and `RenderingEngine.ChromiumRemote` sends the conversion to a remote SelectPdf engine (see "The remote engine" (installation-and-deployment.md)). When it is not set, the converter uses `GlobalProperties.RenderingEngine`, so it normally does not need to be set. This was covered in more details in the "The Chromium engine" (installation-and-deployment.md) section.
 
 `HtmlToPdfOptions.SecurityOptions` - Gets a reference to the object that specifies the generated pdf document security settings. This was covered in more details in "Security settings" (html-to-pdf.md) section.
 

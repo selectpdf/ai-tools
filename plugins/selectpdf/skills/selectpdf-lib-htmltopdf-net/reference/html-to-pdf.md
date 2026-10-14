@@ -415,6 +415,8 @@ To repeat an HTML table's header at the top of every PDF page that the table spa
 
 `HtmlToPdfOptions.InternalLinksEnabled` (default `True`) converts internal HTML links into internal PDF links, and `ExternalLinksEnabled` (default `True`) renders external hyperlinks in the PDF. Set either to `false` to disable that link type.
 
+With the Chromium and Blink engines (v26.5), an internal-link destination whose name is longer than 127 bytes - an anchor in a Japanese heading, for example - is renamed `spdfdest1`, `spdfdest2`, ... and the links to it are updated, because PDF/A does not allow longer names. A link to a destination the page does not define (a "skip to content" link with an empty target, or an anchor that is not on the page) keeps its area but no longer points anywhere.
+
 ```csharp
 // instantiate a html to pdf converter object
 HtmlToPdf converter = new HtmlToPdf();

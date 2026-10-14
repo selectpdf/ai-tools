@@ -6,7 +6,7 @@ applyTo: "**/*.cs,**/*.vb"
 
 Apply when converting HTML/URLs to PDF with the free `Select.HtmlToPdf` Community Edition. Same
 rendering engine as the commercial library, restricted to **HTML→PDF** and **5 pages per document**.
-Current as of v26.4. Full depth (C# + VB.NET) is in the reference files linked below.
+Current as of v26.5. Full depth (C# + VB.NET) is in the reference files linked below.
 
 **Wrong edition?** Commercial (`Select.Pdf`), or need PDF creation/editing, forms, signatures,
 extraction, or >5 pages → use the `selectpdf-lib-net` instructions. Online REST API → a
@@ -78,7 +78,7 @@ Engines via `Options.RenderingEngine`: `WebKit` (default, embedded), `WebKitRest
 
 ## Faithfulness
 
-Only use APIs/options/enums documented in the reference files (sourced from the v26.3 CE SDK reference, updated for v26.4,
+Only use APIs/options/enums documented in the reference files (sourced from the v26.3 CE SDK reference, updated for v26.4 and v26.5,
 and samples). Don't invent members or defaults, and don't use commercial-only features (PDF
 creation/editing, forms, signatures, extraction, accessibility).
 

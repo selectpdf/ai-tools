@@ -1,6 +1,6 @@
 # Modifying existing PDFs: merge, resize, stamps, portfolios, compression
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Modifying an existing PDF
 
@@ -813,12 +813,12 @@ This sample code shows how to create a new PDF document using SelectPdf, how to 
 
 ### Compress existing PDF documents
 
-SelectPdf can also compress existing PDF documents. Load the document with the loaded-document constructor (`PdfDocument`), set the compression options and save - the optimizer runs once during the save. This is built into the main library; no additional package is required.
+SelectPdf can also compress existing PDF documents. Load the document with the loaded-document constructor (`PdfDocument`), set the compression options and save - the compression is applied when the document is saved. This is built into the main library; no additional package is required.
 
 Two independent compression axes control how the document is optimized:
 
 - **Compress PDF streams and fonts** - the 3 compression levels of `PdfDocument.CompressionLevel` (`PdfCompressionLevel.NoCompression`, `PdfCompressionLevel.Normal`, `PdfCompressionLevel.Best`) control Flate/DEFLATE compression on content streams and fonts. `Best` additionally strips unused embedded font subsets.
-- **Compress images from the PDF document** - controlled by `PdfDocument.JpegCompressionEnabled` and `PdfDocument.JpegCompressionLevel` (a value between 0 - best quality / least compression, and 100 - most compression). When enabled, image XObjects are re-encoded as JPEG.
+- **Compress images from the PDF document** - controlled by `PdfDocument.JpegCompressionEnabled` and `PdfDocument.JpegCompressionLevel` (a value between 0 - best quality / least compression, and 100 - most compression). When enabled, images are re-encoded as JPEG.
 
 ### Sample Code
 
@@ -835,7 +835,7 @@ doc.JpegCompressionEnabled = true;                 // re-encode images as JPEG
 // 0 = best quality, 100 = most compression
 doc.JpegCompressionLevel = 20;
 
-// save compressed document (optimizer runs once during save)
+// save compressed document (compression is applied on save)
 doc.Save(file + "-compressed.pdf");
 
 // get pdf document details
@@ -859,7 +859,7 @@ doc.Close();
 		    ' 0 = best quality, 100 = most compression
 		    doc.JpegCompressionLevel = 20
 
-            ' save compressed document (optimizer runs once during save)
+            ' save compressed document (compression is applied on save)
 		    doc.Save(file & "-compressed.pdf")
 
 			' get pdf document details
@@ -870,4 +870,24 @@ doc.Close();
 		    Console.WriteLine("Producer: " & doc.DocumentInformation.Producer)
 
 		    doc.Close()
+```
+
+### Limit the resolution of images
+
+Large photos are often drawn much smaller than their pixel size: a 3000 pixel wide photo shown 4 inches wide is 750 pixels per inch, where 150 is plenty on screen and 300 in print. Set `PdfDocument.ImagesMaxResolution` (pixels per inch) and every image drawn at a higher resolution is resampled down to it. The resolution is measured against the size the image is drawn at, so nothing changes on the page, and an image drawn in several places keeps enough pixels for the largest. The same setting exists on `HtmlToPdfOptions.ImagesMaxResolution` and `WordToPdfOptions.ImagesMaxResolution`.
+
+On a document loaded from a file, the images of the whole document are resampled when it is saved; on a new document, the images added with `PdfImageElement` after the property is set. Gray and RGB images are resampled; image masks, indexed and CMYK images are left as they are, and a document that arrived signed is not resampled, since that would invalidate its signatures.
+
+```csharp
+PdfDocument doc = new PdfDocument("brochure.pdf");
+doc.ImagesMaxResolution = 150;
+doc.Save("brochure-small.pdf");
+doc.Close();
+```
+
+```vbnet
+Dim doc As New PdfDocument("brochure.pdf")
+doc.ImagesMaxResolution = 150
+doc.Save("brochure-small.pdf")
+doc.Close()
 ```

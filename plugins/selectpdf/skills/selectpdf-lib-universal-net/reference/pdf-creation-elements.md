@@ -1,6 +1,6 @@
 # Creating PDF documents from scratch
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Getting started
 
@@ -98,6 +98,25 @@ doc.Save(file)
 
 ' close pdf document
 doc.Close()
+```
+
+`PdfDocument` implements `IDisposable`, so a `using` statement closes it too. Calling `PdfDocument.Close` and disposing the document are the same; doing both is safe.
+
+```csharp
+using (PdfDocument doc = new PdfDocument())
+{
+    PdfPage page = doc.AddPage();
+    // ... add content ...
+    doc.Save(file);
+}
+```
+
+```vbnet
+Using doc As New PdfDocument()
+    Dim page As PdfPage = doc.AddPage()
+    ' ... add content ...
+    doc.Save(file)
+End Using
 ```
 
 ### Full Code
@@ -574,6 +593,8 @@ Both full web pages and html strings can be converted to pdf using `PdfHtmlEleme
 `PdfHtmlElement.HttpHeaders` - Get the collection of custom HTTP headers used for the conversion.
 
 `PdfHtmlElement.JavaScriptEnabled` - Enable scripts when rendering the url or html string.
+
+`PdfHtmlElement.CreateFormFields` - Converts the controls of the html forms into fillable PDF form fields of the document. See "HTML forms to PDF form fields" (html-to-pdf.md).
 
 `PdfHtmlElement.NavigationTimeout` - The time in seconds the converter waits for the web page to load.
 

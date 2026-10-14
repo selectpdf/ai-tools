@@ -1,6 +1,6 @@
 # Word to PDF
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## The Word to PDF converter
 
@@ -115,6 +115,7 @@ A picture without alternative text in the Word document is given the placeholder
 | `WordToPdfOptions.Tagged`, `WordToPdfOptions.AccessibilityStandard`, `WordToPdfOptions.Title`, `WordToPdfOptions.Language` | Tagged (accessible) output: the Word document's structure becomes the logical structure of the pdf, declared as PDF/UA-1 or PDF/UA-2 with the title and the language a declared document must carry. See the Standards section of the converter topic. |
 | `WordToPdfOptions.SecurityOptions`, `WordToPdfOptions.ViewerPreferences`, `WordToPdfOptions.PdfDocumentInformation` | Passwords and permissions, how a viewer opens the document, and its title, author, subject and keywords. |
 | `WordToPdfOptions.JpegCompressionEnabled`, `WordToPdfOptions.JpegCompressionLevel`, `WordToPdfOptions.PdfCompressionLevel` | Image and stream compression, with the html converter's defaults. |
+| `WordToPdfOptions.ImagesMaxResolution` | The highest resolution, in pixels per inch, an image is kept at; images drawn at a higher resolution are resampled down to it. 0 (the default) keeps every image as it is. |
 | `WordToPdfOptions.LFN` | A diagnostic log file written during the conversion. |
 
 ### The Word engine's own options

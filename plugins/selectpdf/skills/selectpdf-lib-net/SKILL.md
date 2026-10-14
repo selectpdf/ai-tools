@@ -14,7 +14,7 @@ description: >-
 # SelectPdf .NET Library (commercial)
 
 Expert guidance for the **commercial Select.Pdf** library — the full, self-hosted PDF toolkit for
-.NET on Windows. No external service and no print drivers. Current as of **v26.4**.
+.NET on Windows. No external service and no print drivers. Current as of **v26.5**.
 
 ## Pick the right skill first
 
@@ -189,6 +189,6 @@ Load the matching reference file for full prose, options and C#/VB samples.
 ## Faithfulness
 
 Only use APIs, enums and options that appear in these reference files (sourced verbatim from the
-SelectPdf v26.3 SDK reference and official samples, updated for v26.4 from the SDK source). Do not
+SelectPdf v26.3 SDK reference and official samples, updated for v26.4 and v26.5 from the SDK source). Do not
 invent members, overloads or option names. When in doubt, consult `reference/api-cheatsheet.md` or the
 online docs at https://selectpdf.com/pdf-library-classic/.

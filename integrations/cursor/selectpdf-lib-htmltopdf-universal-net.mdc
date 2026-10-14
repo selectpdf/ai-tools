@@ -1,5 +1,5 @@
 ---
-description: Convert HTML and URLs to PDF in .NET (C# / VB.NET) with SelectPdf.HtmlToPdf.Universal, the free cross-platform SelectPdf Community Edition (SelectPdf.HtmlToPdf.Universal plus SelectPdf.Universal.Native.<rid> NuGet packages, namespace SelectPdf.Universal) on Windows, Linux (x64, ARM64), macOS on Apple Silicon and Docker. Use for HTML-to-PDF with Chromium (sync or async) with page setup, headers/footers, page numbering, links, bookmarks, web authentication, cookies, HTTP headers and proxy. Free for commercial use, capped at 5 pages per document. For PDF creation/editing, Word to PDF, forms, signatures, redaction or longer output use selectpdf-lib-universal-net; for the classic Windows edition use selectpdf-lib-htmltopdf-net; for the online REST API use a selectpdf-api-* skill.
+description: Convert HTML and URLs to PDF in .NET (C# / VB.NET) with SelectPdf.HtmlToPdf.Universal, the free cross-platform SelectPdf Community Edition (SelectPdf.HtmlToPdf.Universal plus SelectPdf.Universal.Native.<rid>, or one SelectPdf.HtmlToPdf.Windows / .Linux / .Linux.Arm64 / .MacOS package; namespace SelectPdf.Universal) on Windows, Linux (x64, ARM64), macOS on Apple Silicon and Docker, or with the remote engine container (Alpine / musl). Use for HTML-to-PDF with Chromium (sync or async) with page setup, headers/footers, page numbering, links, bookmarks, web authentication, cookies, HTTP headers and proxy. Free for commercial use, capped at 5 pages per document. For PDF creation/editing, Word to PDF, forms, signatures, redaction or longer output use selectpdf-lib-universal-net; for the classic Windows edition use selectpdf-lib-htmltopdf-net; for the online REST API use a selectpdf-api-* skill.
 globs:
 alwaysApply: false
 ---
@@ -8,14 +8,16 @@ alwaysApply: false
 
 Expert guidance for **SelectPdf.HtmlToPdf.Universal**, the free cross-platform HTML to PDF converter:
 Windows (x64, x86), Linux (x64, ARM64), macOS on Apple Silicon and Docker, rendering with Chromium.
-HTML→PDF only, **5 pages per document**. Current as of **v26.4**.
+HTML→PDF only, **5 pages per document**. Current as of **v26.5**.
 
 ## Pick the right rule first
 
 - **Free cross-platform Community Edition (this rule)** — `SelectPdf.HtmlToPdf.Universal` +
-  `SelectPdf.Universal.Native.<rid>`; code uses `using SelectPdf.Universal;`.
+  `SelectPdf.Universal.Native.<rid>` (or one `SelectPdf.HtmlToPdf.<Platform>` package); code uses
+  `using SelectPdf.Universal;`.
 - **Full cross-platform library** — documents over 5 pages, HTML to image, PDF creation or editing, Word to
-  PDF, forms, signatures, redaction, tagged PDF/UA, PDF/A-3A or e-invoices → **`selectpdf-lib-universal-net`**.
+  PDF, tables of contents with page numbers, HTML forms to fillable fields, forms, signatures, redaction,
+  tagged PDF/UA, PDF/A level A or e-invoices → **`selectpdf-lib-universal-net`**.
   It uses the same namespace and the same code, so moving up is a package swap.
 - **Classic Windows Community Edition** — `Select.HtmlToPdf` / `Select.HtmlToPdf.NetCore`, code uses
   `using SelectPdf;` → **`selectpdf-lib-htmltopdf-net`**. To port classic code, read
@@ -24,20 +26,35 @@ HTML→PDF only, **5 pages per document**. Current as of **v26.4**.
 
 ## Install
 
-The converter plus the native engine for **each runtime you deploy to**:
+For an application that runs on one platform, one package installs the converter and that platform's engine:
+
+```bash
+dotnet add package SelectPdf.HtmlToPdf.Linux
+```
+
+`SelectPdf.HtmlToPdf.Windows` (x64), `SelectPdf.HtmlToPdf.Linux` (x64, Docker), `SelectPdf.HtmlToPdf.Linux.Arm64`,
+`SelectPdf.HtmlToPdf.MacOS` (Apple Silicon, macOS 13 or newer). Or install the two packages they bring in: the
+converter and the native engine for the runtime you deploy to:
 
 ```bash
 dotnet add package SelectPdf.HtmlToPdf.Universal
 dotnet add package SelectPdf.Universal.Native.linux-x64
 ```
 
-Native packages: `win-x64`, `win-x86`, `linux-x64`, `linux-arm64`, `osx-arm64` (macOS 13 or newer), the same
-ones the full library uses. Pick the one matching the **architecture of the process that converts**. The
-library targets .NET 8, .NET 10 and .NET Standard 2.0 (usable from .NET Framework 4.6.1+). Optional:
-`SelectPdf.Universal.Fonts` adds Noto fonts for every script, for Linux hosts and containers with no fonts.
+Native packages: `win-x64`, `win-x86`, `linux-x64`, `linux-arm64`, `osx-arm64`, the same ones the full library
+uses. Pick the one matching the **architecture of the process that converts**. **A project references one
+native package**; to publish for several platforms, choose it with a `Condition` on `$(RuntimeIdentifier)` and
+publish once per platform. The library targets .NET 8, .NET 10 and .NET Standard 2.0 (usable from .NET
+Framework 4.6.1+). Optional: `SelectPdf.Universal.Fonts` adds Noto fonts for every script, for Linux hosts and
+containers with no fonts.
 
-> **Platform limits:** glibc-based Linux only (glibc 2.30+; Alpine/musl is not supported). No HTML-to-PDF on
-> Intel Macs (no `osx-x64` engine), and no Windows-on-ARM engine.
+**Remote engine:** with `GlobalProperties.RenderingEngine = RenderingEngine.ChromiumRemote` and
+`GlobalProperties.EngineEndpoint` (plus `EngineAccessToken`), conversions run in the `ghcr.io/selectpdf/engine`
+container and the app needs no native package. This is the supported way to run on **Alpine / musl** Linux. See
+[`installation-and-deployment.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/installation-and-deployment.md), "The remote engine".
+
+> **Platform limits for the native engines:** glibc-based Linux only (glibc 2.30+). No HTML-to-PDF on Intel
+> Macs (no `osx-x64` engine), and no Windows-on-ARM engine. Elsewhere, use the remote engine.
 
 ## License
 
@@ -51,61 +68,63 @@ using SelectPdf.Universal;
 
 // the same code on Windows, Linux and macOS
 HtmlToPdf converter = new HtmlToPdf();
-PdfDocument doc = converter.ConvertUrl("https://selectpdf.com");
+using PdfDocument doc = converter.ConvertUrl("https://selectpdf.com");
 doc.Save("output.pdf");
-doc.Close();
 ```
 ```vbnet
 Imports SelectPdf.Universal
 
 ' the same code on Windows, Linux and macOS
 Dim converter As New HtmlToPdf()
-Dim doc As PdfDocument = converter.ConvertUrl("https://selectpdf.com")
-doc.Save("output.pdf")
-doc.Close()
+Using doc As PdfDocument = converter.ConvertUrl("https://selectpdf.com")
+    doc.Save("output.pdf")
+End Using
 ```
 
 `ConvertHtmlString(html, baseUrl)` converts an HTML string. `ConvertUrlAsync` / `ConvertHtmlStringAsync`
 (optionally with a `CancellationToken`) convert without holding a thread; `doc.Save()` with no arguments
-returns a `byte[]`.
+returns a `byte[]`. `converter.ConversionResult.PdfPageCountBeforeLimit` is the number of pages the content
+produced before the 5-page limit: when it is larger than `PdfPageCount`, the limit cut the document.
 
 Rules that always apply:
 - `using SelectPdf.Universal;` — **no `System.Drawing`** in the API.
 - **Chromium is the only engine**; never set `WebKit`, `WebKitRestricted` or `Blink`.
-- Always `Close()` documents. One converter per conversion; conversions running at once are limited by
+- Always `Close()` documents, or put them in a `using` statement (`PdfDocument` is `IDisposable`). One
+  converter per conversion; conversions running at once are limited by
   `HtmlToPdfOptions.MaximumConcurrentConversions` (default 8).
 
 ## What do you need to do? (routing)
 
 | Task | Reference |
 |---|---|
-| Packages, license, the Chromium engine, fonts and languages, deployment to Windows, Linux, macOS, Docker, Azure, AWS, Google Cloud | [`installation-and-deployment.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/installation-and-deployment.md) |
+| Packages (one per platform, or converter + native), license, the Chromium engine, the remote engine container, fonts and languages, deployment to Windows, Linux, macOS, Docker, Azure, AWS, Google Cloud | [`installation-and-deployment.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/installation-and-deployment.md) |
 | Port code from the classic `Select.HtmlToPdf` edition | [`migrating-from-classic.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/migrating-from-classic.md) |
-| Convert URL / HTML; async and cancellation; page settings, delays, media type, page breaks, table headers, links, automatic bookmarks, document properties, viewer preferences, security, other options | [`html-to-pdf.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/html-to-pdf.md) |
+| Convert URL / HTML; async and cancellation; page settings, delays, media type, fitting wide content, page breaks, table headers, links, automatic bookmarks, document properties, viewer preferences, security, other options (PDF/A, image downsampling) | [`html-to-pdf.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/html-to-pdf.md) |
 | Headers, footers, page numbering | [`page-setup-headers-footers.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/page-setup-headers-footers.md) |
 | Web page authentication, cookies, HTTP headers, POST, proxy | [`auth-cookies-headers-post.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/auth-cookies-headers-post.md) |
 | Troubleshooting, security recommendations for untrusted input | [`troubleshooting-and-security.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/troubleshooting-and-security.md) |
 
 ## Gotchas (read before debugging)
 
-- **Only 5 pages came out** → that is the Community Edition limit, not a bug. The full
-  `SelectPdf.Universal` package removes it with the same code.
+- **Only 5 pages came out** → that is the Community Edition limit, not a bug
+  (`ConversionResult.PdfPageCountBeforeLimit` says how many the content had). The full `SelectPdf.Universal`
+  package removes it with the same code.
 - **Classic code does not compile** → it uses `using SelectPdf;`, `System.Drawing` types or WebKit/Blink
   settings. See [`migrating-from-classic.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-htmltopdf-universal-net/reference/migrating-from-classic.md).
-- **`HtmlToImage`, `PdfStandard.PdfA3A`, partial conversion or open actions are missing** → those are in the
-  full `SelectPdf.Universal` package only.
+- **`HtmlToImage`, `PdfStandard.PdfA1A` / `PdfA2A` / `PdfA3A`, `TableOfContents`, `CreateFormFields`, partial
+  conversion or open actions are missing** → those are in the full `SelectPdf.Universal` package only.
 - **`MinPageLoadTime` / `MaxPageLoadTime`** still compile but are obsolete: use `ConversionDelay` and
   `NavigationTimeout`.
 - **Engine not found on Linux or macOS** → the native package for that runtime is missing, or it does not
-  match the process architecture.
+  match the process architecture. On Alpine / musl, use the remote engine instead.
 - **Boxes or wrong glyphs on Linux** → the host has no fonts for that script. Add `SelectPdf.Universal.Fonts`
   or load web fonts.
 - **Page needs WebGL** → WebGL is off by default; set `Options.WebGlEnabled = true`.
 
 ## Faithfulness
 
-The reference files are converted from the shipped SelectPdf.HtmlToPdf.Universal v26.4 help topics, with the
-official C# and VB.NET samples; every sample was compiled against the SelectPdf.HtmlToPdf.Universal 26.4.0
+The reference files are converted from the shipped SelectPdf.HtmlToPdf.Universal v26.5 help topics, with the
+official C# and VB.NET samples; every sample was compiled against the SelectPdf.HtmlToPdf.Universal 26.5.0
 NuGet package. Only use APIs, enums and options that appear in them, and do not document full-library
 features in this rule. Online documentation: https://selectpdf.com/html-to-pdf/docs/.
 

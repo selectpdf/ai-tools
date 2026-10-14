@@ -1,6 +1,6 @@
 # Installation, license key and deployment (Windows, Linux, macOS, Docker, cloud)
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Installation
 
@@ -49,10 +49,52 @@ Linux servers and container images often have no fonts. **SelectPdf.Universal.Fo
 
 [https://www.nuget.org/packages/SelectPdf.Universal.Fonts/](https://www.nuget.org/packages/SelectPdf.Universal.Fonts/)
 
-- All PDF features - HTML-to-PDF conversion, from-scratch document creation, graphic elements, fonts, encryption, bookmarks, viewer preferences, PDF/A, form filling, PDF compression, digital signatures, portfolios, page resize, PDF-to-text and PDF-to-image - are in-box in the **SelectPdf.Universal** package. The only other package is the optional **SelectPdf.Universal.Fonts**, fonts for every language on Linux - see "Fonts and languages" (installation-and-deployment.md).
+**4. One package per platform** (instead of steps 1 and 2)
+
+For an application that runs on one platform, a single package installs both the managed library and the engine for that platform. These packages contain no code of their own. Install one of them, or the managed library and Native packages as described above - not both.
+
+Windows x64: SelectPdf.Universal and the engine package for that platform.
+
+[https://www.nuget.org/packages/SelectPdf.Universal.Windows/](https://www.nuget.org/packages/SelectPdf.Universal.Windows/)
+
+Linux x64 and Docker: SelectPdf.Universal and the engine package for that platform.
+
+[https://www.nuget.org/packages/SelectPdf.Universal.Linux/](https://www.nuget.org/packages/SelectPdf.Universal.Linux/)
+
+Linux ARM64 and Docker: SelectPdf.Universal and the engine package for that platform.
+
+[https://www.nuget.org/packages/SelectPdf.Universal.Linux.Arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Linux.Arm64/)
+
+macOS on Apple Silicon: SelectPdf.Universal and the engine package for that platform.
+
+[https://www.nuget.org/packages/SelectPdf.Universal.MacOS/](https://www.nuget.org/packages/SelectPdf.Universal.MacOS/)
+
+- All PDF features - HTML-to-PDF conversion, from-scratch document creation, graphic elements, fonts, encryption, bookmarks, viewer preferences, PDF/A, form filling, PDF compression, digital signatures, portfolios, page resize, PDF-to-text and PDF-to-image - are in-box in the **SelectPdf.Universal** package. The other packages are the optional **SelectPdf.Universal.Fonts**, fonts for every language on Linux (see "Fonts and languages" (installation-and-deployment.md)), and the one-package-per-platform installs of step 4.
 - There is only one HTML rendering engine (Chromium / CEF), bundled in the Native package. There are no engine companion packages to choose. See "The Chromium engine" (installation-and-deployment.md).
-- To deploy to more than one platform side by side (for example a build published for Windows, Linux and macOS), install every matching Native package; each targets its own runtime identifier and they can coexist.
+- A project references one Native package. To publish one application for several platforms, see Publishing for Several Platforms.
 - On macOS only Apple Silicon (ARM64) is supported by the Native package. On an Intel Mac the managed features still work, but HTML-to-PDF, PDF-to-text and PDF-to-image are unavailable because no **osx-x64** engine package is produced.
+
+### Publishing for Several Platforms
+
+A project references one Native package. Every Native package installs the engine into the same folder next to the application, so two of them in one build conflict.
+
+To publish one application for several platforms, choose the Native package by runtime identifier and publish once per platform; each published copy then carries the engine for its platform. Add `Or '$(RuntimeIdentifier)' == ''` to the package for the computer you develop on, so that builds and debugging without a runtime identifier have an engine too:
+
+```xml
+<ItemGroup>
+  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal.Native.win-x64" Version="26.5.0"
+    Condition="'$(RuntimeIdentifier)' == 'win-x64'
+               Or '$(RuntimeIdentifier)' == ''" />
+  <PackageReference Include="SelectPdf.Universal.Native.linux-x64" Version="26.5.0"
+    Condition="'$(RuntimeIdentifier)' == 'linux-x64'" />
+</ItemGroup>
+```
+
+```text
+dotnet publish -c Release -r win-x64
+dotnet publish -c Release -r linux-x64
+```
 
 ### The Previous SelectPdf Library (Select.Pdf)
 
@@ -124,9 +166,9 @@ Do not forget to replace **your-license-key** with the actual license key receiv
 
 ## The Chromium engine
 
-SelectPdf renders HTML with a single engine: the **Chromium** rendering engine, based on the **Chromium Embedded Framework (CEF)**. It is the default and only rendering engine, so no engine selection is required for a typical conversion. Because it tracks a current Chromium release, it renders modern HTML5/CSS3 and modern JavaScript (ES2020+) correctly.
+SelectPdf.Universal renders HTML with the **Chromium** rendering engine, based on the **Chromium Embedded Framework (CEF)**. Chromium is the only engine, and it runs in one of two places: on the machine the application runs on (`RenderingEngine.Chromium`, the default), or in a remote SelectPdf engine that the application reaches over HTTP (`RenderingEngine.ChromiumRemote`, see "The remote engine" (installation-and-deployment.md)). A typical conversion needs no engine selection. Because the engine tracks a current Chromium release, it renders modern HTML5/CSS3 and modern JavaScript (ES2020+) correctly.
 
-The engine ships in the platform-specific **SelectPdf.Universal.Native.<rid>** NuGet package (for example **SelectPdf.Universal.Native.win-x64** or **SelectPdf.Universal.Native.linux-x64**) that is installed alongside the managed **SelectPdf.Universal** package - see "Installation" (installation-and-deployment.md). The engine runs headless / off-screen, so no display server is required. It runs on Windows (x64, x86), Linux (x64, arm64) and macOS (Apple Silicon), and on Microsoft Azure Web Apps (Basic plan or above) without additional configuration - see "Microsoft Azure" (installation-and-deployment.md).
+For an engine on the application's own machine, the engine ships in the platform-specific **SelectPdf.Universal.Native.<rid>** NuGet package (for example **SelectPdf.Universal.Native.win-x64** or **SelectPdf.Universal.Native.linux-x64**) that is installed alongside the managed **SelectPdf.Universal** package - see "Installation" (installation-and-deployment.md). The engine runs headless / off-screen, so no display server is required. It runs on Windows (x64, x86), Linux (x64, arm64) and macOS (Apple Silicon), and on Microsoft Azure Web Apps (Basic plan or above) without additional configuration - see "Microsoft Azure" (installation-and-deployment.md).
 
 ### NuGet Packages
 
@@ -146,7 +188,7 @@ Chromium engine for macOS on Apple Silicon (ARM64), macOS 13 (Ventura) or newer.
 
 ### Selecting the Chromium Engine
 
-Chromium is the default engine, so this step is optional. If you set it explicitly, assign `HtmlToPdfOptions.RenderingEngine` to `RenderingEngine.Chromium` (the only value):
+Chromium running on this machine is the default, so this step is optional. To set it explicitly, assign `HtmlToPdfOptions.RenderingEngine` to `RenderingEngine.Chromium`. The other value, `RenderingEngine.ChromiumRemote`, sends the conversion to a remote SelectPdf engine instead - see "The remote engine" (installation-and-deployment.md). When the property is not set, the converter uses `GlobalProperties.RenderingEngine`:
 
 ```csharp
 HtmlToPdf converter = new HtmlToPdf();
@@ -337,6 +379,288 @@ The property is available on `HtmlToPdfOptions` and on every other type that ren
 
 The Chromium engine supports the full SelectPdf HTML-to-PDF feature set - including automatic bookmark generation, POST data, web elements location retrieval, table of contents generation, and partial web page rendering (converting only a CSS-selected region of the input document via `HtmlToPdfOptions.VisibleWebElementSelector`).
 
+## The remote engine
+
+The conversion engines normally run on the machine the application runs on, from the **SelectPdf.Universal.Native.<rid>** package. With `RenderingEngine.ChromiumRemote` the application sends that work over HTTP to the **SelectPdf engine** instead - a service that ships as the container image `ghcr.io/selectpdf/engine` and runs on another machine, as another container, or beside the application in the same pod.
+
+Every native operation goes to the engine: HTML to PDF and HTML to image (the Chromium engine), and PDF to text and PDF to image (the PDF tool). Everything else stays in the application and works exactly as before: building the document, headers and footers, bookmarks, PDF/A and PDF/UA, security and signatures, Word to PDF, redaction, forms - and the license check. The engine itself needs no license.
+
+Use the remote engine to:
+
+- **Run on Alpine Linux** and other musl-based systems, where the native engines cannot run. This is the supported way to use the library there.
+- **Keep the application small**: it references only the managed **SelectPdf.Universal** package - no native package and no fonts package.
+- **Isolate rendering** from the application, scale it separately, or share one engine between several applications.
+
+### Quick start
+
+Start the engine with an access token:
+
+```text
+docker run -d --name selectpdf-engine -p 8080:8080 \
+  --read-only --tmpfs /tmp \
+  -e SELECTPDF_ENGINE_TOKEN="$(openssl rand -base64 32)" \
+  ghcr.io/selectpdf/engine:26.5
+```
+
+Then point the application at it, once at startup. The conversion code does not change:
+
+```csharp
+GlobalProperties.RenderingEngine = RenderingEngine.ChromiumRemote;
+GlobalProperties.EngineEndpoint = "http://localhost:8080";
+GlobalProperties.EngineAccessToken = "the token the engine was started with";
+
+HtmlToPdf converter = new HtmlToPdf();
+PdfDocument doc = converter.ConvertUrl("https://selectpdf.com");
+doc.Save("test.pdf");
+doc.Close();
+```
+
+```vbnet
+GlobalProperties.RenderingEngine = RenderingEngine.ChromiumRemote
+GlobalProperties.EngineEndpoint = "http://localhost:8080"
+GlobalProperties.EngineAccessToken = "the token the engine was started with"
+
+Dim converter As New HtmlToPdf()
+Dim doc As PdfDocument = converter.ConvertUrl("https://selectpdf.com")
+doc.Save("test.pdf")
+doc.Close()
+```
+
+The same settings can come from environment variables instead, with no code at all - which is how a container deployment usually does it:
+
+```text
+SELECTPDF_RENDERING_ENGINE=ChromiumRemote
+SELECTPDF_ENGINE_ENDPOINT=http://selectpdf-engine:8080
+SELECTPDF_ENGINE_TOKEN=the token the engine was started with
+```
+
+The samples include a complete Docker Compose example, **docker/remote-engine**: an application on `mcr.microsoft.com/dotnet/aspnet:10.0-alpine` and the engine as two services.
+
+### Application settings
+
+| Property | Environment variable | Meaning |
+|---|---|---|
+| `GlobalProperties.RenderingEngine` | `SELECTPDF_RENDERING_ENGINE` | `Chromium` (the default: the engines run on this machine) or `ChromiumRemote`. Every converter follows it unless its own **RenderingEngine** property is set, and the PDF tools always follow it. |
+| `GlobalProperties.EngineEndpoint` | `SELECTPDF_ENGINE_ENDPOINT` | The engine's url. Default `http://selectpdf-engine:8080`: an engine service named `selectpdf-engine` on the same Docker network or cluster. |
+| `GlobalProperties.EngineAccessToken` | `SELECTPDF_ENGINE_TOKEN` | One of the tokens the engine was started with, or none when the engine requires none. |
+| `GlobalProperties.EngineTimeout` | `SELECTPDF_ENGINE_TIMEOUT` (seconds) | How long one request may take. By default it follows the conversion's own navigation and print timeouts, plus time to wait for a free slot on a busy engine. |
+
+A single converter can use the other engine than the global setting through its own `HtmlToPdfOptions.RenderingEngine` (and the **RenderingEngine** property of **HtmlToImage**, **PdfHtmlElement**, **PdfHtmlSection** and **HtmlToImageElement**).
+
+### Running the engine
+
+The image is `ghcr.io/selectpdf/engine` (mirrored on Docker Hub as `selectpdf/engine`), for **x64** and **arm64**. Use the tag of the library's version - `26.5.0`, or `26.5` for its latest build; an engine that does not speak the library's protocol is reported as such. The engine listens on port 8080, runs as a non-root user, works with a read-only file system and a writable `/tmp`, and needs no extra capabilities and no `--shm-size`.
+
+**Health:** `GET /health` answers 200 once the engine has done its first conversion (the image's own `HEALTHCHECK` uses it), and 503 before that or when it cannot convert. `/healthz` answers the same, for probes written with that name. `GET /v1/info` (with the token) reports the engine's version, its Chromium version and its limits.
+
+| Engine environment variable | Meaning |
+|---|---|
+| `SELECTPDF_ENGINE_TOKEN` | The access tokens the engine accepts, separated by commas - several at once let a token be rotated without downtime. Each must be at least 32 characters, or the engine does not start; generate one with `openssl rand -base64 32`. Without a token anyone who can reach the port can use the engine (it logs a warning). |
+| `SELECTPDF_ENGINE_TOKEN_FILE` | A file holding the tokens, one per line - a Docker or Kubernetes secret. Instead of `SELECTPDF_ENGINE_TOKEN`. |
+| `SELECTPDF_MAX_CONCURRENCY` | HTML conversions run at once. Default: the number of CPUs the container has. |
+| `SELECTPDF_MAX_TOOL_CONCURRENCY` | PDF to text / image operations run at once. Default: the number of CPUs. |
+| `SELECTPDF_QUEUE_TIMEOUT` | Seconds a request waits for a free slot (default 30). After that the engine answers 503 with `Retry-After: 1` and closes the connection, so a retry can reach another replica; the library retries such an answer up to three times. |
+| `SELECTPDF_MAX_BODY_MB` | The largest request accepted, in MB (default 100). |
+| `SELECTPDF_ENGINE_HTTP_CACHE` | The most of the HTTP cache a conversion may keep: `clear`, `thirdParty` or `all` (the default - each conversion keeps what it asks for through `HtmlToPdfOptions.HttpCache`). Set `clear` on an engine shared by different callers. |
+| `SELECTPDF_ENGINE_PORT` | The port to listen on (default 8080) - change it when the engine runs beside an application that uses 8080 in the same pod. |
+| `SELECTPDF_TEMP_DIR` | Where conversions work (default `/tmp/selectpdf-engine`). Each request has a folder of its own, deleted when it ends. |
+
+**Docker Compose:** name the engine service `selectpdf-engine` and the application needs no endpoint setting at all:
+
+```text
+services:
+  selectpdf-engine:
+    image: ghcr.io/selectpdf/engine:26.5
+    read_only: true
+    tmpfs:
+      - /tmp
+    environment:
+      SELECTPDF_ENGINE_TOKEN: ${SELECTPDF_ENGINE_TOKEN}
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SELECTPDF_RENDERING_ENGINE: ChromiumRemote
+      SELECTPDF_ENGINE_TOKEN: ${SELECTPDF_ENGINE_TOKEN}
+    depends_on:
+      selectpdf-engine:
+        condition: service_healthy
+```
+
+**Kubernetes, Azure, AWS and Google Cloud:** see Running the engine in the cloud below.
+
+### Running the engine in the cloud
+
+Each route below keeps the engine off the internet and was tested end to end on its platform with the image and an application on `aspnet:10.0-alpine`. Pick the one where the application already runs. The token rule decides the shape of each: the library sends the token over plain HTTP only to a local endpoint (a name without a dot, `localhost`, a `.svc.cluster.local` name or a private address), and over HTTPS anywhere else.
+
+The samples download has a step-by-step sample for Azure Container Apps, Amazon ECS, Google Cloud Run and Kubernetes in `cloud/remote-engine`, each deploying the application of `docker/remote-engine` beside the engine.
+
+#### Kubernetes (Helm)
+
+The chart runs the engine as a Deployment behind a Service, non-root with a read-only root file system, with `/health` as its startup, readiness and liveness probe and the token in a Secret. Install it as `selectpdf-engine` and an application in the same namespace needs no endpoint setting:
+
+```text
+helm install selectpdf-engine \
+  oci://ghcr.io/selectpdf/charts/selectpdf-engine --version 26.5.0 \
+  --namespace pdf --create-namespace \
+  --set auth.token="$(openssl rand -base64 32)"
+```
+
+From another namespace use `http://selectpdf-engine.<namespace>.svc.cluster.local:8080`. Other values: `replicaCount` (2), `auth.existingSecret` for a Secret you manage, `engine.httpCache`, `engine.maxConcurrency` and `resources`. Several tokens are separated by commas, which Helm's `--set` splits on: escape them (`--set auth.token='a\,b'`) or put the value in a values file.
+
+#### Azure Container Apps
+
+Run the engine as an app with internal ingress named `selectpdf-engine`: apps in the same environment reach it as `http://selectpdf-engine`, a local name, and nothing outside the environment can.
+
+```text
+az containerapp create -n selectpdf-engine -g my-group \
+  --environment my-environment \
+  --image ghcr.io/selectpdf/engine:26.5 \
+  --ingress internal --target-port 8080 --transport http \
+  --cpu 2 --memory 4Gi --min-replicas 1 --max-replicas 3 \
+  --secrets "engine-token=$TOKEN" \
+  --env-vars SELECTPDF_ENGINE_TOKEN=secretref:engine-token
+```
+
+and in the application's app:
+
+```text
+--secrets "engine-token=$TOKEN" \
+--env-vars SELECTPDF_RENDERING_ENGINE=ChromiumRemote \
+  SELECTPDF_ENGINE_ENDPOINT=http://selectpdf-engine \
+  SELECTPDF_ENGINE_TOKEN=secretref:engine-token
+```
+
+Keep `--min-replicas 1`: an engine scaled to zero starts Chromium on the first request after it.
+
+#### Azure Container Instances
+
+Run the engine as a second container in the application's container group. The containers share `localhost`, so the engine listens on another port and only the application's port is exposed:
+
+```text
+containers:
+  - name: selectpdf-engine
+    properties:
+      image: ghcr.io/selectpdf/engine:26.5
+      resources:
+        requests: { cpu: 2, memoryInGB: 4 }
+      environmentVariables:
+        - name: SELECTPDF_ENGINE_PORT
+          value: '8081'
+        - name: SELECTPDF_ENGINE_TOKEN
+          secureValue: '<token>'
+  - name: app
+    properties:
+      image: myregistry.azurecr.io/my-app:1.0
+      ports:
+        - port: 8080
+      resources:
+        requests: { cpu: 1, memoryInGB: 1.5 }
+      environmentVariables:
+        - name: SELECTPDF_RENDERING_ENGINE
+          value: ChromiumRemote
+        - name: SELECTPDF_ENGINE_ENDPOINT
+          value: http://localhost:8081
+        - name: SELECTPDF_ENGINE_TOKEN
+          secureValue: '<token>'
+```
+
+Deploy the group with `az container create --file group.yaml`, with `ipAddress` publishing port 8080 only.
+
+#### Amazon ECS on Fargate
+
+**As its own service, with Service Connect.** Run the engine as a service that publishes port 8080 under the client alias `selectpdf-engine` - the library's default endpoint, so the application needs no endpoint setting - and turn Service Connect on in the application's service too. The engine's task definition:
+
+```text
+"containerDefinitions": [{
+  "name": "engine",
+  "image": "ghcr.io/selectpdf/engine:26.5",
+  "readonlyRootFilesystem": true,
+  "portMappings": [{ "name": "engine", "containerPort": 8080,
+                     "protocol": "tcp", "appProtocol": "http" }],
+  "secrets": [{ "name": "SELECTPDF_ENGINE_TOKEN",
+                "valueFrom": "<Secrets Manager secret ARN>" }],
+  "mountPoints": [{ "sourceVolume": "tmp", "containerPath": "/tmp" }],
+  "healthCheck": {
+    "command": ["CMD", "dotnet", "/app/SelectPdf.Engine.Host.dll",
+                "--healthcheck"],
+    "interval": 30, "timeout": 10, "retries": 3, "startPeriod": 60 }
+}],
+"volumes": [{ "name": "tmp" }],
+"cpu": "2048", "memory": "4096"
+```
+
+and its service:
+
+```text
+aws ecs create-service --cluster my-cluster \
+  --service-name selectpdf-engine --task-definition selectpdf-engine \
+  --launch-type FARGATE --desired-count 2 \
+  --network-configuration "awsvpcConfiguration={subnets=[...],
+    securityGroups=[engine-sg]}" \
+  --service-connect-configuration '{"enabled":true,
+    "namespace":"my-namespace","services":[{"portName":"engine",
+    "discoveryName":"selectpdf-engine","clientAliases":[
+    {"port":8080,"dnsName":"selectpdf-engine"}]}]}'
+```
+
+Give the engine's security group port 8080 from the application's security group only. The image declares `/tmp` as a volume, which is what lets the non-root engine write to the task volume with a read-only root file system. Reading the token from Secrets Manager needs `secretsmanager:GetSecretValue` on the task execution role.
+
+**In the application's task.** Add the engine as a second container with `SELECTPDF_ENGINE_PORT` set to `8081`, give the application `SELECTPDF_ENGINE_ENDPOINT=http://localhost:8081`, and make it start after the engine with `"dependsOn": [{"containerName": "engine", "condition": "HEALTHY"}]`. Size the task for both (2 vCPU and 4 GB or more).
+
+#### Google Cloud Run
+
+Run the engine as its own service and give the application its HTTPS URL:
+
+```text
+gcloud run deploy selectpdf-engine \
+  --image ghcr.io/selectpdf/engine:26.5 \
+  --region europe-north1 --port 8080 --cpu 2 --memory 4Gi \
+  --concurrency 8 --timeout 600 --execution-environment gen2 \
+  --no-invoker-iam-check \
+  --set-secrets SELECTPDF_ENGINE_TOKEN=engine-token:latest
+```
+
+```text
+SELECTPDF_RENDERING_ENGINE=ChromiumRemote
+SELECTPDF_ENGINE_ENDPOINT=https://selectpdf-engine-xxxxxxxxxx-lz.a.run.app
+SELECTPDF_ENGINE_TOKEN=<the same token>
+```
+
+`--no-invoker-iam-check` is required: without it Cloud Run checks the `Authorization` header of a request coming from another Cloud Run service as a Google identity token, and refuses the engine's token before it reaches the engine. The engine's own token check still applies. Check the engine's health from outside at `/health`: Cloud Run serves no external path ending in `z`, so the older `/healthz` answers 404 there. Cloud Run pulls the public image from ghcr.io directly; Google recommends Artifact Registry, which can mirror it through a remote repository.
+
+### Security
+
+- **Use a token** and keep the engine off the public internet - on the Docker network, the cluster network or a private subnet of the application.
+- **The token is never sent in clear text to another network.** With a token set, the library requires an `https` endpoint unless the endpoint is a local one: a service name without a dot, `localhost`, a loopback or a private address. The engine itself serves plain HTTP; for an engine on another machine, put TLS in front of it (an ingress, a load balancer or a reverse proxy).
+- **A page cannot read the engine's files**: local file access is always off in the engine, whatever a conversion asks for.
+- **The engine fetches what the pages reference**, from its own network. When it converts html you do not control, limit where the engine's network can reach (internal services, cloud metadata addresses).
+- **A shared engine**: set `SELECTPDF_ENGINE_HTTP_CACHE=clear`, so no conversion is served a response another caller's conversion fetched. Cookies and storage are cleared after every conversion in any case.
+
+### What is different from a local engine
+
+- **Local files:** the engine cannot see the application's files, so a `file://` url or base url is refused before anything is sent. Convert the html as a string, or serve the files over http. Local files an html string references - images, stylesheets, fonts and media in `src`, `href`, `srcset` or a CSS `url()` - are sent with it as `data:` urls, so they are drawn as a local engine draws them (up to 48 MB in one conversion; not when local file access is denied, as locally). Relative urls inside an inlined stylesheet do not resolve.
+- **localhost** in a url means the engine's own machine, not the application's - except when the engine runs in the application's pod or on its host network. A conversion of a `localhost` or loopback url that fails says so in its message; use an address the engine can reach, such as the application's service name.
+- **Fonts:** the engine has fonts for every language (the Noto family) and renders with them, as a Linux application with the **SelectPdf.Universal.Fonts** package does. Fonts in the application's own **fonts** folder are sent to the engine with each conversion. See "Fonts and languages" (installation-and-deployment.md).
+- **Per-conversion settings that a local in-process engine fixes for the whole process** - `HtmlToPdfOptions.WebGlEnabled`, a proxy, insecure content - are honoured per conversion: the engine runs such a conversion in a process of its own. A proxy must be reachable from the engine.
+- **Errors** are the same exception types as locally (`HtmlToPdfException`, `PdfToTextException`, ...). When the engine itself could not be reached or refused the request, the message says so and names the request id the engine logs its runs under.
+- **Logging:** with a log file set (**LFN**), the engine's own log of the conversion is appended to it.
+- **Cancellation:** cancelling an awaited conversion (**ConvertUrlAsync** and the other asynchronous methods) cancels it in the engine.
+
+### Sizing
+
+One engine converts several pages at once - as many as it has CPUs by default - and queues the rest. Measured with a light document of one or two pages, one engine container limited to N CPUs:
+
+| CPUs | One conversion | Conversions per second, fully loaded |
+|---|---|---|
+| 1 | about 100 ms | about 7 |
+| 2 | about 60 ms | about 10 |
+| 4 | about 50 ms | about 18 |
+| 8 | about 50 ms | about 24 |
+
+Real pages take longer, mostly in fetching them. Throughput grows little beyond 4 to 8 CPUs per engine; for more, run more engine replicas behind one service. Memory stayed under 500 MB with eight light conversions at once; heavy pages (news sites, long reports) need more - give each engine 2 GB or more.
+
 ## Fonts and languages
 
 HTML is rendered by a Chromium engine, which takes the fonts a page asks for from the computer it runs on, and text the library draws itself (headers, footers, text elements) uses fonts from the same place. On Windows and macOS that just works: both come with fonts for every major script. A Linux server, and almost every Linux container image, comes with few fonts or none.
@@ -357,10 +681,10 @@ Reference it next to the other two packages:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="SelectPdf.Universal" Version="26.4.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.4.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.4.0" />
+                    Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
 </ItemGroup>
 ```
 
@@ -519,7 +843,7 @@ docker build -t myapp .
 docker run --rm -p 8080:8080 myapp
 ```
 
-> **Important:** Use a **glibc-based** Linux image (the default Debian / Ubuntu based `mcr.microsoft.com/dotnet` tags). **Alpine** (musl) images are not supported by the native engines.
+> **Important:** Use a **glibc-based** Linux image (the default Debian / Ubuntu based `mcr.microsoft.com/dotnet` tags) for an application that runs the engines itself. **Alpine** (musl) images cannot run the native engines: an application on Alpine converts through the remote engine container instead - see "The remote engine" (installation-and-deployment.md).
 
 #### Alternative: publish on the host, copy into the image
 
@@ -560,7 +884,7 @@ docker run --rm --platform linux/arm64 -p 8080:8080 myapp-arm64
 
 Reference the managed package together with **SelectPdf.Universal.Native.win-x64** and base the runtime image on **Windows Server Core** — for example `mcr.microsoft.com/dotnet/aspnet:8.0-windowsservercore-ltsc2022`. Server Core provides the GDI components the Chromium engine uses; the smaller **Nano Server** images do not and are not supported. No Visual C++ Redistributable is required — the native engines are static builds.
 
-One container-specific step is required in the image (illustrated by the shipped Docker samples and verified end-to-end): **install the core Windows font families**. Server Core images ship almost no fonts, and the Chromium engine cannot start on a fontless image — DirectWrite's font fallback fails fatally when none of the installed families are ones it recognizes (a set of only third-party fonts is not sufficient; the standard Windows families — Segoe UI, Arial, Times New Roman, Verdana, Tahoma — are). Copy them from Microsoft's full Windows Server image in a build stage and register them:
+One container-specific step is required in the image (illustrated by the shipped Docker samples and verified end-to-end): **install the core Windows font families**. Server Core images ship almost no fonts, and the Chromium engine cannot start unless standard Windows font families are installed (third-party fonts alone are not enough; Segoe UI, Arial, Times New Roman, Verdana or Tahoma are). Copy them from Microsoft's full Windows Server image in a build stage and register them:
 
 ```text
 FROM mcr.microsoft.com/windows/server:ltsc2022 AS fonts
@@ -577,7 +901,7 @@ RUN powershell -Command "Get-ChildItem C:\Windows\Fonts -Filter *.ttf | \
 
 Add the italic variants and any other families your pages use the same way. Alternatively, base the runtime on the **full Windows Server image** (`mcr.microsoft.com/windows/server:ltsc2022`, which ships the complete font set) and install the ASP.NET Core runtime in the Dockerfile — no font step is needed there, at the cost of a larger image.
 
-Nothing else is required: the engine detects that it is running in a Windows container and automatically disables the DirectX shader-compiler path that would otherwise crash on display-less hosts — rendering proceeds in software, which is exactly right for PDF and image output. (The environment variable `SELECTPDF_BLOCK_D3DCOMPILER` — `1`/`0` — can force this behavior on or off if ever needed.)
+Nothing else is required: the engine detects that it is running in a Windows container and renders in software, which is all PDF and image output needs.
 
 Windows container images can only be built and run on a Windows host with Docker switched to Windows-container mode. When Windows itself is not a requirement, prefer the Linux containers above — they are smaller and need no font step at all.
 
@@ -620,7 +944,7 @@ Any service that runs a Linux or Windows container also runs SelectPdf - see "Do
 
 - **Azure Functions Consumption and Flex Consumption plans** - see "Azure Functions" (installation-and-deployment.md).
 - **Azure App Service Free and Shared plans** - they do not allow the engine processes.
-- **Alpine (musl) Linux images** - the engines need a glibc-based distribution.
+- **Alpine (musl) Linux images running the engines themselves** - the native engines need a glibc-based distribution. An application on Alpine converts through the remote engine container instead: see "The remote engine" (installation-and-deployment.md).
 
 ### What every platform needs
 
@@ -864,10 +1188,10 @@ Reference the three packages in the application:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="SelectPdf.Universal" Version="26.4.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.4.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.4.0" />
+                    Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
 </ItemGroup>
 ```
 
@@ -978,10 +1302,10 @@ Use the Lambda .NET base image and the packages for the function's architecture:
   <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="3.0.1" />
   <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson"
                     Version="3.0.1" />
-  <PackageReference Include="SelectPdf.Universal" Version="26.4.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.4.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.4.0" />
+                    Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
 </ItemGroup>
 ```
 
@@ -1160,10 +1484,10 @@ Reference the three packages in the application:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="SelectPdf.Universal" Version="26.4.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.4.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.4.0" />
+                    Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
 </ItemGroup>
 ```
 

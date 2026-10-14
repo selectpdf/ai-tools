@@ -16,7 +16,7 @@ description: >-
 
 Expert guidance for the **free Select.HtmlToPdf Community Edition** — the same rendering engine as the
 commercial library, restricted to **HTML→PDF conversion** and **5 pages per document**. Runs on
-Windows. Current as of **v26.4**.
+Windows. Current as of **v26.5**.
 
 ## Pick the right skill first
 
@@ -162,7 +162,7 @@ Selectable via `converter.Options.RenderingEngine`:
 ## Faithfulness
 
 Only use APIs, enums and options that appear in these reference files (sourced verbatim from the
-SelectPdf Community Edition v26.3 SDK reference and official samples, updated for v26.4 from the SDK
-source). Do not invent members or options, and do not document commercial-only features (PDF
+SelectPdf Community Edition v26.3 SDK reference and official samples, updated for v26.4 and v26.5 from the
+SDK source). Do not invent members or options, and do not document commercial-only features (PDF
 creation/editing, forms, signatures, extraction, accessibility, e-invoices) in this skill. Online docs:
 https://selectpdf.com/html-to-pdf/docs-classic/.

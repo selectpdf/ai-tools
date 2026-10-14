@@ -13,8 +13,8 @@ Four guides, mirrored across every tool:
 
 | File stem | Library | Package |
 |---|---|---|
-| `selectpdf-lib-universal-net` | SelectPdf.Universal, cross-platform commercial (Windows, Linux, macOS on Apple Silicon, Docker) | `SelectPdf.Universal` + `SelectPdf.Universal.Native.<rid>` |
-| `selectpdf-lib-htmltopdf-universal-net` | free cross-platform Community Edition (HTML→PDF, 5-page cap) | `SelectPdf.HtmlToPdf.Universal` + `SelectPdf.Universal.Native.<rid>` |
+| `selectpdf-lib-universal-net` | SelectPdf.Universal, cross-platform commercial (Windows, Linux, macOS on Apple Silicon, Docker) | `SelectPdf.Universal` + `SelectPdf.Universal.Native.<rid>`, or `SelectPdf.Universal.<Platform>` |
+| `selectpdf-lib-htmltopdf-universal-net` | free cross-platform Community Edition (HTML→PDF, 5-page cap) | `SelectPdf.HtmlToPdf.Universal` + `SelectPdf.Universal.Native.<rid>`, or `SelectPdf.HtmlToPdf.<Platform>` |
 | `selectpdf-lib-net` | classic commercial Select.Pdf (Windows) | `Select.Pdf` / `Select.Pdf.NetCore` |
 | `selectpdf-lib-htmltopdf-net` | classic free Community Edition (Windows, HTML→PDF, 5-page cap) | `Select.HtmlToPdf` / `Select.HtmlToPdf.NetCore` |
 

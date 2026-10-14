@@ -1,6 +1,6 @@
 # Troubleshooting and security recommendations
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Troubleshooting
 
@@ -70,7 +70,7 @@ The Chromium engine loads and embeds the web fonts referenced by the page in the
 
 ### When a html string is converted to pdf, the styles are not applied and the images are missing.
 
-When you convert a string to pdf and have references to external resources, the converter needs to know the location of the html. To do that you need to use the version of ConvertHtmlString method has also an additional parameter called baseUrl. Use that to specify the path where the file should be. Using it and the relative path to the image or css or js file from html, the converter will be able to calculate the full path to the resource file. `HtmlToPdf.ConvertHtmlString(string, string)` contains an additional parameter: *baseUrl*. The *baseUrl* parameter allows the converter to resolve relative urls. Basically, *baseUrl + relative image/css url = full absolute url*.
+When you convert a string to pdf and have references to external resources, the converter needs to know the location of the html. To do that you need to use the version of ConvertHtmlString method has also an additional parameter called baseUrl. Use that to specify the path where the file should be. Using it and the relative path to the image or css or js file from html, the converter will be able to calculate the full path to the resource file. `HtmlToPdf.ConvertHtmlString(string, string)` contains an additional parameter: *baseUrl*. The *baseUrl* parameter allows the converter to resolve relative urls. Basically, *baseUrl + relative image/css url = full absolute url*. An http or https *baseUrl* is also the page's own address and origin, so a web font, a fetch request or a module script on the same site needs no CORS headers - the page is served as the response for that url, not from a temporary file.
 
 ### I convert a web page to PDF and one of the images gets split between 2 pages. How do I make it stay in one page?
 

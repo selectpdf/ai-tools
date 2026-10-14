@@ -86,6 +86,8 @@ Dim tiffBytes As Byte() = rasterizer.ConvertToTiff()
 
 `PdfToText` also searches: after `Load`, call `Search(text, caseSensitive, wholeWordsOnly)`, which returns a `TextPosition[]` — one entry per occurrence. Each `TextPosition` exposes `PageNumber` plus `X`, `Y`, `Width`, and `Height`, giving the location of the match (used below to draw highlight rectangles over the hits).
 
+Since v26.5 `Search` finds text in every script - Cyrillic, Chinese, Japanese, Korean, Hindi, Thai, Arabic, Hebrew - and right-to-left terms typed in reading order; earlier versions found only text in the Windows code page. Extracted text no longer contains the invisible bidi embedding characters (U+202A - U+202C) around right-to-left text, and Arabic letters the Chromium engine draws as shaped glyphs are extracted inside their words.
+
 ```csharp
 // instantiate a pdf to text converter object
 PdfToText pdfToText = new PdfToText();

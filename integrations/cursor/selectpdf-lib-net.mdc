@@ -6,7 +6,7 @@ alwaysApply: false
 
 # SelectPdf .NET library (commercial)
 
-Self-hosted PDF toolkit for .NET. Current as of v26.4. Full depth (every topic, C# + VB.NET) lives in
+Self-hosted PDF toolkit for .NET. Current as of v26.5. Full depth (every topic, C# + VB.NET) lives in
 the reference files linked at the bottom — open the relevant one before writing non-trivial code.
 
 **Wrong edition?** Free Community Edition (`Select.HtmlToPdf`, HTML→PDF only, 5-page cap) → use the
@@ -89,7 +89,7 @@ Engines via `Options.RenderingEngine`: `WebKit` (default, embedded), `WebKitRest
 
 ## Faithfulness
 
-Only use APIs/options/enums documented in the reference files (sourced from the v26.3 SDK reference, updated for v26.4, and
+Only use APIs/options/enums documented in the reference files (sourced from the v26.3 SDK reference, updated for v26.4 and v26.5, and
 official samples). Don't invent members, overloads, enum values, or defaults.
 
 ## Full reference (open the relevant file)

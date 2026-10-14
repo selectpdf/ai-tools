@@ -1,6 +1,6 @@
 # Accessible PDF (PDF/UA-1, PDF/UA-2), PDF/A and electronic invoices
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Accessible PDF and PDF/A
 
@@ -10,7 +10,7 @@ A tagged PDF carries a logical structure tree describing the meaning of the cont
 
 > **Note:** Tagged (accessible) PDF and PDF/A-3 generation are available only in the full commercial SelectPdf library. They are not available in the free SelectPdf community edition.
 
-> **Note:** Tagged (PDF/UA) output and PDF/A level A are produced by the Chromium rendering engine, which is the default and only engine, so no engine selection is required. See "The Chromium engine" (installation-and-deployment.md).
+> **Note:** Tagged (PDF/UA) output and PDF/A level A are produced by the Chromium rendering engine, whether it runs on the application's machine or in a remote engine, so no engine selection is required. See "The Chromium engine" (installation-and-deployment.md) and "The remote engine" (installation-and-deployment.md).
 
 ### Tagging the document, and declaring a standard
 
@@ -225,12 +225,13 @@ doc.EndTag()
 
 The `PdfStandard` enumeration selects the archiving standard of the generated document:
 
-- `PdfA` - PDF/A-1b, and `PdfA2B` - PDF/A-2b.
+- `PdfA` / `PdfA1A` - PDF/A-1 at level B and level A (accessible: includes the tagged logical structure).
+- `PdfA2B` / `PdfA2U` / `PdfA2A` - PDF/A-2 at level B, U (all text has Unicode mapping) and A.
 - `PdfA3B` / `PdfA3U` / `PdfA3A` - PDF/A-3 at level B (visual reproduction), U (all text has Unicode mapping) and A (accessible: includes the tagged logical structure). PDF/A-3 is the level that may carry embedded files, which is what hybrid electronic invoices are built on.
 - `PdfA4` - PDF/A-4, defined on PDF 2.0, plus the two variants `PdfA4E` (engineering: 3D and rich media) and `PdfA4F` (allows arbitrary embedded files).
 - `PdfX` - PDF/X-1a:2001, for print production.
 
-> **Note:** **Which archiving levels combine with which accessibility standard.** PDF/UA-2 is defined on PDF 2.0, so it combines only with PDF/A-4 (`PdfA4`, `PdfA4E`, `PdfA4F`). PDF/UA-1 is defined on PDF 1.7, so it combines with PDF/A-2 and PDF/A-3 (`PdfA2B`, `PdfA3B`, `PdfA3U`, `PdfA3A`) and with PDF/X-1a, but not with PDF/A-4. PDF/A-1b (`PdfA`) combines with neither: producing a PDF/A-1b file rebuilds the document in a way that does not keep its logical structure. Asking for a combination that cannot be produced raises an error naming the levels that can be used instead, rather than producing a file that conforms to neither standard.
+> **Note:** **Which archiving levels combine with which accessibility standard.** PDF/UA-2 is defined on PDF 2.0, so it combines only with PDF/A-4 (`PdfA4`, `PdfA4E`, `PdfA4F`). PDF/UA-1 is defined on PDF 1.7, so it combines with PDF/A-1a, PDF/A-2 and PDF/A-3 (`PdfA1A`, `PdfA2B`, `PdfA2U`, `PdfA2A`, `PdfA3B`, `PdfA3U`, `PdfA3A`) and with PDF/X-1a, but not with PDF/A-4. PDF/A-1b (`PdfA`) combines with neither: producing a PDF/A-1b file rebuilds the document in a way that does not keep its logical structure; use PDF/A-1a, which keeps it, for an accessible PDF/A-1 file. The A levels (`PdfA1A`, `PdfA2A`, `PdfA3A`) turn tagging on for a conversion, and a document built from code at one of them needs `Tagged` set. Asking for a combination that cannot be produced raises an error naming the levels that can be used instead, rather than producing a file that conforms to neither standard.
 
 > **Note:** PDF/A does not permit certain interactive features - sound, movie and screen annotations, and link actions such as launching an external file or running JavaScript. PDF/UA-2 likewise does not permit sound annotations, which PDF 2.0 deprecates. Adding one of these raises an error that names the unsupported feature, rather than producing a non-conformant file.
 

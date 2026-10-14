@@ -1,6 +1,6 @@
 # Migrating from the classic SelectPdf library
 
-Converted from the shipped SelectPdf.Universal v26.4 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
 
 ## Migrating to SelectPdf.Universal
 
@@ -142,7 +142,7 @@ File.WriteAllBytes("page.png", png)
 
 ### Step 4: Move to the Chromium Engine
 
-SelectPdf.Universal renders HTML with one engine, Chromium. `RenderingEngine` is kept so existing code compiles, but its only value is `RenderingEngine.Chromium`: assignments of `WebKit`, `WebKitRestricted` or `Blink` have to be removed. Select.Pdf used WebKit by default, so an application that never set the engine was rendering with WebKit and will see the output change: a current browser layout, different page breaks and page counts, and full support for modern CSS and JavaScript. Review the documents the application produces, and control pagination from the page's CSS (`break-before`, `break-after`, `break-inside: avoid`) - see "Page breaks" (html-to-pdf.md) and "The Chromium engine" (installation-and-deployment.md).
+SelectPdf.Universal renders HTML with one engine, Chromium. `RenderingEngine` is kept so existing code compiles; its values now say where Chromium runs - `RenderingEngine.Chromium` (the default) on the machine the application runs on, `RenderingEngine.ChromiumRemote` in a remote SelectPdf engine (see "The remote engine" (installation-and-deployment.md)). Assignments of `WebKit`, `WebKitRestricted` or `Blink` have to be removed. Select.Pdf used WebKit by default, so an application that never set the engine was rendering with WebKit and will see the output change: a current browser layout, different page breaks and page counts, and full support for modern CSS and JavaScript. Review the documents the application produces, and control pagination from the page's CSS (`break-before`, `break-after`, `break-inside: avoid`) - see "Page breaks" (html-to-pdf.md) and "The Chromium engine" (installation-and-deployment.md).
 
 Settings that belonged to the other engines are gone:
 
@@ -150,7 +150,7 @@ Settings that belonged to the other engines are gone:
 |---|---|
 | `CefEnginePath`, `CefEngineTemporaryFilesPath` | `ChromiumEnginePath`, `ChromiumEngineTemporaryFilesPath`, on the converter options and on every html element, section and image converter. Normally not needed: the engine is found next to the application. |
 | `GlobalProperties.HtmlEngineFullPath` | `ChromiumEnginePath` on the object that converts |
-| `GlobalProperties.PdfToolsFullPath` | No setting: the PDF tool is deployed by the native package and found next to the application or under **runtimes/<rid>/native** |
+| `GlobalProperties.PdfToolsFullPath` | No setting: the PDF tool is deployed by the native package next to the application and found there |
 | `GlobalProperties.EnableRestrictedRenderingEngine`, `EnableFallbackToRestrictedRenderingEngine` | Removed (no WebKit Restricted engine) |
 | `BlinkEnginePath`, `BlinkEngineTemporaryFilesPath`, `BlinkEngineLaunchTimeout`, `BlinkEngineLaunchMaxTries`, `BlinkMaxThreadPoolWorkers`, `ExternalBrowserEndpoint` | Removed (no Blink engine). The number of conversions that run at once is `HtmlToPdfOptions.MaximumConcurrentConversions`. |
 | `AutoFitWidth`, `AutoFitHeight` (`HtmlToPdfPageFitMode`) | Removed: WebKit scaling modes. Size the content with `WebPageWidth`, the page size and CSS - see "Resizing content during conversion" (html-to-pdf.md). |
@@ -249,7 +249,7 @@ Unchanged: the 28-point default page margins, JPEG compression (on, level 10), s
 
 - The native package deploys the engine files next to the application at build and publish time; there is nothing to copy by hand and no build step to add.
 - On Linux, the native package brings the libraries the Chromium engine needs, so no system packages have to be installed; glibc 2.30 or later is required (Debian 11, Ubuntu 20.04, RHEL 9 and later). See "Deployment" (installation-and-deployment.md), "Docker" (installation-and-deployment.md) and "Microsoft Azure" (installation-and-deployment.md).
-- An application published for several platforms references one native package per platform; they install side by side.
+- A project references one native package. An application published for several platforms chooses its native package by runtime identifier and is published once per platform; see "Installation" (installation-and-deployment.md).
 
 ### New in SelectPdf.Universal
 
@@ -259,6 +259,10 @@ Unchanged: the 28-point default page margins, JPEG compression (on, level 10), s
 - Signature validation, AES-GCM encryption and unencrypted metadata - "Digital signatures and signature validation" (security-and-signatures.md), "Advanced security" (security-and-signatures.md).
 - PDF/A-4, PDF/A-4e, PDF/A-4f, PDF/UA-1 and PDF/UA-2 - "Accessible PDF and PDF/A" (accessibility-and-compliance.md); ZUGFeRD / Factur-X invoices - "ZUGFeRD / Factur-X electronic invoices" (accessibility-and-compliance.md).
 - `HtmlToImageElement`, fonts from memory and system font discovery, `PdfDocument.Append` from a file or a stream, and position overloads (`x, y, width, height`) on link, annotation and signature elements.
+- A remote engine that runs conversions in a container on another machine - "The remote engine" (installation-and-deployment.md).
+- A table of contents with page numbers - "Table of contents" (links-bookmarks-toc.md); HTML forms converted into fillable PDF fields - "HTML forms to PDF form fields" (html-to-pdf.md).
+- Signing with keys in an HSM, a smart card, a USB token or a key service, and long-term validation of signatures - "Digital signatures and signature validation" (security-and-signatures.md).
+- `PdfDocument`, the managers and the PDF to text and PDF to image converters implement `IDisposable`, so they can be used in a `using` statement.
 
 ### Checklist
 
