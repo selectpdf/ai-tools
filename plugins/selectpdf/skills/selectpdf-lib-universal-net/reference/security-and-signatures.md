@@ -19,7 +19,7 @@ This can be done using `PdfDocument.Security` property of the `PdfDocument` obje
 
 The strength of the encryption is set with `PdfDocumentSecurity.KeySize` and `PdfDocumentSecurity.Algorithm`. The supported combinations are:
 
-- RC4 with a 40-bit or 128-bit key (`PdfEncryptionKeySize.EncryptKey40Bit`, `PdfEncryptionKeySize.EncryptKey128Bit`). Broken; for old viewers only.
+- RC4 with a 40-bit or 128-bit key (`PdfEncryptionKeySize.EncryptKey40Bit`, `PdfEncryptionKeySize.EncryptKey128Bit`). Considered insecure; for old viewers only.
 - AES with a 128-bit or 256-bit key (`PdfEncryptionAlgorithm.AES` with `PdfEncryptionKeySize.EncryptKey128Bit` or `PdfEncryptionKeySize.EncryptKey256Bit`).
 - AES-256 revision 6 (`PdfEncryptionKeySize.EncryptKey256BitRevision6`), the AES-256 handler defined by PDF 2.0. This is the default: setting a password is enough.
 - AES-256-GCM (`PdfEncryptionAlgorithm.AESGCM`), also defined by PDF 2.0. Choosing it writes the document as PDF 2.0, which older viewers may not open.
@@ -300,7 +300,7 @@ An existing document is encrypted the same way with `PdfSecurityManager`, whose 
 
 ### What to avoid
 
-- RC4, with a 40-bit or a 128-bit key. It is broken and is supported only for old viewers.
+- RC4, with a 40-bit or a 128-bit key. It is considered insecure and is supported only for old viewers.
 - An owner password without a user password. Anyone can then open the document; the permissions (printing, copying, editing) are honoured by compliant viewers, but they are not what keeps the content confidential. The user password is.
 - Passwords written into source code or configuration files in plain text.
 

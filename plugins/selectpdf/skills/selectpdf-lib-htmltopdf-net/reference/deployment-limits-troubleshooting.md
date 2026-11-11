@@ -97,7 +97,7 @@ SelectPdf.GlobalProperties.ForceDenyLocalFileAccess = True
 | Conversion failure error 32 — `ERROR_SHARING_VIOLATION` (file in use by another process) | `Select.Html.dep` was left locked during file transfer | Re-upload `Select.Html.dep` |
 | Conversion failure error 1260 — `ERROR_ACCESS_DISABLED_BY_POLICY` (blocked by group policy) | The converter launches a child process to render HTML and lacks the rights to do so | Grant the application enough rights to start a new process |
 | Conversion error: *Navigation timeout* / blank or empty PDF | Page does not finish loading within the timeout | Increase the load/conversion timeout and/or set a minimum pre-render delay; ensure the target URL is reachable from the server |
-| Wrong fonts / gibberish text when web fonts are used | Pre-v17.1 web-font rendering bug | Fixed in v17.1 — upgrade |
+| Wrong fonts / text when web fonts are used | Web fonts not finished loading when the page is captured | Add a delay: `converter.Options.MinPageLoadTime = 2;` |
 | Web fonts not applied at all | Font format unsupported | Provide **TTF** or **WOFF** versions — these are the only web-font types Select.Pdf supports |
 | Converting an HTML string: styles not applied, images missing | Relative resource URLs cannot be resolved without a base path | Use the `ConvertHtmlString(html, baseUrl)` overload; `baseUrl` + relative URL = absolute URL |
 | Generated PDF has more content but only **5 pages** appear | Community Edition 5-page cap (content past page 5 is dropped) | Reduce the document to ≤5 pages, or upgrade to the commercial Select.Pdf for unlimited pages (same API) |

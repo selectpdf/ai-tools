@@ -555,7 +555,7 @@ doc.Close()
 
 ## Partial page conversion
 
-Convert only a specific section of a page. Set `VisibleWebElementId` to the HTML element's ID (the element can be an image, table, table row, div, text, etc.); it is honored by **every** rendering engine. With the **Blink** or **Chromium** engine you can instead set `VisibleWebElementSelector` to any CSS selector the engine understands (for example `"#content"`, `".infobox"` or `"table.wikitable tbody"`): the matched element is lifted out of the page and rendered on its own. A selector that matches nothing fails the conversion rather than converting the whole page. The WebKit engines cannot take a selector; use `VisibleWebElementId` with them. (Since v26.4, partial conversion produces PDF on the Blink and Chromium engines too; before, it applied only to WebKit / WebKit Restricted.)
+Convert only a specific section of a page. Set `VisibleWebElementId` to the HTML element's ID (the element can be an image, table, table row, div, text, etc.); it is honored by **every** rendering engine. With the **Blink** or **Chromium** engine you can instead set `VisibleWebElementSelector` to any CSS selector the engine understands (for example `"#content"`, `".infobox"` or `"table.wikitable tbody"`): the matched element is lifted out of the page and rendered on its own. A selector that matches nothing fails the conversion rather than converting the whole page. The WebKit engines cannot take a selector; use `VisibleWebElementId` with them. (Since v26.4, partial conversion produces PDF on the Blink and Chromium engines too.)
 
 ```csharp
 using SelectPdf;

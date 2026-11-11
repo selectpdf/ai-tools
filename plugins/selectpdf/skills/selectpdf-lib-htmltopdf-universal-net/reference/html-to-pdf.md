@@ -1284,7 +1284,7 @@ Every current pdf viewer opens these documents. Viewers older than Adobe Acrobat
 
 ### What to avoid
 
-- RC4, with a 40-bit or a 128-bit key. It is broken and is supported only for old viewers.
+- RC4, with a 40-bit or a 128-bit key. It is considered insecure and is supported only for old viewers.
 - An owner password without a user password. Anyone can then open the document; the permissions (printing, copying, editing) are honoured by compliant viewers, but they are not what keeps the content confidential. The user password is.
 - Passwords written into source code or configuration files in plain text.
 
