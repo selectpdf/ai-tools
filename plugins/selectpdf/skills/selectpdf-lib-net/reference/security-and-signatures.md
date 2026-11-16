@@ -82,6 +82,8 @@ doc.Security.CanFillFormFields = True
 doc.Security.CanPrint = True
 ```
 
+To open an existing password-protected PDF, pass the password to the constructor: `new PdfDocument(file, password)` or `new PdfDocument(stream, password)`. The password can be the user or the owner password, for RC4, AES-128 and AES-256 documents.
+
 ## Advanced security on an existing PDF (PdfSecurityManager)
 
 `PdfSecurityManager` applies advanced security to an existing PDF file: `Load(file)`, configure, then `Save(...)` and `Close()`. It lets you choose the encryption algorithm via `EncryptionAlgorithm` (`PdfEncryptionAlgorithm.RC4` or `PdfEncryptionAlgorithm.AES`) and the key length via `EncryptionKeySize` (`PdfEncryptionKeySize.EncryptKey256Bit`; the documented sizes are 40, 128 or 256 bits). Beyond the standard permission flags (note the manager uses `CanFillFields`, not `CanFillFormFields`), it adds `CanAccessibilityCopyContent` and `CanFullQualityPrint`, and can also digitally sign the document with `Sign(...)`.

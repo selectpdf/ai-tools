@@ -64,6 +64,36 @@ form.Save("output.pdf")
 form.Close()
 ```
 
+## Password-protected forms
+
+`PdfFormManager.Load` has overloads for a file path, a `Stream` and a `byte[]`, each with an optional password: `Load(file, password)`, `Load(stream, password)`, `Load(bytes, password)`. A document protected with an owner password only (no user password) opens without one. A password-protected document is saved with the security it was loaded with: the same encryption algorithm and key length, the same user and owner passwords and the same permissions. To save it without encryption instead, set `RemoveSecurity` to `true` before calling `Load`.
+
+```csharp
+PdfFormManager form = new PdfFormManager();
+
+// save the filled form without the encryption of the source file
+form.RemoveSecurity = true;
+form.Load(file, "user-password");
+
+PdfFormFieldTextBox name = form.Fields["f1_1"] as PdfFormFieldTextBox;
+name.Text = "John Smith";
+form.Save("output.pdf");
+form.Close();
+```
+
+```vbnet
+Dim form As New PdfFormManager()
+
+' save the filled form without the encryption of the source file
+form.RemoveSecurity = True
+form.Load(file, "user-password")
+
+Dim name As PdfFormFieldTextBox = TryCast(form.Fields("f1_1"), PdfFormFieldTextBox)
+name.Text = "John Smith"
+form.Save("output.pdf")
+form.Close()
+```
+
 ## Compressing a new PDF document
 
 For newly created documents, set `PdfDocument.CompressionLevel` to a `PdfCompressionLevel` value. The three documented levels are `NoCompression`, `Normal`, and `Best`.

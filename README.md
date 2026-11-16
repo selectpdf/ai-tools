@@ -59,8 +59,9 @@ files here for depth. See [`integrations/README.md`](integrations/README.md) for
 
 ## Versioning
 
-Content tracks **SelectPdf v26.5**. API signatures and feature availability are taken from the shipped SDK
-reference, official samples and SDK source. The Universal skills are converted from the shipped v26.5 help
+The classic skills track **SelectPdf v26.6** and the Universal skills **SelectPdf.Universal v26.5**. API
+signatures and feature availability are taken from the shipped SDK reference, official samples and SDK
+source. The Universal skills are converted from the shipped v26.5 help
 topics, and every C# and VB.NET sample in them was compiled against the 26.5.0 NuGet packages.
 
 ## Resources
