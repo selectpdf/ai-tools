@@ -18,7 +18,7 @@ Well-established platform facts to keep deployment consistent (not Select.Pdf-sp
 
 - Match the package bitness to the process: load the x86 native package in a 32-bit process and the x64 package in a 64-bit process. A mismatch surfaces as `System.BadImageFormatException` when the native DLL is loaded.
 - Under IIS, the process bitness is set by the application pool: **Enable 32-Bit Applications = True** runs the worker as x86; `False` runs it as x64. The Select.Pdf package you deploy must match that setting.
-- The same license key works across all packages and runtimes (.NET 10 / 9 / 8 / 7 / 6 / 5 / .NET Core / .NET 4.6.1 / 4.7.2 / 4.0–4.5 / 2.0 / AnyCPU / x64), so switching bitness does not require a new key.
+- The same license key works across all packages and runtimes (.NET 11 / 10 / 9 / 8 / 7 / 6 / 5 / .NET Core / .NET 4.6.1 / 4.7.2 / 4.0–4.5 / 2.0 / AnyCPU / x64), so switching bitness does not require a new key.
 
 ### GAC installation
 
