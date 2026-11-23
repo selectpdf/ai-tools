@@ -1,6 +1,6 @@
 # Creating PDF documents from scratch
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Getting started
 
@@ -13,11 +13,11 @@ This section will show how to create a simple 'Hello World!' application with Se
 To use Select.Pdf classes, a namespace needs to be imported.
 
 ```csharp
-			using SelectPdf.Universal;
+using SelectPdf.Universal;
 ```
 
 ```vbnet
-			Imports SelectPdf.Universal
+Imports SelectPdf.Universal
 ```
 
 ### Create the document
@@ -325,135 +325,135 @@ A font installed on the machine is described with `PdfSystemFont` (family name, 
 Sample code that shows how to create text elements with different settings. Read the comments from the code for customization details.
 
 ```csharp
-			// create a new pdf document
-            PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-            // create a new pdf font (component standard font)
-            PdfFont font1 = doc.Fonts.Add(PdfStandardFont.Helvetica);
-            font1.Size = 20;
+// create a new pdf font (component standard font)
+PdfFont font1 = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font1.Size = 20;
 
-            // create a new pdf font (system font, embedded into the document)
-            // Liberation Sans is bundled with the library, so it is available on every host;
-            // PdfSystemFonts.IsFamilyInstalled tells whether another family can be used
-            string family = PdfSystemFonts.IsFamilyInstalled("Verdana")
-                ? "Verdana" : "Liberation Sans";
-            PdfFont font2 = doc.Fonts.Add(new PdfSystemFont(family, 15f));
+// create a new pdf font (system font, embedded into the document)
+// Liberation Sans is bundled with the library, so it is available on every host;
+// PdfSystemFonts.IsFamilyInstalled tells whether another family can be used
+string family = PdfSystemFonts.IsFamilyInstalled("Verdana")
+    ? "Verdana" : "Liberation Sans";
+PdfFont font2 = doc.Fonts.Add(new PdfSystemFont(family, 15f));
 
-            // add a new page to the document
-            PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-            // define a rendering result object
-            PdfRenderingResult result;
+// define a rendering result object
+PdfRenderingResult result;
 
-            // create text element 
-            PdfTextElement text1 = new PdfTextElement(0, 0, 
-                "Regular text using standard font Helvetica, size 20.", font1);
-            result = page.Add(text1);
+// create text element 
+PdfTextElement text1 = new PdfTextElement(0, 0, 
+    "Regular text using standard font Helvetica, size 20.", font1);
+result = page.Add(text1);
 
-            // create text element 
-            PdfTextElement text2 = new PdfTextElement(0, result.PdfPageLastRectangle.Bottom + 20, 
-                "Regular text using system font " + family + ", size 15.", font2);
-            result = page.Add(text2);
+// create text element 
+PdfTextElement text2 = new PdfTextElement(0, result.PdfPageLastRectangle.Bottom + 20, 
+    "Regular text using system font " + family + ", size 15.", font2);
+result = page.Add(text2);
 
-            // create colored text element 
-            PdfTextElement text3 = new PdfTextElement(
-                0, result.PdfPageLastRectangle.Bottom + 20, 200,
-                "Red text over light blue background, using system font " + family +
-                ", size 15, limited at a width of 200 points.", font2);
-            text3.ForeColor = new PdfColor(255, 0, 0);
-            text3.BackColor = new PdfColor(173, 216, 230);
-            result = page.Add(text3);
+// create colored text element 
+PdfTextElement text3 = new PdfTextElement(
+    0, result.PdfPageLastRectangle.Bottom + 20, 200,
+    "Red text over light blue background, using system font " + family +
+    ", size 15, limited at a width of 200 points.", font2);
+text3.ForeColor = new PdfColor(255, 0, 0);
+text3.BackColor = new PdfColor(173, 216, 230);
+result = page.Add(text3);
 
-            // create colored text element, right aligned
-            PdfTextElement text4 = new PdfTextElement(
-                0, result.PdfPageLastRectangle.Bottom + 20, 300,
-                "Red text over light green background, right aligned, using system font " +
-                family + ", size 15, limited at a width of 300 points.", font2);
-            text4.ForeColor = new PdfColor(255, 0, 0);
-            text4.BackColor = new PdfColor(144, 238, 144);
-            text4.HorizontalAlign = PdfTextHorizontalAlign.Right;
-            result = page.Add(text4);
+// create colored text element, right aligned
+PdfTextElement text4 = new PdfTextElement(
+    0, result.PdfPageLastRectangle.Bottom + 20, 300,
+    "Red text over light green background, right aligned, using system font " +
+    family + ", size 15, limited at a width of 300 points.", font2);
+text4.ForeColor = new PdfColor(255, 0, 0);
+text4.BackColor = new PdfColor(144, 238, 144);
+text4.HorizontalAlign = PdfTextHorizontalAlign.Right;
+result = page.Add(text4);
 
-            // create text element 
-            PdfTextElement text5 = new PdfTextElement(
-                0, result.PdfPageLastRectangle.Bottom + 200, 300,
-                "Regular text using system font " + family + ", size 15, rotated 45 degrees.",
-                font2);
-            text5.Direction = 45; // rotate 45 degrees counter-clockwise
-            result = page.Add(text5);
+// create text element 
+PdfTextElement text5 = new PdfTextElement(
+    0, result.PdfPageLastRectangle.Bottom + 200, 300,
+    "Regular text using system font " + family + ", size 15, rotated 45 degrees.",
+    font2);
+text5.Direction = 45; // rotate 45 degrees counter-clockwise
+result = page.Add(text5);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' create a new pdf document
-            Dim doc As New PdfDocument()
+' create a new pdf document
+Dim doc As New PdfDocument()
 
-            ' create a new pdf font (component standard font)
-            Dim font1 As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-            font1.Size = 20
+' create a new pdf font (component standard font)
+Dim font1 As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font1.Size = 20
 
-            ' create a new pdf font (system font, embedded into the document)
-            ' Liberation Sans is bundled with the library, so it is available on every host;
-            ' PdfSystemFonts.IsFamilyInstalled tells whether another family can be used
-            Dim family As String = If(PdfSystemFonts.IsFamilyInstalled("Verdana"), _
-                "Verdana", "Liberation Sans")
-            Dim font2 As PdfFont = doc.Fonts.Add(New PdfSystemFont(family, 15F))
+' create a new pdf font (system font, embedded into the document)
+' Liberation Sans is bundled with the library, so it is available on every host;
+' PdfSystemFonts.IsFamilyInstalled tells whether another family can be used
+Dim family As String = If(PdfSystemFonts.IsFamilyInstalled("Verdana"), _
+    "Verdana", "Liberation Sans")
+Dim font2 As PdfFont = doc.Fonts.Add(New PdfSystemFont(family, 15F))
 
-            ' add a new page to the document
-            Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-            ' define a rendering result object
-            Dim result As PdfRenderingResult
+' define a rendering result object
+Dim result As PdfRenderingResult
 
-            ' create text element 
-            Dim text1 As New PdfTextElement(0, 0, _
-                    "Regular text using standard font Helvetica, size 20.", font1)
-            result = page.Add(text1)
+' create text element 
+Dim text1 As New PdfTextElement(0, 0, _
+        "Regular text using standard font Helvetica, size 20.", font1)
+result = page.Add(text1)
 
-            ' create text element 
-            Dim text2 As New PdfTextElement(0, _
-                    result.PdfPageLastRectangle.Bottom + 20, _
-                    "Regular text using system font " + family + ", size 15.", font2)
-            result = page.Add(text2)
+' create text element 
+Dim text2 As New PdfTextElement(0, _
+        result.PdfPageLastRectangle.Bottom + 20, _
+        "Regular text using system font " + family + ", size 15.", font2)
+result = page.Add(text2)
 
-            ' create colored text element 
-            Dim text3 As New PdfTextElement( _
-                0, result.PdfPageLastRectangle.Bottom + 20, 200, _
-                "Red text over light blue background, using system font " + family + _
-                ", size 15, limited at a width of 200 points.", font2)
-            text3.ForeColor = New PdfColor(255, 0, 0)
-            text3.BackColor = New PdfColor(173, 216, 230)
-            result = page.Add(text3)
+' create colored text element 
+Dim text3 As New PdfTextElement( _
+    0, result.PdfPageLastRectangle.Bottom + 20, 200, _
+    "Red text over light blue background, using system font " + family + _
+    ", size 15, limited at a width of 200 points.", font2)
+text3.ForeColor = New PdfColor(255, 0, 0)
+text3.BackColor = New PdfColor(173, 216, 230)
+result = page.Add(text3)
 
-            ' create colored text element, right aligned
-            Dim text4 As New PdfTextElement( _
-                0, result.PdfPageLastRectangle.Bottom + 20, 300, _
-                "Red text over light green background, right aligned, using system font " + _
-                family + ", size 15, limited at a width of 300 points.", font2)
-            text4.ForeColor = New PdfColor(255, 0, 0)
-            text4.BackColor = New PdfColor(144, 238, 144)
-            text4.HorizontalAlign = PdfTextHorizontalAlign.Right
-            result = page.Add(text4)
+' create colored text element, right aligned
+Dim text4 As New PdfTextElement( _
+    0, result.PdfPageLastRectangle.Bottom + 20, 300, _
+    "Red text over light green background, right aligned, using system font " + _
+    family + ", size 15, limited at a width of 300 points.", font2)
+text4.ForeColor = New PdfColor(255, 0, 0)
+text4.BackColor = New PdfColor(144, 238, 144)
+text4.HorizontalAlign = PdfTextHorizontalAlign.Right
+result = page.Add(text4)
 
-            ' create text element 
-            Dim text5 As New PdfTextElement( _
-                0, result.PdfPageLastRectangle.Bottom + 200, 300, _
-                "Regular text using system font " + family + ", size 15, rotated 45 degrees.", _
-                font2)
-            text5.Direction = 45
-            ' rotate 45 degrees counter-clockwise
-            result = page.Add(text5)
+' create text element 
+Dim text5 As New PdfTextElement( _
+    0, result.PdfPageLastRectangle.Bottom + 200, 300, _
+    "Regular text using system font " + family + ", size 15, rotated 45 degrees.", _
+    font2)
+text5.Direction = 45
+' rotate 45 degrees counter-clockwise
+result = page.Add(text5)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Image elements
@@ -464,7 +464,7 @@ Images can be added to a pdf document using `PdfImageElement` objects. Here are 
 
 **Size** of the image in the destination page can be customized using `PdfImageElement.Width` and `PdfImageElement.Height` properties.
 
-**Image source** - the image can be specified as a file name if a constructor with the specific parameter is used: `PdfImageElement.ctor(float, float, string)`
+**Image source** - the image can be specified as a file name if a constructor with the specific parameter is used: `PdfImageElement.PdfImageElement(float, float, string)`
 
 **Transparency** can be customized using `PdfElement.Transparency` property.
 
@@ -473,112 +473,110 @@ Images can be added to a pdf document using `PdfImageElement` objects. Here are 
 Sample code that shows how to create image elements with different settings. Read the comments from the code for customization details.
 
 ```csharp
-			// create a new pdf document
-            PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-            // add a new page to the document
-            PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-            // get image path
-            string imgFile = @"C:\Path\to\logo.png";
+// get image path
+string imgFile = "logo.png";
 
-            // define a rendering result object
-            PdfRenderingResult result;
+// define a rendering result object
+PdfRenderingResult result;
 
-            // create image element from file path with real image size
-            PdfImageElement img1 = new PdfImageElement(0, 0, imgFile);
-            result = page.Add(img1);
+// create image element from file path with real image size
+PdfImageElement img1 = new PdfImageElement(0, 0, imgFile);
+result = page.Add(img1);
 
-            // create image element from file path with fixed size in pdf
-            // (aspect ratio not preserved)
-            PdfImageElement img2 = new PdfImageElement(0,
-                result.PdfPageLastRectangle.Bottom + 50, 100, 100, imgFile);
-            result = page.Add(img2);
+// create image element from file path with fixed size in pdf
+// (aspect ratio not preserved)
+PdfImageElement img2 = new PdfImageElement(0,
+    result.PdfPageLastRectangle.Bottom + 50, 100, 100, imgFile);
+result = page.Add(img2);
 
-            // add text element
-            PdfFont font1 = doc.Fonts.Add(PdfStandardFont.Helvetica);
-            font1.Size = 10;
-            PdfTextElement text1 = new PdfTextElement(0, 
-                result.PdfPageLastRectangle.Bottom + 50, Helper.SomeText(), font1);
-            page.Add(text1);
+// add text element
+PdfFont font1 = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font1.Size = 10;
+PdfTextElement text1 = new PdfTextElement(0, 
+    result.PdfPageLastRectangle.Bottom + 50, Helper.SomeText(), font1);
+page.Add(text1);
 
-            // add image over text (no transparency)
-            PdfImageElement img3 = new PdfImageElement(0, 
-                result.PdfPageLastRectangle.Bottom + 50, imgFile);
-            result = page.Add(img3);
+// add image over text (no transparency)
+PdfImageElement img3 = new PdfImageElement(0, 
+    result.PdfPageLastRectangle.Bottom + 50, imgFile);
+result = page.Add(img3);
 
-            // add image over text (with transparency) next to the previous image
-            PdfImageElement img4 = new PdfImageElement(
-                result.PdfPageLastRectangle.Right + 30, 
-                result.PdfPageLastRectangle.Top, imgFile);
-            img4.Transparency = 50;
-            result = page.Add(img4);
+// add image over text (with transparency) next to the previous image
+PdfImageElement img4 = new PdfImageElement(
+    result.PdfPageLastRectangle.Right + 30, 
+    result.PdfPageLastRectangle.Top, imgFile);
+img4.Transparency = 50;
+result = page.Add(img4);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' create a new pdf document
-            Dim doc As New PdfDocument()
+' create a new pdf document
+Dim doc As New PdfDocument()
 
-            ' add a new page to the document
-            Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-            ' get image path
-            Dim imgFile As String = "C:\Path\to\logo.png"
+' get image path
+Dim imgFile As String = "logo.png"
 
-            ' define a rendering result object
-            Dim result As PdfRenderingResult
+' define a rendering result object
+Dim result As PdfRenderingResult
 
-            ' create image element from file path with real image size
-            Dim img1 As New PdfImageElement(0, 0, imgFile)
-            result = page.Add(img1)
+' create image element from file path with real image size
+Dim img1 As New PdfImageElement(0, 0, imgFile)
+result = page.Add(img1)
 
-            ' create image element from file path with fixed size in pdf
-            ' (aspect ratio not preserved)
-            Dim img2 As New PdfImageElement(0, result.PdfPageLastRectangle.Bottom + 50, _
-                                            100, 100, imgFile)
-            result = page.Add(img2)
+' create image element from file path with fixed size in pdf
+' (aspect ratio not preserved)
+Dim img2 As New PdfImageElement(0, result.PdfPageLastRectangle.Bottom + 50, _
+                                100, 100, imgFile)
+result = page.Add(img2)
 
-            ' add text element
-            Dim font1 As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-            font1.Size = 10
-            Dim text1 As New PdfTextElement(0, result.PdfPageLastRectangle.Bottom + 50, _
-                                            Helper.SomeText(), font1)
-            page.Add(text1)
+' add text element
+Dim font1 As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font1.Size = 10
+Dim text1 As New PdfTextElement(0, result.PdfPageLastRectangle.Bottom + 50, _
+                                Helper.SomeText(), font1)
+page.Add(text1)
 
-            ' add image over text (no transparency)
-            Dim img3 As New PdfImageElement(0, result.PdfPageLastRectangle.Bottom + 50, imgFile)
-            result = page.Add(img3)
+' add image over text (no transparency)
+Dim img3 As New PdfImageElement(0, result.PdfPageLastRectangle.Bottom + 50, imgFile)
+result = page.Add(img3)
 
-            ' add image over text (with transparency) next to the previous image
-            Dim img4 As New PdfImageElement(result.PdfPageLastRectangle.Right + 30, _
-                                            result.PdfPageLastRectangle.Top, imgFile)
-            img4.Transparency = 50
-            result = page.Add(img4)
+' add image over text (with transparency) next to the previous image
+Dim img4 As New PdfImageElement(result.PdfPageLastRectangle.Right + 30, _
+                                result.PdfPageLastRectangle.Top, imgFile)
+img4.Transparency = 50
+result = page.Add(img4)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## HTML elements
 
 HTML content can be added to a pdf document in several ways. If a complex document is created that will contain several types of pdf elements and the html content that will be added is only a small part of the total content, `PdfHtmlElement` objects can be used to convert web pages or raw html content and add the conversion result to the pdf document.
 
-If the pdf is generated mostly as a result of an html to pdf conversion, the `HtmlToPdf` object should be used instead. This is described in details in the "Html to Pdf Converter" section of our documentation that starts here.
+If the pdf is generated mostly as a result of an html to pdf conversion, the `HtmlToPdf` object should be used instead. This is described in details in the "Html to Pdf Converter" section of our documentation that starts "The HTML to PDF converter" (html-to-pdf.md).
 
 ### Element properties
 
-Both full web pages and html strings can be converted to pdf using `PdfHtmlElement` with the appropriate constructor. `PdfHtmlElement.ctor(string)` can be used to convert a full web page specified by an url or local file to pdf. `PdfHtmlElement.ctor(string, string)` can be used to convert a raw html string to pdf.
-
-**Properties**
+Both full web pages and html strings can be converted to pdf using `PdfHtmlElement` with the appropriate constructor. `PdfHtmlElement.PdfHtmlElement(string)` can be used to convert a full web page specified by an url or local file to pdf. `PdfHtmlElement.PdfHtmlElement(string, string)` can be used to convert a raw html string to pdf.
 
 `PdfHtmlElement.Authentication` - Handles authentication options if the web page being converted requires authentication.
 
@@ -639,43 +637,43 @@ A `PdfHtmlElement` can also be added to a `PdfTemplate` - a header, a footer or 
 Sample code that shows how to use `PdfHtmlElement` object to convert a web page to pdf.
 
 ```csharp
-			// create a new pdf document
-            PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-            // add a new page to the document
-            PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-            // create html element 
-            PdfHtmlElement html = new PdfHtmlElement(url);
+// create html element 
+PdfHtmlElement html = new PdfHtmlElement(url);
 
-            // add the html element to the document
-            page.Add(html);
+// add the html element to the document
+page.Add(html);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' create a new pdf document
-	        Dim doc As New PdfDocument()
-	
-	        ' add a new page to the document
-	        Dim page As PdfPage = doc.AddPage()
-	
-	        ' create html element 
-	        Dim html As New PdfHtmlElement(url)
-	
-	        ' add the html element to the document
-	        page.Add(html)
-	
-	        ' save pdf document
-	        doc.Save("Sample.pdf")
-	
-	        ' close pdf document
-	        doc.Close()
+' create a new pdf document
+Dim doc As New PdfDocument()
+
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
+
+' create html element 
+Dim html As New PdfHtmlElement(url)
+
+' add the html element to the document
+page.Add(html)
+
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document
+doc.Close()
 ```
 
 ## Graphic elements
@@ -691,6 +689,8 @@ Select.Pdf has support to draw a variety of shapes, such as:
 - Rectangles: `PdfRectangleElement`
 - Bezier Curves: `PdfBezierCurveElement`
 
+### Common properties
+
 These graphic elements (all derived from `PdfElement`), share a number of properties that can be used to modify their appearance:
 
 - Line style: `PdfElement.LineStyle` can be used to specify the line styles of the graphic elements that draw lines. Using this, the line width, line dash style, line cap style and line join style can be specified.
@@ -704,63 +704,63 @@ These graphic elements (all derived from `PdfElement`), share a number of proper
 The following code shows how to draw several graphic elements:
 
 ```csharp
-			// create a new pdf document
-            PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-            // add a new page to the document
-            PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-            // define a rendering result object
-            PdfRenderingResult result;
+// define a rendering result object
+PdfRenderingResult result;
 
-            // simple horizontal line element
-            PdfLineElement line1 = new PdfLineElement(0, 0, 400, 0);
-            line1.LineStyle.LineWidth = 3;
-            result = page.Add(line1);
+// simple horizontal line element
+PdfLineElement line1 = new PdfLineElement(0, 0, 400, 0);
+line1.LineStyle.LineWidth = 3;
+result = page.Add(line1);
 
-            // horizontal dotted red line element
-            PdfLineElement line2 = new PdfLineElement(0, 30, 400, 30);
-            line2.ForeColor = new PdfColor(255, 0, 0);
-            line2.LineStyle.LineWidth = 2;
-            line2.LineStyle.LineDashStyle = PdfLineDashStyle.Dot;
-            result = page.Add(line2);
+// horizontal dotted red line element
+PdfLineElement line2 = new PdfLineElement(0, 30, 400, 30);
+line2.ForeColor = new PdfColor(255, 0, 0);
+line2.LineStyle.LineWidth = 2;
+line2.LineStyle.LineDashStyle = PdfLineDashStyle.Dot;
+result = page.Add(line2);
 
-            // horizontal dashed blue line element with complex styles
-            PdfLineElement line3 = new PdfLineElement(0, 60, 400, 60);
-            line3.ForeColor = new PdfColor(0, 0, 255);
-            line3.LineStyle.LineWidth = 2;
-            line3.LineStyle.LineDashStyle = PdfLineDashStyle.Dash;
-            line3.LineStyle.LineCapStyle = PdfLineCapStyle.RoundCap;
-            line3.LineStyle.LineJoinStyle = PdfLineJoinStyle.RoundJoin;
-            result = page.Add(line3);
+// horizontal dashed blue line element with complex styles
+PdfLineElement line3 = new PdfLineElement(0, 60, 400, 60);
+line3.ForeColor = new PdfColor(0, 0, 255);
+line3.LineStyle.LineWidth = 2;
+line3.LineStyle.LineDashStyle = PdfLineDashStyle.Dash;
+line3.LineStyle.LineCapStyle = PdfLineCapStyle.RoundCap;
+line3.LineStyle.LineJoinStyle = PdfLineJoinStyle.RoundJoin;
+result = page.Add(line3);
 
-            // simple rectangle
-            PdfRectangleElement rect1 = new PdfRectangleElement(0, 90, 400, 100);
-            result = page.Add(rect1);
+// simple rectangle
+PdfRectangleElement rect1 = new PdfRectangleElement(0, 90, 400, 100);
+result = page.Add(rect1);
 
-            // simple circle
-            PdfCircleElement circ1 = new PdfCircleElement(50, 250, 50);
-            circ1.ForeColor = new PdfColor(0, 128, 0);
-            result = page.Add(circ1);
+// simple circle
+PdfCircleElement circ1 = new PdfCircleElement(50, 250, 50);
+circ1.ForeColor = new PdfColor(0, 128, 0);
+result = page.Add(circ1);
 
-            // ellipse filled with gradient background color
-            PdfEllipseElement elli1 = new PdfEllipseElement(300, 250, 100, 50);
-            elli1.ForeColor = new PdfColor(165, 42, 42);
-            elli1.Gradient = new PdfGradient(new PdfColor(173, 216, 230),
-                new PdfColor(0, 0, 139), PdfGradientDirection.ForwardDiagonal);
-            elli1.LineStyle.LineWidth = 2;
-            result = page.Add(elli1);
+// ellipse filled with gradient background color
+PdfEllipseElement elli1 = new PdfEllipseElement(300, 250, 100, 50);
+elli1.ForeColor = new PdfColor(165, 42, 42);
+elli1.Gradient = new PdfGradient(new PdfColor(173, 216, 230),
+    new PdfColor(0, 0, 139), PdfGradientDirection.ForwardDiagonal);
+elli1.LineStyle.LineWidth = 2;
+result = page.Add(elli1);
 
-            // bezier curve
-            PdfBezierCurveElement bez1 = new PdfBezierCurveElement(
-                50, 350, 100, 400, 200, 350, 250, 370);
-            result = page.Add(bez1);
+// bezier curve
+PdfBezierCurveElement bez1 = new PdfBezierCurveElement(
+    50, 350, 100, 400, 200, 350, 250, 370);
+result = page.Add(bez1);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
@@ -831,7 +831,7 @@ Select.Pdf can be used to control how a page looks like when it is added to a pd
 - Page orientation
 - Page margins
 
-**Page size**
+### Page size
 
 SelectPdf supports the following standard page sizes:
 
@@ -842,14 +842,14 @@ SelectPdf supports the following standard page sizes:
 
 Pages with custom page sizes can also be created using Select.Pdf.
 
-**Page orientation**
+### Page orientation
 
 SelectPdf supports the following page orientations:
 
 - Portrait
 - Landscape
 
-**Page margins**
+### Page margins
 
 Page margins can be set using `PdfMargins` object.
 
@@ -1059,89 +1059,89 @@ Pdf templates can be added to a pdf document using `PdfTemplateCollection.Add(fl
 - `PdfTemplate.Foreground` - Controls whether the template is rendered in front of the page main content or not.
 - `PdfTemplate.Background` - Controls whether the template is rendered behind the page main content or not.
 
-`PdfDocument` has also 2 special templates: `PdfTemplateCollection.Header` and `PdfTemplateCollection.Footer` to manage custom headers and footers that would appear in all pages of the pdf document. More about this in the next section, that describes pdf document headers and footers.
+`PdfDocument` has also 2 special templates: `PdfTemplateCollection.Header` and `PdfTemplateCollection.Footer` to manage custom headers and footers that would appear in all pages of the pdf document. More about this in the next section, that describes "Headers and footers" (page-setup-headers-footers.md).
 
 ### Sample Code
 
 This sample code shows how to create a new PDF document using Select.Pdf, how to add several pages and pdf templates to the document.
 
 ```csharp
-			// create a new pdf document
-            PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-            // create a new pdf font
-            PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
-            font.Size = 24;
+// create a new pdf font
+PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font.Size = 24;
 
-            // add a new page to the document
-            PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-            // create a new text element and add it to the page
-            PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
-            page.Add(text);
+// create a new text element and add it to the page
+PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
+page.Add(text);
 
-            // get image path
-            string imgFile = @"C:\Path\to\logo.png";
+// get image path
+string imgFile = "logo.png";
 
-            // add a template containing an image
-            // the image should repeat on all pdf pages automatically
-            PdfTemplate template1 = doc.Templates.Add(
-                new SelectPdf.Universal.Drawing.RectangleF(100, 0, 400, 150));
-            PdfImageElement img1 = new PdfImageElement(0, 0, imgFile);
-            template1.Add(img1);
+// add a template containing an image
+// the image should repeat on all pdf pages automatically
+PdfTemplate template1 = doc.Templates.Add(
+    new SelectPdf.Universal.Drawing.RectangleF(100, 0, 400, 150));
+PdfImageElement img1 = new PdfImageElement(0, 0, imgFile);
+template1.Add(img1);
 
-            // add another template containing an image behind the existing page elements
-            // (under the text) the image should repeat on all pdf pages automatically
-            PdfTemplate template2 = doc.Templates.Add(
-                new SelectPdf.Universal.Drawing.RectangleF(100, 200, 400, 150));
-            template2.Background = true;
-            PdfImageElement img2 = new PdfImageElement(0, 0, imgFile);
-            template2.Add(img2);
+// add another template containing an image behind the existing page elements
+// (under the text) the image should repeat on all pdf pages automatically
+PdfTemplate template2 = doc.Templates.Add(
+    new SelectPdf.Universal.Drawing.RectangleF(100, 200, 400, 150));
+template2.Background = true;
+PdfImageElement img2 = new PdfImageElement(0, 0, imgFile);
+template2.Add(img2);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' create a new pdf document
-    Dim doc As New PdfDocument()
+' create a new pdf document
+Dim doc As New PdfDocument()
 
-    ' create a new pdf font
-    Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-    font.Size = 24
+' create a new pdf font
+Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font.Size = 24
 
-    ' add a new page to the document
-    Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-    ' create a new text element and add it to the page
-    Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
-    page.Add(text)
+' create a new text element and add it to the page
+Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
+page.Add(text)
 
-    ' get image path
-    Dim imgFile As String = "C:\Path\to\logo.png"
+' get image path
+Dim imgFile As String = "logo.png"
 
-    ' add a template containing an image
-    ' the image should repeat on all pdf pages automatically
-    Dim template1 As PdfTemplate = doc.Templates.Add( _
-        New SelectPdf.Universal.Drawing.RectangleF(100, 0, 400, 150))
-    Dim img1 As New PdfImageElement(0, 0, imgFile)
-    template1.Add(img1)
+' add a template containing an image
+' the image should repeat on all pdf pages automatically
+Dim template1 As PdfTemplate = doc.Templates.Add( _
+    New SelectPdf.Universal.Drawing.RectangleF(100, 0, 400, 150))
+Dim img1 As New PdfImageElement(0, 0, imgFile)
+template1.Add(img1)
 
-    ' add another template containing an image behind the existing page elements 
-    ' (under the text)
-    ' the image should repeat on all pdf pages automatically
-    Dim template2 As PdfTemplate = doc.Templates.Add( _
-        New SelectPdf.Universal.Drawing.RectangleF(100, 200, 400, 150))
-    template2.Background = True
-    Dim img2 As New PdfImageElement(0, 0, imgFile)
-    template2.Add(img2)
+' add another template containing an image behind the existing page elements 
+' (under the text)
+' the image should repeat on all pdf pages automatically
+Dim template2 As PdfTemplate = doc.Templates.Add( _
+    New SelectPdf.Universal.Drawing.RectangleF(100, 200, 400, 150))
+template2.Background = True
+Dim img2 As New PdfImageElement(0, 0, imgFile)
+template2.Add(img2)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```

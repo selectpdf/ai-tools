@@ -1,6 +1,6 @@
 # Accessible PDF (PDF/UA-1, PDF/UA-2), PDF/A and electronic invoices
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Accessible PDF and PDF/A
 
@@ -288,6 +288,76 @@ A few shapes cannot produce a conformant file, and are refused at the point of u
 
 Appending one document to another carries the appended document's structure across, so a tagged document built from several parts stays tagged - see "Merging PDFs" (edit-merge-split-stamp.md).
 
+## Alternate text for images in existing PDFs
+
+SelectPdf PDF Library for .NET can fix the alternative text of the images in an existing tagged PDF document: add a description where one is missing, replace a bad one (a file name, "image1"), or mark an image that is only decoration as decorative. Missing alternative text is the most common reason a PDF fails PDF/UA (ISO 14289-1, checkpoint 7.3), and this turns such a file into a passing one without generating it again.
+
+The work is done with `PdfAccessibilityManager`:
+
+- `PdfAccessibilityManager.Load(string)` - loads the tagged PDF document, password protected or not, from a file, Stream, byte array or `PdfDocument` object.
+- `PdfAccessibilityManager.Figures` - the figures of the document, in reading order: its Figure and Formula elements, including custom element types the document maps to them.
+- `PdfAccessibilityManager.MissingAlternateText` - the figures that still have no description: neither alternative nor actual text, or only a placeholder such as a file name ("chart1.png"), a numbered name ("image1", "Picture 3") or a GUID. Decorative figures are not listed.
+- `PdfAccessibilityManager.Save(string)` - saves the document with the changes to a file, Stream or byte array, and `PdfAccessibilityManager.GetDocument` returns it as a `PdfDocument` object, to continue working on it.
+
+### A figure
+
+Each `PdfFigure` says where it is and what describes it:
+
+- `PdfFigure.PageIndex` and `PdfFigure.Bounds` - the page it starts on and its box on it, in points from the top-left corner of the page as displayed.
+- `PdfFigure.Type` - Figure, or Formula, which needs a description too.
+- `PdfFigure.AlternateText` - the description a screen reader reads in place of the image.
+- `PdfFigure.ActualText` - the text the figure shows, when it is a picture of text: a formula, a scanned word, a logo with a name in it.
+- `PdfFigure.IsDecorative` - set it for an image that carries no information (a border, a background flourish). When saved, the figure leaves the structure tree and its content is marked as an artifact: the page looks the same, and screen readers skip it.
+- `PdfFigure.GetImage(int)` - renders the figure's area of its page as a PNG image (150 dpi by default), to show a person who writes the description, or to send to a service that describes images.
+
+Setting a text to null or an empty string removes it.
+
+### Code sample
+
+Describe every figure that has no description, and mark a decorative one:
+
+```csharp
+using (PdfAccessibilityManager manager = new PdfAccessibilityManager())
+{
+    manager.Load("report.pdf");
+
+    foreach (PdfFigure figure in manager.MissingAlternateText)
+    {
+        // show the image to a person, or to an image-description service
+        byte[] png = figure.GetImage(150);
+        figure.AlternateText = Describe(png);
+    }
+
+    manager.Figures[3].IsDecorative = true;      // a border: screen readers skip it
+
+    manager.Save("report-fixed.pdf");
+}
+```
+
+```vbnet
+Using manager As New PdfAccessibilityManager()
+    manager.Load("report.pdf")
+
+    For Each figure As PdfFigure In manager.MissingAlternateText
+        ' show the image to a person, or to an image-description service
+        Dim png As Byte() = figure.GetImage(150)
+        figure.AlternateText = Describe(png)
+    Next
+
+    manager.Figures(3).IsDecorative = True
+
+    manager.Save("report-fixed.pdf")
+End Using
+```
+
+### Tagged documents, signatures and PDF/UA
+
+- **Tagged documents only.** An untagged document has no structure element to carry a description, and alternative text alone would not make it accessible, so Load refuses it with a `PdfDocumentException` that says so. To make new documents accessible from the start, see "Accessible PDF and PDF/A" (accessibility-and-compliance.md).
+- Setting a text writes the element's /Alt (or /ActualText) entry and nothing else; the pages are not changed.
+- A signed document is appended to, so its signatures still verify after the change.
+- A document that declares PDF/UA is checked again when it is saved: a change that would leave some of its content outside the structure tree is refused.
+- Documents the library creates with `PdfDocument.Tagged` write an image's `PdfPageElement.AlternateText` as its description, and an image given none gets no description (version 26.6 and later; earlier versions wrote a GUID in its place). Such a figure is listed by `PdfAccessibilityManager.MissingAlternateText`.
+
 ## ZUGFeRD / Factur-X electronic invoices
 
 A **hybrid electronic invoice** carries the same invoice twice: the page a person reads, and the xml a machine reads, embedded inside the same pdf. **ZUGFeRD** (Germany) and **Factur-X** (France) are the same standard under two names, and both are what most European e-invoicing rules ask for.
@@ -416,7 +486,7 @@ doc.AddZugferdInvoice(xml, ZugferdProfile.Basic,
 
 ### Custom metadata of your own
 
-A PDF/A document may only carry metadata from the schemas the standard predefines, unless the schema itself is described inside the document. That is the mechanism the invoice metadata is built on, and it is available for metadata a recipient's system needs to find in your documents: `PdfDocument.AddXmpExtensionSchema(string, string, string, >)` declares the schema and writes the values of its properties, so the document stays conformant.
+A PDF/A document may only carry metadata from the schemas the standard predefines, unless the schema itself is described inside the document. That is the mechanism the invoice metadata is built on, and it is available for metadata a recipient's system needs to find in your documents: `PdfDocument.AddXmpExtensionSchema(string, string, string, IDictionary<string, string>)` declares the schema and writes the values of its properties, so the document stays conformant.
 
 ```csharp
 Dictionary<string, string> properties = new Dictionary<string, string>();
@@ -434,4 +504,166 @@ properties("Department") = "Accounts payable"
 
 doc.AddXmpExtensionSchema("acme", "urn:acme:pdfa:custom:1p0#",
     "ACME custom schema", properties)
+```
+
+## Validating PDF/A, PDF/UA and PDF/X
+
+SelectPdf PDF Library for .NET can check whether an existing PDF document conforms to a standard: PDF/A (archiving, parts 1 to 4), PDF/UA (accessibility, parts 1 and 2) and PDF/X (print exchange: PDF/X-1a, PDF/X-3 and PDF/X-4). Every rule of the standard is checked and each object that fails one is reported, with the rule, what it requires, why the object fails it and where the object is. The document is only read, never changed.
+
+Validation is done with `PdfValidator`:
+
+- `PdfValidator.Validate(byte[], string, PdfConformanceStandard, ValidationOptions)` - validates a document against a `PdfConformanceStandard` and returns a `ValidationReport`.
+- `PdfValidator.ClaimedStandard(byte[], string)` - returns the standard a document says it conforms to in its metadata, or null when it claims none.
+
+### The report
+
+- `ValidationReport.IsCompliant` is true when every check passed and the validation was complete.
+- `ValidationReport.Failures` lists the failed checks, each a `RuleFailure`: the rule (its specification, clause and test number), what the rule requires, why the object fails it, the object's place in the document as a path (`document/pages[3]/annots[0]`), its page and its object number. At most 100 failures are listed per rule by default; `ValidationReport.ChecksFailed` counts them all.
+- `ValidationReport.Complete` is false when the validation stopped early - at a time or size limit, or on a part of the file that could not be read. Such a report is never compliant: a check that was not made is not a check that passed.
+
+The limits are set with `ValidationOptions`: the failures listed per rule and in all, and how long the validation may run, reading the file included (30 seconds by default). The memory a validation holds is limited too, to about 16 GB (1 GB in a 32-bit process, and no more than half the memory the process may use), so that a very large or hostile file ends as an incomplete report rather than taking the process's memory.
+
+### The rules
+
+PDF/A and PDF/UA are checked with the validation profiles of the veraPDF project, the reference for these standards; the results agree with veraPDF's on its test corpora. PDF/X is checked with rules written from the public descriptions of ISO 15930. The version of the rules is in `ValidationReport.ProfilesVersion`.
+
+### Example
+
+```csharp
+byte[] pdf = File.ReadAllBytes("document.pdf");
+
+ValidationReport report = PdfValidator.Validate(pdf, null,
+    PdfConformanceStandard.PdfA2B);
+
+if (report.IsCompliant)
+{
+    Console.WriteLine("The document conforms to PDF/A-2b.");
+}
+else
+{
+    if (!report.Complete)
+        Console.WriteLine("The validation did not complete.");
+    foreach (RuleFailure failure in report.Failures)
+        Console.WriteLine(failure.Rule + ": " + failure.Message
+            + " (" + failure.Context + ")");
+}
+```
+
+```vbnet
+Dim pdf As Byte() = File.ReadAllBytes("document.pdf")
+
+Dim report As ValidationReport = PdfValidator.Validate(pdf, Nothing,
+    PdfConformanceStandard.PdfA2B)
+
+If report.IsCompliant Then
+    Console.WriteLine("The document conforms to PDF/A-2b.")
+Else
+    If Not report.Complete Then
+        Console.WriteLine("The validation did not complete.")
+    End If
+    For Each failure As RuleFailure In report.Failures
+        Console.WriteLine(failure.Rule.ToString() & ": " & failure.Message _
+            & " (" & failure.Context & ")")
+    Next
+End If
+```
+
+To check a document against the standard it claims:
+
+```csharp
+PdfConformanceStandard? claimed = PdfValidator.ClaimedStandard(pdf, null);
+if (claimed != null)
+{
+    ValidationReport report = PdfValidator.Validate(pdf, null, claimed.Value);
+    Console.WriteLine(claimed + ": " + (report.IsCompliant ? "yes" : "no"));
+}
+```
+
+```vbnet
+Dim claimed As PdfConformanceStandard? = PdfValidator.ClaimedStandard(pdf, Nothing)
+If claimed.HasValue Then
+    Dim report As ValidationReport =
+        PdfValidator.Validate(pdf, Nothing, claimed.Value)
+    Console.WriteLine(claimed.Value.ToString() & ": " _
+        & If(report.IsCompliant, "yes", "no"))
+End If
+```
+
+## Fixing documents for PDF/A, PDF/UA and PDF/X (preflight)
+
+SelectPdf PDF Library for .NET can fix an existing PDF document so that it conforms to a standard: PDF/A, PDF/UA or PDF/X. The document is validated first; one that conforms already is returned as it is. Otherwise the fixes for what it fails are applied, and the result is validated again, so you see what was fixed and what is left.
+
+Fixing is done with `PdfPreflight.Fix(byte[], string, PdfConformanceStandard, PreflightOptions)`, which returns a `PreflightResult`: the fixed document, the fixes applied (`PreflightFix`: what each did and to how many objects) and the `ValidationReport` of the fixed document. A digitally signed document is refused: every fix rewrites the file, which the signature would no longer cover. Fix the document before it is signed.
+
+The whole fix - the validation before, the fixes and the validation after - runs within the timeout of `PreflightOptions.Validation` (30 seconds by default) and under the memory limit a validation has. Past the timeout `Fix` throws `TimeoutException`; raise `ValidationOptions.Timeout` for very large documents.
+
+### PDF/A
+
+The document is converted to the PDF/A level you ask for, any part from PDF/A-1 to PDF/A-4. Before the conversion, actions the level forbids (launching applications, playing sounds and movies, and from PDF/A-2 hiding fields and the like) are removed, fonts are embedded, the text of glyphs the document does not map to Unicode is recovered where the font allows it, and embedded files are given the names, type and relationship the level requires. PDF/A-3 and PDF/A-4f keep embedded files; for the other levels, embedded files the level does not admit are removed only when `PreflightOptions.RemoveAttachmentsAndJavaScript` is set - otherwise they are kept and reported.
+
+### PDF/UA
+
+A document without tags is tagged (headings, paragraphs, lists, tables, figures, links and form fields are recognized on the page), and a document whose tags leave content outside them is tagged again. Then the language is set from `PreflightOptions.Language` when the document has none - it is never guessed - and a missing title is taken from the first heading. Annotations and form fields are tagged, links are described, heading levels that skip a level are renumbered, and fonts are embedded and mapped to Unicode. A PDF/A claim the standard contradicts (PDF/A-1 to 3 under PDF/UA-2, which is a PDF 2.0 standard, or PDF/A-4 under PDF/UA-1) is removed and reported; a PDF/A claim that can hold is kept valid.
+
+What needs a person is still reported after the fixes: alternate text for figures, the headers of an irregular table, the label of a form field. Use the tags and alternate text APIs to supply them, then validate again.
+
+### PDF/X
+
+Encryption is removed; the identification, dates and output intent are written; every page gets a TrimBox; colour is converted to CMYK - through the output profile you give (`PreflightOptions.OutputProfile`, an ICC printer profile), or with the device formula without one - or, under an RGB or Gray output intent, given the colour spaces that describe it. Transparency, hidden layers, transfer functions and compressions the level forbids are removed, and fonts are embedded from the installed fonts. Annotations in the printed area are removed only when `PreflightOptions.RemoveAnnotations` is set (what they print is drawn into the page first), and embedded files and JavaScript only when `PreflightOptions.RemoveAttachmentsAndJavaScript` is set.
+
+### Example
+
+```csharp
+byte[] pdf = File.ReadAllBytes("report.pdf");
+
+PreflightResult result = PdfPreflight.Fix(pdf, null,
+    PdfConformanceStandard.PdfUA1,
+    new PreflightOptions(Language: "en-US"));
+
+foreach (PreflightFix fix in result.Applied)
+    Console.WriteLine(fix.Description + " (" + fix.Count + ")");
+
+if (result.After.IsCompliant)
+    File.WriteAllBytes("report-ua1.pdf", result.Pdf);
+else
+    foreach (RuleFailure failure in result.After.Failures)
+        Console.WriteLine("Left: " + failure.Rule + " " + failure.Message);
+```
+
+```vbnet
+Dim pdf As Byte() = File.ReadAllBytes("report.pdf")
+
+Dim result As PreflightResult = PdfPreflight.Fix(pdf, Nothing,
+    PdfConformanceStandard.PdfUA1,
+    New PreflightOptions(Language:="en-US"))
+
+For Each fix As PreflightFix In result.Applied
+    Console.WriteLine(fix.Description & " (" & fix.Count & ")")
+Next
+
+If result.After.IsCompliant Then
+    File.WriteAllBytes("report-ua1.pdf", result.Pdf)
+Else
+    For Each failure As RuleFailure In result.After.Failures
+        Console.WriteLine("Left: " & failure.Rule.ToString() & " " & failure.Message)
+    Next
+End If
+```
+
+For print, with a printer profile:
+
+```csharp
+var options = new PreflightOptions(
+    OutputProfile: File.ReadAllBytes("ISOcoated_v2_eci.icc"),
+    RemoveAnnotations: true);
+PreflightResult result = PdfPreflight.Fix(pdf, null,
+    PdfConformanceStandard.PdfX4, options);
+```
+
+```vbnet
+Dim options As New PreflightOptions(
+    OutputProfile:=File.ReadAllBytes("ISOcoated_v2_eci.icc"),
+    RemoveAnnotations:=True)
+Dim result As PreflightResult = PdfPreflight.Fix(pdf, Nothing,
+    PdfConformanceStandard.PdfX4, options)
 ```

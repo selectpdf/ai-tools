@@ -1,6 +1,6 @@
 # Migrating from the classic SelectPdf library
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Migrating to SelectPdf.Universal
 
@@ -11,7 +11,7 @@ SelectPdf.Universal is the cross-platform successor of the **Select.Pdf** librar
 |  | Select.Pdf | SelectPdf.Universal |
 |---|---|---|
 | Platforms | Windows | Windows (x64, x86), Linux (x64, ARM64), macOS (Apple Silicon), Docker containers |
-| Frameworks | .NET Framework 2.0 and later, .NET Standard 2.0 | .NET Standard 2.0 (.NET Framework 4.6.1 and later, .NET Core 2.0 and later), .NET 8, .NET 10 |
+| Frameworks | .NET Framework 2.0 and later, .NET Standard 2.0 | .NET Standard 2.0 (.NET Framework 4.6.1 and later, .NET Core 2.0 and later), .NET 8, .NET 10 (and .NET 9 and .NET 11 through them) |
 | NuGet packages | **Select.Pdf**, **Select.Pdf.NetCore**, their x64 builds, and engine companion packages | **SelectPdf.Universal** plus one **SelectPdf.Universal.Native.<rid>** package per platform |
 | Assembly | **Select.Pdf.dll** | **SelectPdf.Universal.dll** |
 | Namespaces | **SelectPdf** (with **System.Drawing** types in the API) | **SelectPdf.Universal** and **SelectPdf.Universal.Drawing** |
@@ -23,7 +23,7 @@ SelectPdf.Universal is the cross-platform successor of the **Select.Pdf** librar
 
 Remove the Select.Pdf package references (including the Chromium and Blink companion packages and **Select.Pdf.Extras**), any direct reference to **Select.Pdf.dll**, and the engine files a project carries by hand (**Select.Html.dep**, **Select.Tools.dep**, the engine folders and any build step that copies them). Then install **SelectPdf.Universal** and the native package for each platform the application runs on:
 
-```text
+```
 dotnet add package SelectPdf.Universal
 # the native package: win-x64, win-x86, linux-x64, linux-arm64 or osx-arm64
 dotnet add package SelectPdf.Universal.Native.win-x64
@@ -171,7 +171,7 @@ Three settings have new names. The old names still compile, marked obsolete, and
 
 `CefEnginePath` and `CefEngineTemporaryFilesPath` were renamed without an obsolete alias (see Step 4). A few method parameters were renamed as well (`PdfDocument.RemovePage` and the `PdfPageCollection` methods); this only matters to calls that use named arguments.
 
-### Step 6: Features That Are Not Available
+### Step 6: Replaced and Removed Features
 
 | Select.Pdf | SelectPdf.Universal |
 |---|---|
@@ -188,7 +188,7 @@ Three settings have new names. The old names still compile, marked obsolete, and
 
 Fonts are where a Windows-only library and a cross-platform one differ most, because the fonts installed on a Linux server or in a container are not the fonts of a Windows desktop.
 
-**Porting font code**
+#### Porting font code
 
 | Select.Pdf | SelectPdf.Universal |
 |---|---|
@@ -196,31 +196,31 @@ Fonts are where a Windows-only library and a cross-platform one differ most, bec
 | `doc.Fonts.Add(new Font("Arial", 12))`, `doc.AddFont(new Font(...))` | `doc.Fonts.Add(new PdfSystemFont("Arial", 12))`, or `PdfFont.CreateFromSystemFont("Arial", 12)` |
 | `new Font("Arial", 12, FontStyle.Bold \| FontStyle.Italic)` | `new PdfSystemFont("Arial", 12, PdfFontStyle.Bold \| PdfFontStyle.Italic)`. Underline and strikeout are properties of the font: `IsUnderline`, `IsStrikeout`. |
 | `doc.Fonts.Add(font, false)` (an installed font, not embedded) | Not supported: an installed font is always embedded, as a subset. For a font that is not embedded, use one of the 14 standard fonts, which every PDF reader has. |
-| `doc.Fonts.Add(@"C:\fonts\font.ttf")` | Unchanged, or `PdfFont.CreateFromFile(path, size)`. Fonts can also be loaded from memory: `PdfFont.CreateFromBytes`, `PdfFont.CreateFromStream`, `doc.Fonts.Add(byte[])`, `doc.Fonts.Add(Stream)`. |
+| `doc.Fonts.Add("font.ttf")` | Unchanged, or `PdfFont.CreateFromFile(path, size)`. Fonts can also be loaded from memory: `PdfFont.CreateFromBytes`, `PdfFont.CreateFromStream`, `doc.Fonts.Add(byte[])`, `doc.Fonts.Add(Stream)`. |
 | `font.GetSystemFont()` (a `System.Drawing.Font`) | `font.GetSystemFont()` returns the `PdfSystemFont` the font was created from, or null |
 | `System.Drawing.FontFamily.Families` | `PdfSystemFonts.InstalledFamilies`, `PdfSystemFonts.IsFamilyInstalled`, `PdfSystemFonts.LoadFontBytes` |
 | `PdfTextSection(x, y, text, System.Drawing.Font)` | `PdfTextSection(x, y, text, PdfFont)` |
 
-**How installed fonts are found on each platform**
+#### How installed fonts are found on each platform
 
 - A font requested by family name (`PdfSystemFont`, `PdfFont.CreateFromSystemFont`) is looked up among the fonts installed on the machine the application runs on - the Windows font folder, the font directories of a Linux distribution, the macOS system fonts - by exact family name. A family that is not installed is an error (`PdfDocumentException`), never a silent substitution with another face. **Arial**, **Times New Roman**, **Verdana** or **Segoe UI** are installed on Windows, but usually not on Linux servers or in containers.
 - The library carries three font families of its own, embedded in the assembly: **Liberation Sans**, **Liberation Serif** and **Liberation Mono**, each with bold and italic faces. They have the same character widths as Arial, Times New Roman and Courier New, so text laid out with them takes the same space. They are available on every platform, including a container with no fonts installed, and are always listed by `PdfSystemFonts.InstalledFamilies`. Code that must produce the same document on Windows, Linux and macOS should ask for these names instead of the Windows ones.
 - The 14 standard PDF fonts (Helvetica, Times, Courier, Symbol, ZapfDingbats and their styles) and the standard CJK fonts are not embedded: the PDF reader supplies them, so they work the same on every platform.
 - For an application running on Windows, nothing changes: the installed fonts are available as before.
 
-**Fonts in HTML conversion**
+#### Fonts in HTML conversion
 
 - Chromium uses the fonts installed on the machine and the web fonts a page loads (`@font-face`, Google Fonts), and embeds every font the page uses, as a subset. Web fonts render the same everywhere; a page that relies on a font by name (`font-family: Arial`) renders with that font only where it is installed, and with another face elsewhere.
 - On Linux, the library configures Chromium so that the generic families (`sans-serif`, `serif`, `monospace`) fall back to the bundled Liberation fonts when the system has nothing better. Text therefore renders even in a container with no fonts at all; a system that has fonts installed keeps its own. To reproduce a Windows layout exactly on Linux, install the fonts the pages use, or load them as web fonts.
 - Windows containers based on Windows Server Core need the core Windows font families installed; see "Docker" (installation-and-deployment.md).
 
-**Fonts in documents with a standard**
+#### Fonts in documents with a standard
 
 - PDF/A and PDF/X require every font to be embedded. A standard font used in such a document is drawn with the bundled face that has the same metrics, and embedded: Helvetica with Liberation Sans, Times with Liberation Serif, Courier with Liberation Mono. Symbol and ZapfDingbats have no bundled equivalent and are refused.
 - The standard CJK fonts are never embedded, so they cannot be used in PDF/A or PDF/X documents: load a CJK TrueType or OpenType font with `PdfFont.CreateFromFile` instead.
 - `PdfDocument.ConvertToPdfA` embeds the fonts a loaded document uses but does not carry, resolving each by name on the machine and falling back to the bundled family closest to it.
 
-**Other differences**
+#### Other differences
 
 - Text drawn with a standard CJK font appears about one line lower than in Select.Pdf, which painted CJK text one line above the requested position while reporting a rectangle below it. SelectPdf.Universal paints the text at the requested position, and the rectangle it reports matches. Latin text and TrueType fonts are placed as before.
 - `Size`, `IsUnderline` and `IsStrikeout` can be changed on every kind of font after it is created, as in Select.Pdf.

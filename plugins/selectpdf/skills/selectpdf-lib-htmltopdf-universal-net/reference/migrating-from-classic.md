@@ -1,6 +1,6 @@
 # Migrating from the classic Community Edition
 
-Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Migrating to SelectPdf.HtmlToPdf.Universal
 
@@ -11,7 +11,7 @@ SelectPdf.HtmlToPdf.Universal is the cross-platform successor of the free **Sele
 |  | Select.HtmlToPdf | SelectPdf.HtmlToPdf.Universal |
 |---|---|---|
 | Platforms | Windows | Windows (x64, x86), Linux (x64, ARM64), macOS (Apple Silicon), Docker containers |
-| Frameworks | .NET Framework 2.0 and later, .NET Standard 2.0 | .NET Standard 2.0 (.NET Framework 4.6.1 and later, .NET Core 2.0 and later), .NET 8, .NET 10 |
+| Frameworks | .NET Framework 2.0 and later, .NET Standard 2.0 | .NET Standard 2.0 (.NET Framework 4.6.1 and later, .NET Core 2.0 and later), .NET 8, .NET 10 (and .NET 9 and .NET 11 through them) |
 | NuGet packages | **Select.HtmlToPdf**, **Select.HtmlToPdf.NetCore**, and engine companion packages | **SelectPdf.HtmlToPdf.Universal** plus one **SelectPdf.Universal.Native.<rid>** package per platform |
 | Assembly | **Select.HtmlToPdf.dll** | **SelectPdf.HtmlToPdf.Universal.dll** |
 | Namespaces | **SelectPdf** (with **System.Drawing** types in the API) | **SelectPdf.Universal** and **SelectPdf.Universal.Drawing** |
@@ -23,7 +23,7 @@ SelectPdf.HtmlToPdf.Universal is the cross-platform successor of the free **Sele
 
 Remove the Select.HtmlToPdf package references (including the Chromium and Blink companion packages), any direct reference to **Select.HtmlToPdf.dll**, and the engine files a project carries by hand (**Select.Html.dep**, the engine folders and any build step that copies them). Then install **SelectPdf.HtmlToPdf.Universal** and the native package for each platform the application runs on:
 
-```text
+```
 dotnet add package SelectPdf.HtmlToPdf.Universal
 # the native package: win-x64, win-x86, linux-x64, linux-arm64 or osx-arm64
 dotnet add package SelectPdf.Universal.Native.win-x64
@@ -155,7 +155,7 @@ Also removed: `PdfStandard.PdfSiqQLevelA` and `PdfSiqQLevelB`, `PdfViewerTextOrd
 
 Fonts are where a Windows-only converter and a cross-platform one differ most, because the fonts installed on a Linux server or in a container are not the fonts of a Windows desktop.
 
-**Porting font code**
+#### Porting font code
 
 | Select.HtmlToPdf | SelectPdf.HtmlToPdf.Universal |
 |---|---|
@@ -166,7 +166,7 @@ Fonts are where a Windows-only converter and a cross-platform one differ most, b
 | `doc.Fonts.Add(@"C:\fonts\font.ttf")` | Unchanged, or `PdfFont.CreateFromFile(path, size)`; also from memory with `PdfFont.CreateFromBytes` and `PdfFont.CreateFromStream`. |
 | `System.Drawing.FontFamily.Families` | `PdfSystemFonts.InstalledFamilies`, `PdfSystemFonts.IsFamilyInstalled` |
 
-**How fonts are found on each platform**
+#### How fonts are found on each platform
 
 - A font requested by family name (`PdfSystemFont`, `PdfFont.CreateFromSystemFont`) is looked up among the fonts installed on the machine the application runs on, by exact family name. A family that is not installed is an error, never a silent substitution. **Arial**, **Times New Roman** or **Segoe UI** are installed on Windows, but usually not on Linux servers or in containers.
 - The library carries three font families of its own: **Liberation Sans**, **Liberation Serif** and **Liberation Mono**, with bold and italic faces, metric-compatible with Arial, Times New Roman and Courier New. They are available on every platform, including a container with no fonts installed. Code that must produce the same document everywhere should ask for these names.

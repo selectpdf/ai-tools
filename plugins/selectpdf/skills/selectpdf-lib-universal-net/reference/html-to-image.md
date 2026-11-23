@@ -1,6 +1,6 @@
 # HTML to image
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Converting a URL to an image
 
@@ -13,65 +13,65 @@ To convert an url (or local file) to image, `HtmlToImage` class exposes the `Htm
 This sample shows how to use SelectPdf html to image converter to convert an url to a PNG image, also setting a few properties.
 
 ```csharp
-			// read parameters from the webpage
-            string url = "https://www.example.com";
+// read parameters from the webpage
+string url = "https://www.example.com";
 
-            int webPageWidth = 1024;
-            try
-            {
-                webPageWidth = Convert.ToInt32(widthValue);
-            }
-            catch { }
+int webPageWidth = 1024;
+try
+{
+    webPageWidth = Convert.ToInt32(widthValue);
+}
+catch { }
 
-            int webPageHeight = 0;
-            try
-            {
-                webPageHeight = Convert.ToInt32(heightValue);
-            }
-            catch { }
+int webPageHeight = 0;
+try
+{
+    webPageHeight = Convert.ToInt32(heightValue);
+}
+catch { }
 
-            // instantiate a html to image converter object
-            HtmlToImage imgConverter = new HtmlToImage();
+// instantiate a html to image converter object
+HtmlToImage imgConverter = new HtmlToImage();
 
-            // set converter options
-            imgConverter.WebPageWidth = webPageWidth;
-            imgConverter.WebPageHeight = webPageHeight;
+// set converter options
+imgConverter.WebPageWidth = webPageWidth;
+imgConverter.WebPageHeight = webPageHeight;
 
-            // convert the url to a PNG image (returned as a byte array)
-            byte[] imageBytes = imgConverter.ConvertUrl(url);
+// convert the url to a PNG image (returned as a byte array)
+byte[] imageBytes = imgConverter.ConvertUrl(url);
 
-            // save the image to a file
-            System.IO.File.WriteAllBytes("image.png", imageBytes);
+// save the image to a file
+System.IO.File.WriteAllBytes("image.png", imageBytes);
 ```
 
 ```vbnet
-        	' read parameters from the webpage
-	        Dim url As String = "https://www.example.com"
+' read parameters from the webpage
+Dim url As String = "https://www.example.com"
 
-	        Dim webPageWidth As Integer = 1024
-	        Try
-	            webPageWidth = Convert.ToInt32(widthValue)
-	        Catch
-	        End Try
+Dim webPageWidth As Integer = 1024
+Try
+    webPageWidth = Convert.ToInt32(widthValue)
+Catch
+End Try
 
-	        Dim webPageHeight As Integer = 0
-	        Try
-	            webPageHeight = Convert.ToInt32(heightValue)
-	        Catch
-	        End Try
+Dim webPageHeight As Integer = 0
+Try
+    webPageHeight = Convert.ToInt32(heightValue)
+Catch
+End Try
 
-	        ' instantiate a html to image converter object
-	        Dim imgConverter As New HtmlToImage()
+' instantiate a html to image converter object
+Dim imgConverter As New HtmlToImage()
 
-	        ' set converter options
-	        imgConverter.WebPageWidth = webPageWidth
-	        imgConverter.WebPageHeight = webPageHeight
+' set converter options
+imgConverter.WebPageWidth = webPageWidth
+imgConverter.WebPageHeight = webPageHeight
 
-	        ' convert the url to a PNG image (returned as a byte array)
-	        Dim imageBytes As Byte() = imgConverter.ConvertUrl(url)
+' convert the url to a PNG image (returned as a byte array)
+Dim imageBytes As Byte() = imgConverter.ConvertUrl(url)
 
-	        ' save the image to a file
-	        System.IO.File.WriteAllBytes("image.png", imageBytes)
+' save the image to a file
+System.IO.File.WriteAllBytes("image.png", imageBytes)
 ```
 
 ## Converting an HTML string to an image
@@ -87,67 +87,67 @@ The first method, that has only the *htmlString* parameter, can be used to conve
 This sample shows how to use SelectPdf html to image converter to convert a raw html code to a PNG image, also setting a few properties.
 
 ```csharp
-			// read parameters from the webpage
-            string htmlString = "<html><body><h1>Hello world</h1></body></html>";
-            string baseUrl = "https://www.example.com/";
+// read parameters from the webpage
+string htmlString = "<html><body><h1>Hello world</h1></body></html>";
+string baseUrl = "https://www.example.com/";
 
-            int webPageWidth = 1024;
-            try
-            {
-                webPageWidth = Convert.ToInt32(widthValue);
-            }
-            catch { }
+int webPageWidth = 1024;
+try
+{
+    webPageWidth = Convert.ToInt32(widthValue);
+}
+catch { }
 
-            int webPageHeight = 0;
-            try
-            {
-                webPageHeight = Convert.ToInt32(heightValue);
-            }
-            catch { }
+int webPageHeight = 0;
+try
+{
+    webPageHeight = Convert.ToInt32(heightValue);
+}
+catch { }
 
-            // instantiate a html to image converter object
-            HtmlToImage imgConverter = new HtmlToImage();
+// instantiate a html to image converter object
+HtmlToImage imgConverter = new HtmlToImage();
 
-            // set converter options
-            imgConverter.WebPageWidth = webPageWidth;
-            imgConverter.WebPageHeight = webPageHeight;
+// set converter options
+imgConverter.WebPageWidth = webPageWidth;
+imgConverter.WebPageHeight = webPageHeight;
 
-            // convert the html string to a PNG image (returned as a byte array)
-            byte[] imageBytes =
-                imgConverter.ConvertHtmlString(htmlString, baseUrl);
+// convert the html string to a PNG image (returned as a byte array)
+byte[] imageBytes =
+    imgConverter.ConvertHtmlString(htmlString, baseUrl);
 
-            // save the image to a file
-            System.IO.File.WriteAllBytes("image.png", imageBytes);
+// save the image to a file
+System.IO.File.WriteAllBytes("image.png", imageBytes);
 ```
 
 ```vbnet
-        	' read parameters from the webpage
-	        Dim htmlString As String = "<html><body><h1>Hello world</h1></body></html>"
-	        Dim baseUrl As String = "https://www.example.com/"
+' read parameters from the webpage
+Dim htmlString As String = "<html><body><h1>Hello world</h1></body></html>"
+Dim baseUrl As String = "https://www.example.com/"
 
-	        Dim webPageWidth As Integer = 1024
-	        Try
-	            webPageWidth = Convert.ToInt32(widthValue)
-	        Catch
-	        End Try
+Dim webPageWidth As Integer = 1024
+Try
+    webPageWidth = Convert.ToInt32(widthValue)
+Catch
+End Try
 
-	        Dim webPageHeight As Integer = 0
-	        Try
-	            webPageHeight = Convert.ToInt32(heightValue)
-	        Catch
-	        End Try
+Dim webPageHeight As Integer = 0
+Try
+    webPageHeight = Convert.ToInt32(heightValue)
+Catch
+End Try
 
-	        ' instantiate a html to image converter object
-	        Dim imgConverter As New HtmlToImage()
+' instantiate a html to image converter object
+Dim imgConverter As New HtmlToImage()
 
-	        ' set converter options
-	        imgConverter.WebPageWidth = webPageWidth
-	        imgConverter.WebPageHeight = webPageHeight
+' set converter options
+imgConverter.WebPageWidth = webPageWidth
+imgConverter.WebPageHeight = webPageHeight
 
-	        ' convert the html string to a PNG image (returned as a byte array)
-	        Dim imageBytes As Byte() = _
-	            imgConverter.ConvertHtmlString(htmlString, baseUrl)
+' convert the html string to a PNG image (returned as a byte array)
+Dim imageBytes As Byte() = _
+    imgConverter.ConvertHtmlString(htmlString, baseUrl)
 
-	        ' save the image to a file
-	        System.IO.File.WriteAllBytes("image.png", imageBytes)
+' save the image to a file
+System.IO.File.WriteAllBytes("image.png", imageBytes)
 ```

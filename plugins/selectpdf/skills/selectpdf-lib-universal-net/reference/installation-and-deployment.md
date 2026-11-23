@@ -1,6 +1,6 @@
 # Installation, license key and deployment (Windows, Linux, macOS, Docker, cloud)
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Installation
 
@@ -13,66 +13,72 @@ A typical installation is two steps:
 1. Install the **managed library** package (**SelectPdf.Universal**).
 2. Install the **native engine** package that matches your deployment platform (runtime identifier), for example **SelectPdf.Universal.Native.win-x64**.
 
-**1. Managed library package**
+#### Managed library package
 
-The full SelectPdf library. A single AnyCPU package that targets **.NET Standard 2.0**, **.NET 8.0** and **.NET 10.0** - usable from .NET Framework 4.6.1+, .NET Core 2.0+ / .NET Standard 2.0, and .NET 5 through .NET 10. The assembly is **SelectPdf.Universal.dll** and its public types live in the **SelectPdf.Universal** namespace (with **SelectPdf.Universal.Drawing** for the drawing primitives).
+- **SelectPdf.Universal**: The full SelectPdf library. A single AnyCPU package that targets **.NET Standard 2.0**, **.NET 8.0** and **.NET 10.0** - usable from .NET Framework 4.6.1+, .NET Core 2.0+ / .NET Standard 2.0, and .NET 5 through .NET 11. The assembly is **SelectPdf.Universal.dll** and its public types live in the **SelectPdf.Universal** namespace (with **SelectPdf.Universal.Drawing** for the drawing primitives). [https://www.nuget.org/packages/SelectPdf.Universal/](https://www.nuget.org/packages/SelectPdf.Universal/)
 
-[https://www.nuget.org/packages/SelectPdf.Universal/](https://www.nuget.org/packages/SelectPdf.Universal/)
+#### Native engine packages
 
-**2. Native engine packages** (install the one that matches your deployment runtime identifier)
+Install the one that matches your deployment runtime identifier.
 
-The Chromium (CEF) HTML rendering engine and the native PDF tool used by the PDF-to-text and PDF-to-image converters are platform specific. Install exactly the Native package(s) matching the runtime identifier(s) you deploy to. The managed library is **AnyCPU**. Choose the Native package that matches the architecture of the process that converts - win-x64, linux-x64, linux-arm64 or osx-arm64 for a 64-bit process, win-x86 for a 32-bit Windows process: the Chromium engine then runs inside the application. With a package of another architecture conversions run in a separate engine process; see "The Chromium engine" (installation-and-deployment.md).
+The Chromium (CEF) HTML rendering engine and the native PDF tool used by the PDF-to-text and PDF-to-image converters are platform specific. Install exactly the Native package(s) matching the runtime identifier(s) you deploy to; each brings the PDF tool with it (see the PDF tool packages below). The managed library is **AnyCPU**. Choose the Native package that matches the architecture of the process that converts - win-x64, linux-x64, linux-arm64 or osx-arm64 for a 64-bit process, win-x86 for a 32-bit Windows process: the Chromium engine then runs inside the application. With a package of another architecture conversions run in a separate engine process; see "The Chromium engine" (installation-and-deployment.md).
 
-Native engines for 64-bit Windows.
+- **SelectPdf.Universal.Native.win-x64**: Native engines for 64-bit Windows. [https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x64/)
+- **SelectPdf.Universal.Native.win-x86**: Native engines for 32-bit Windows. [https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x86/](https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x86/)
+- **SelectPdf.Universal.Native.linux-x64**: Native engines for 64-bit Linux (x64). [https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-x64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-x64/)
+- **SelectPdf.Universal.Native.linux-arm64**: Native engines for 64-bit Linux (ARM64 / aarch64). [https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-arm64/)
+- **SelectPdf.Universal.Native.osx-arm64**: Native engines for macOS on Apple Silicon (ARM64). Requires macOS 13 (Ventura) or newer. [https://www.nuget.org/packages/SelectPdf.Universal.Native.osx-arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.osx-arm64/)
 
-[https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x64/)
+#### PDF tool packages
 
-Native engines for 32-bit Windows.
+For an application that works with existing PDF documents only.
 
-[https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x86/](https://www.nuget.org/packages/SelectPdf.Universal.Native.win-x86/)
+The PDF tool (SelectPdf.Tools) used by the PDF-to-text and PDF-to-image converters, and the preflight also ships on its own, without the Chromium engine, one package per runtime identifier. Each Native package depends on the Tools package of its runtime identifier, so an application that converts HTML gets the PDF tool with the Native package and needs nothing more. An application that converts no HTML can install the Tools package instead of the Native one and stay small.
 
-Native engines for 64-bit Linux (x64).
+- **SelectPdf.Universal.Tools.win-x64**: The PDF tool for 64-bit Windows. [https://www.nuget.org/packages/SelectPdf.Universal.Tools.win-x64/](https://www.nuget.org/packages/SelectPdf.Universal.Tools.win-x64/)
+- **SelectPdf.Universal.Tools.win-x86**: The PDF tool for 32-bit Windows. [https://www.nuget.org/packages/SelectPdf.Universal.Tools.win-x86/](https://www.nuget.org/packages/SelectPdf.Universal.Tools.win-x86/)
+- **SelectPdf.Universal.Tools.linux-x64**: The PDF tool for 64-bit Linux (x64). [https://www.nuget.org/packages/SelectPdf.Universal.Tools.linux-x64/](https://www.nuget.org/packages/SelectPdf.Universal.Tools.linux-x64/)
+- **SelectPdf.Universal.Tools.linux-arm64**: The PDF tool for 64-bit Linux (ARM64 / aarch64). [https://www.nuget.org/packages/SelectPdf.Universal.Tools.linux-arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Tools.linux-arm64/)
+- **SelectPdf.Universal.Tools.osx-arm64**: The PDF tool for macOS on Apple Silicon (ARM64). [https://www.nuget.org/packages/SelectPdf.Universal.Tools.osx-arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Tools.osx-arm64/)
 
-[https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-x64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-x64/)
+#### Fonts package
 
-Native engines for 64-bit Linux (ARM64 / aarch64).
-
-[https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.linux-arm64/)
-
-Native engines for macOS on Apple Silicon (ARM64). Requires macOS 13 (Ventura) or newer.
-
-[https://www.nuget.org/packages/SelectPdf.Universal.Native.osx-arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Native.osx-arm64/)
-
-**3. Fonts package** (optional, for Linux)
+Optional, for Linux.
 
 Linux servers and container images often have no fonts. **SelectPdf.Universal.Fonts** adds Noto fonts for every script, so pages in any language render there; it copies nothing for Windows builds. See "Fonts and languages" (installation-and-deployment.md).
 
 [https://www.nuget.org/packages/SelectPdf.Universal.Fonts/](https://www.nuget.org/packages/SelectPdf.Universal.Fonts/)
 
-**4. One package per platform** (instead of steps 1 and 2)
+#### One package per platform
+
+Instead of steps 1 and 2.
 
 For an application that runs on one platform, a single package installs both the managed library and the engine for that platform. These packages contain no code of their own. Install one of them, or the managed library and Native packages as described above - not both.
 
-Windows x64: SelectPdf.Universal and the engine package for that platform.
+- **SelectPdf.Universal.Windows**: Windows x64: SelectPdf.Universal and the engine package for that platform. [https://www.nuget.org/packages/SelectPdf.Universal.Windows/](https://www.nuget.org/packages/SelectPdf.Universal.Windows/)
+- **SelectPdf.Universal.Linux**: Linux x64 and Docker: SelectPdf.Universal and the engine package for that platform. [https://www.nuget.org/packages/SelectPdf.Universal.Linux/](https://www.nuget.org/packages/SelectPdf.Universal.Linux/)
+- **SelectPdf.Universal.Linux.Arm64**: Linux ARM64 and Docker: SelectPdf.Universal and the engine package for that platform. [https://www.nuget.org/packages/SelectPdf.Universal.Linux.Arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Linux.Arm64/)
+- **SelectPdf.Universal.MacOS**: macOS on Apple Silicon: SelectPdf.Universal and the engine package for that platform. [https://www.nuget.org/packages/SelectPdf.Universal.MacOS/](https://www.nuget.org/packages/SelectPdf.Universal.MacOS/)
 
-[https://www.nuget.org/packages/SelectPdf.Universal.Windows/](https://www.nuget.org/packages/SelectPdf.Universal.Windows/)
-
-Linux x64 and Docker: SelectPdf.Universal and the engine package for that platform.
-
-[https://www.nuget.org/packages/SelectPdf.Universal.Linux/](https://www.nuget.org/packages/SelectPdf.Universal.Linux/)
-
-Linux ARM64 and Docker: SelectPdf.Universal and the engine package for that platform.
-
-[https://www.nuget.org/packages/SelectPdf.Universal.Linux.Arm64/](https://www.nuget.org/packages/SelectPdf.Universal.Linux.Arm64/)
-
-macOS on Apple Silicon: SelectPdf.Universal and the engine package for that platform.
-
-[https://www.nuget.org/packages/SelectPdf.Universal.MacOS/](https://www.nuget.org/packages/SelectPdf.Universal.MacOS/)
+#### Notes
 
 - All PDF features - HTML-to-PDF conversion, from-scratch document creation, graphic elements, fonts, encryption, bookmarks, viewer preferences, PDF/A, form filling, PDF compression, digital signatures, portfolios, page resize, PDF-to-text and PDF-to-image - are in-box in the **SelectPdf.Universal** package. The other packages are the optional **SelectPdf.Universal.Fonts**, fonts for every language on Linux (see "Fonts and languages" (installation-and-deployment.md)), and the one-package-per-platform installs of step 4.
 - There is only one HTML rendering engine (Chromium / CEF), bundled in the Native package. There are no engine companion packages to choose. See "The Chromium engine" (installation-and-deployment.md).
 - A project references one Native package. To publish one application for several platforms, see Publishing for Several Platforms.
 - On macOS only Apple Silicon (ARM64) is supported by the Native package. On an Intel Mac the managed features still work, but HTML-to-PDF, PDF-to-text and PDF-to-image are unavailable because no **osx-x64** engine package is produced.
+
+#### .NET Framework projects (ASP.NET Web Forms, MVC 5, Web Site)
+
+In a .NET Framework project that installs packages through **packages.config** (an ASP.NET Web Forms or MVC 5 web application, a console or desktop application), install **SelectPdf.Universal.Windows**. On build, the packages copy into the output folder (**bin** for a web application) the **Chromium-CEF-154.0.28** engine folder, **SelectPdf.Tools.dep**, and the native graphics libraries **libSkiaSharp.dll** and **libHarfBuzzSharp.dll** in **x86**, **x64** and **arm64** subfolders. Publishing the web application deploys them with it. Version 26.5.0 did not copy the engine and **libHarfBuzzSharp.dll** in these projects; with it, copy them as described below.
+
+An ASP.NET **Web Site** (a site opened as a folder, with no project file) runs no package build step, so NuGet copies only the assemblies. Copy these once from the solution's **packages** folder into the site, and again after updating the packages (*<version>* is the version folder of each package):
+
+- **SelectPdf.Universal.Native.win-x64.<version>\contentFiles\any\any\Chromium-CEF-154.0.28** to **bin\Chromium-CEF-154.0.28**
+- **SelectPdf.Universal.Tools.win-x64.<version>\contentFiles\any\any\SelectPdf.Tools.dep** to **bin**
+- **SkiaSharp.NativeAssets.Win32.<version>\runtimes\win-x64\native\libSkiaSharp.dll** to **bin\x64**, and the **win-x86** one to **bin\x86**
+- **HarfBuzzSharp.NativeAssets.Win32.<version>\runtimes\win-x64\native\libHarfBuzzSharp.dll** to **bin\x64**, and the **win-x86** one to **bin\x86**
+
+Copy both architectures: IIS and IIS Express can run a site as a 32-bit or a 64-bit process, and the library loads the one that matches. Without the graphics libraries a conversion fails with "Unable to load library 'libSkiaSharp'" or "Unable to load library 'libHarfBuzzSharp'". The engine folder can also stay elsewhere on the server, named by `HtmlToPdfOptions.ChromiumEnginePath`.
 
 ### Publishing for Several Platforms
 
@@ -82,16 +88,16 @@ To publish one application for several platforms, choose the Native package by r
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
-  <PackageReference Include="SelectPdf.Universal.Native.win-x64" Version="26.5.0"
+  <PackageReference Include="SelectPdf.Universal" Version="26.6.0" />
+  <PackageReference Include="SelectPdf.Universal.Native.win-x64" Version="26.6.0"
     Condition="'$(RuntimeIdentifier)' == 'win-x64'
                Or '$(RuntimeIdentifier)' == ''" />
-  <PackageReference Include="SelectPdf.Universal.Native.linux-x64" Version="26.5.0"
+  <PackageReference Include="SelectPdf.Universal.Native.linux-x64" Version="26.6.0"
     Condition="'$(RuntimeIdentifier)' == 'linux-x64'" />
 </ItemGroup>
 ```
 
-```text
+```
 dotnet publish -c Release -r win-x64
 dotnet publish -c Release -r linux-x64
 ```
@@ -100,7 +106,7 @@ dotnet publish -c Release -r linux-x64
 
 Before SelectPdf.Universal, the SelectPdf library shipped as **Select.Pdf**: a Windows-only library for .NET Framework and .NET, distributed as NuGet packages and as downloadable archives. SelectPdf.Universal is a separate product line with its own package ids, assembly names and namespace. NuGet does not treat it as an update of **Select.Pdf**, so an existing project keeps the previous library until its references are replaced. To move a project, remove the pieces listed below, install the packages described above, and follow "Migrating to SelectPdf.Universal" (migrating-from-classic.md) for the code changes.
 
-**Previous NuGet packages and their replacements**
+#### Previous NuGet packages and their replacements
 
 | Previous package | What it contained | Replace with |
 |---|---|---|
@@ -110,11 +116,11 @@ Before SelectPdf.Universal, the SelectPdf library shipped as **Select.Pdf**: a W
 | **Select.Pdf.NetCore.Blink**, **Select.Pdf.NetCore.Blink.x64** | A Chrome build (**Chromium-<version>** folder) for the Blink rendering engine. | Nothing: SelectPdf.Universal has one rendering engine, Chromium. The Blink, WebKit and WebKit Restricted engines are not available. |
 | **Select.Pdf.Extras**, **Select.Pdf.Extras.x64** | An add-on with an alternative forms manager and compressor (**Select.Pdf.Extras.dll**). | No add-on: form filling (`PdfFormManager`) and compression are part of **SelectPdf.Universal**. Code written against the add-on's own classes has to be rewritten. |
 
-**Previous download archives**
+#### Previous download archives
 
 The library was also offered as zip archives from the SelectPdf website: **SelectPdf-Assemblies-v<version>.zip** (the assemblies for each .NET Framework version, the documentation and the samples), **SelectPdf-Samples-v<version>.zip**, **SelectPdf-Chromium-Windows[-x64]-v<version>.zip** (the Chromium engine folder) and **SelectPdf-BlinkBinaries[-x64]-v<version>.zip** (the Blink engine folder). A project set up from an archive references the DLL directly and carries its engine files by hand. SelectPdf.Universal has no archive distribution: it is installed through NuGet only.
 
-**What to remove from a project that used the previous library**
+#### What to remove from a project that used the previous library
 
 - The package references listed in the table above, and **Newtonsoft.Json** if it was added only for SelectPdf.
 - Direct references to **Select.Pdf.dll**, **Select.HtmlToPdf.dll** or **Select.Pdf.Extras.dll**, usually with a hint path into the **Assemblies** folder of an archive.
@@ -124,7 +130,7 @@ The library was also offered as zip archives from the SelectPdf website: **Selec
 
 The new assemblies are named **SelectPdf.Universal.dll** and **SelectPdf.HtmlToPdf.Universal.dll**, and the engine files are the **Chromium-CEF-154.0.28** folder and **SelectPdf.Tools.dep** (**SelectPdf.Tools** on Linux and macOS). SelectPdf.Universal loads nothing from the previous library, so leftover files do not affect it, but they add to the size of every deployment.
 
-**License keys**
+#### License keys
 
 SelectPdf.Universal reads its license key from `GlobalProperties.LicenseKey`, in the same format as the previous library. A key issued for version 26 or later is accepted; a key for an earlier major version is refused as not valid for this version, as the previous library refuses it too. See "License key" (installation-and-deployment.md).
 
@@ -136,7 +142,7 @@ SelectPdf Library for .NET is provided as a free trial product that can be teste
 
 The free trial is fully functional, but without a license key, an watermark will be displayed in each page of the pdf documents generated with the library. A license key is need to unlock the product and remove the demo watermark.
 
-The same license key works with all SelectPdf targets (.NET Standard 2.0, .NET 8.0, .NET 10.0 - usable from .NET Framework 4.6.1+, .NET Core 2.0+ and .NET 5 through .NET 10).
+The same license key works with all SelectPdf targets (.NET Standard 2.0, .NET 8.0, .NET 10.0 - usable from .NET Framework 4.6.1+, .NET Core 2.0+ and .NET 5 through .NET 11).
 
 A license key can be purchased from the product website: [https://selectpdf.com](https://selectpdf.com).
 
@@ -151,13 +157,13 @@ If you previously used the Community Edition for tests, switch the package refer
 If you used the free trial of the commercial library for tests, there is no need to download another version of the product, as the free trial is a full version. To unlock the product, the license key needs to be set in code, using the `GlobalProperties.LicenseKey` property of the `GlobalProperties` class:
 
 ```csharp
-	// sample license key setting
-    SelectPdf.Universal.GlobalProperties.LicenseKey = "your-license-key";
+// sample license key setting
+SelectPdf.Universal.GlobalProperties.LicenseKey = "your-license-key";
 ```
 
 ```vbnet
-	' sample license key setting
-    SelectPdf.Universal.GlobalProperties.LicenseKey = "your-license-key"
+' sample license key setting
+SelectPdf.Universal.GlobalProperties.LicenseKey = "your-license-key"
 ```
 
 Do not forget to replace **your-license-key** with the actual license key received by email when the order is processed.
@@ -174,15 +180,11 @@ For an engine on the application's own machine, the engine ships in the platform
 
 Install the managed **SelectPdf.Universal** package and the **SelectPdf.Universal.Native.<rid>** package matching your deployment runtime identifier. The Native package deploys the Chromium runtime (engine folder **Chromium-CEF-154.0.28**) into the application output folder automatically at build time.
 
-Chromium engine for 64-bit Windows.
-
-Chromium engine for 32-bit Windows.
-
-Chromium engine for 64-bit Linux (x64).
-
-Chromium engine for 64-bit Linux (ARM64 / aarch64).
-
-Chromium engine for macOS on Apple Silicon (ARM64), macOS 13 (Ventura) or newer.
+- **SelectPdf.Universal.Native.win-x64**: Chromium engine for 64-bit Windows.
+- **SelectPdf.Universal.Native.win-x86**: Chromium engine for 32-bit Windows.
+- **SelectPdf.Universal.Native.linux-x64**: Chromium engine for 64-bit Linux (x64).
+- **SelectPdf.Universal.Native.linux-arm64**: Chromium engine for 64-bit Linux (ARM64 / aarch64).
+- **SelectPdf.Universal.Native.osx-arm64**: Chromium engine for macOS on Apple Silicon (ARM64), macOS 13 (Ventura) or newer.
 
 > **Note:** Choose the native package that matches the architecture of the application's process: the engine then runs inside the application (see Engine Hosting below). With a package of another architecture, for example a 32-bit process with the win-x64 package, conversions still work, in a separate engine process. The Linux packages carry the Chromium system libraries the engine needs, so a minimal server or container image needs no additional packages; see "Deployment" (installation-and-deployment.md).
 
@@ -313,9 +315,8 @@ End Try
 
 The engine can run in two ways, selected for the whole application by `GlobalProperties.ChromiumEngineHostMode`:
 
-The engine is loaded into the application once and kept ready between conversions. This is the default when the in-process host library (**SelectPdf.Cef.Host.dll**, **.so** or **.dylib**) is beside the engine, as it is in every current native package. It removes the time spent starting and closing a browser for every conversion, so short pages convert several times faster.
-
-Every conversion starts a short-lived engine process of its own. Nothing is shared between conversions, and a crash or a hang inside the browser cannot affect the application. This is the default when the host library is not beside the engine.
+- **InProcess**: The engine is loaded into the application once and kept ready between conversions. This is the default when the in-process host library that every current native package carries is beside the engine. It removes the time spent starting and closing a browser for every conversion, so short pages convert several times faster.
+- **OutOfProcess**: Every conversion starts a short-lived engine process of its own. Nothing is shared between conversions, and a crash or a hang inside the browser cannot affect the application. This is the default when the host library is not beside the engine.
 
 Set the mode during start-up, before the first conversion: the value in force at the first conversion is used for the life of the process. The environment variable `SELECTPDF_CHROMIUM_ENGINE_HOST` (`inprocess` or `outofprocess`) changes the default without a code change; an explicit assignment overrides it.
 
@@ -339,7 +340,7 @@ What running the engine inside the application means:
 - The engine runs inside the application only when the native package matches the architecture of the application's process: win-x64, linux-x64, linux-arm64 or osx-arm64 for a 64-bit process, win-x86 for a 32-bit Windows process (a Windows App Service worker is 32-bit by default). Otherwise conversions run out of process automatically, and assigning `ChromiumEngineHostMode.InProcess` throws.
 - The browser's threads run in the application's process, and its renderer and helper processes stay alive until the application exits.
 
-One conversion can run in its own engine process whatever the mode is, with `HtmlToPdfOptions.ForceOutOfProcess`: use it for a page you do not trust, one likely to crash or hang the browser, or one that needs a browser-wide setting other than the one the first conversion fixed. It costs the start of an engine process.
+One conversion can run in its own engine process whatever the mode is, with `HtmlToPdfOptions.ForceOutOfProcess`: use it for a page you do not trust, one likely to crash or hang the browser, or one that needs a browser-wide setting other than the one the first conversion fixed. That conversion starts an engine process of its own.
 
 ```csharp
 HtmlToPdf converter = new HtmlToPdf();
@@ -395,11 +396,11 @@ Use the remote engine to:
 
 Start the engine with an access token:
 
-```text
+```
 docker run -d --name selectpdf-engine -p 8080:8080 \
   --read-only --tmpfs /tmp \
   -e SELECTPDF_ENGINE_TOKEN="$(openssl rand -base64 32)" \
-  ghcr.io/selectpdf/engine:26.5
+  ghcr.io/selectpdf/engine:26.6
 ```
 
 Then point the application at it, once at startup. The conversion code does not change:
@@ -428,7 +429,7 @@ doc.Close()
 
 The same settings can come from environment variables instead, with no code at all - which is how a container deployment usually does it:
 
-```text
+```
 SELECTPDF_RENDERING_ENGINE=ChromiumRemote
 SELECTPDF_ENGINE_ENDPOINT=http://selectpdf-engine:8080
 SELECTPDF_ENGINE_TOKEN=the token the engine was started with
@@ -449,7 +450,7 @@ A single converter can use the other engine than the global setting through its 
 
 ### Running the engine
 
-The image is `ghcr.io/selectpdf/engine` (mirrored on Docker Hub as `selectpdf/engine`), for **x64** and **arm64**. Use the tag of the library's version - `26.5.0`, or `26.5` for its latest build; an engine that does not speak the library's protocol is reported as such. The engine listens on port 8080, runs as a non-root user, works with a read-only file system and a writable `/tmp`, and needs no extra capabilities and no `--shm-size`.
+The image is `ghcr.io/selectpdf/engine` (mirrored on Docker Hub as `selectpdf/engine`), for **x64** and **arm64**. Use the tag of the library's version - `26.6.0`, or `26.6` for its latest build; an engine that does not speak the library's protocol is reported as such. The engine listens on port 8080, runs as a non-root user, works with a read-only file system and a writable `/tmp`, and needs no extra capabilities and no `--shm-size`.
 
 **Health:** `GET /health` answers 200 once the engine has done its first conversion (the image's own `HEALTHCHECK` uses it), and 503 before that or when it cannot convert. `/healthz` answers the same, for probes written with that name. `GET /v1/info` (with the token) reports the engine's version, its Chromium version and its limits.
 
@@ -467,10 +468,10 @@ The image is `ghcr.io/selectpdf/engine` (mirrored on Docker Hub as `selectpdf/en
 
 **Docker Compose:** name the engine service `selectpdf-engine` and the application needs no endpoint setting at all:
 
-```text
+```
 services:
   selectpdf-engine:
-    image: ghcr.io/selectpdf/engine:26.5
+    image: ghcr.io/selectpdf/engine:26.6
     read_only: true
     tmpfs:
       - /tmp
@@ -500,9 +501,9 @@ The samples download has a step-by-step sample for Azure Container Apps, Amazon 
 
 The chart runs the engine as a Deployment behind a Service, non-root with a read-only root file system, with `/health` as its startup, readiness and liveness probe and the token in a Secret. Install it as `selectpdf-engine` and an application in the same namespace needs no endpoint setting:
 
-```text
+```
 helm install selectpdf-engine \
-  oci://ghcr.io/selectpdf/charts/selectpdf-engine --version 26.5.0 \
+  oci://ghcr.io/selectpdf/charts/selectpdf-engine --version 26.6.0 \
   --namespace pdf --create-namespace \
   --set auth.token="$(openssl rand -base64 32)"
 ```
@@ -513,10 +514,10 @@ From another namespace use `http://selectpdf-engine.<namespace>.svc.cluster.loca
 
 Run the engine as an app with internal ingress named `selectpdf-engine`: apps in the same environment reach it as `http://selectpdf-engine`, a local name, and nothing outside the environment can.
 
-```text
+```
 az containerapp create -n selectpdf-engine -g my-group \
   --environment my-environment \
-  --image ghcr.io/selectpdf/engine:26.5 \
+  --image ghcr.io/selectpdf/engine:26.6 \
   --ingress internal --target-port 8080 --transport http \
   --cpu 2 --memory 4Gi --min-replicas 1 --max-replicas 3 \
   --secrets "engine-token=$TOKEN" \
@@ -525,7 +526,7 @@ az containerapp create -n selectpdf-engine -g my-group \
 
 and in the application's app:
 
-```text
+```
 --secrets "engine-token=$TOKEN" \
 --env-vars SELECTPDF_RENDERING_ENGINE=ChromiumRemote \
   SELECTPDF_ENGINE_ENDPOINT=http://selectpdf-engine \
@@ -538,11 +539,11 @@ Keep `--min-replicas 1`: an engine scaled to zero starts Chromium on the first r
 
 Run the engine as a second container in the application's container group. The containers share `localhost`, so the engine listens on another port and only the application's port is exposed:
 
-```text
+```
 containers:
   - name: selectpdf-engine
     properties:
-      image: ghcr.io/selectpdf/engine:26.5
+      image: ghcr.io/selectpdf/engine:26.6
       resources:
         requests: { cpu: 2, memoryInGB: 4 }
       environmentVariables:
@@ -572,10 +573,10 @@ Deploy the group with `az container create --file group.yaml`, with `ipAddress` 
 
 **As its own service, with Service Connect.** Run the engine as a service that publishes port 8080 under the client alias `selectpdf-engine` - the library's default endpoint, so the application needs no endpoint setting - and turn Service Connect on in the application's service too. The engine's task definition:
 
-```text
+```
 "containerDefinitions": [{
   "name": "engine",
-  "image": "ghcr.io/selectpdf/engine:26.5",
+  "image": "ghcr.io/selectpdf/engine:26.6",
   "readonlyRootFilesystem": true,
   "portMappings": [{ "name": "engine", "containerPort": 8080,
                      "protocol": "tcp", "appProtocol": "http" }],
@@ -593,7 +594,7 @@ Deploy the group with `az container create --file group.yaml`, with `ipAddress` 
 
 and its service:
 
-```text
+```
 aws ecs create-service --cluster my-cluster \
   --service-name selectpdf-engine --task-definition selectpdf-engine \
   --launch-type FARGATE --desired-count 2 \
@@ -613,16 +614,16 @@ Give the engine's security group port 8080 from the application's security group
 
 Run the engine as its own service and give the application its HTTPS URL:
 
-```text
+```
 gcloud run deploy selectpdf-engine \
-  --image ghcr.io/selectpdf/engine:26.5 \
+  --image ghcr.io/selectpdf/engine:26.6 \
   --region europe-north1 --port 8080 --cpu 2 --memory 4Gi \
   --concurrency 8 --timeout 600 --execution-environment gen2 \
   --no-invoker-iam-check \
   --set-secrets SELECTPDF_ENGINE_TOKEN=engine-token:latest
 ```
 
-```text
+```
 SELECTPDF_RENDERING_ENGINE=ChromiumRemote
 SELECTPDF_ENGINE_ENDPOINT=https://selectpdf-engine-xxxxxxxxxx-lz.a.run.app
 SELECTPDF_ENGINE_TOKEN=<the same token>
@@ -634,6 +635,7 @@ SELECTPDF_ENGINE_TOKEN=<the same token>
 
 - **Use a token** and keep the engine off the public internet - on the Docker network, the cluster network or a private subnet of the application.
 - **The token is never sent in clear text to another network.** With a token set, the library requires an `https` endpoint unless the endpoint is a local one: a service name without a dot, `localhost`, a loopback or a private address. The engine itself serves plain HTTP; for an engine on another machine, put TLS in front of it (an ingress, a load balancer or a reverse proxy).
+- **The engine is called directly.** The application's proxy settings (`HTTP_PROXY`, `HTTPS_PROXY`, the system proxy) are not used for the engine connection, so the token never passes through a proxy and a proxy set for the application's outbound traffic does not need a `NO_PROXY` entry for the engine.
 - **A page cannot read the engine's files**: local file access is always off in the engine, whatever a conversion asks for.
 - **The engine fetches what the pages reference**, from its own network. When it converts html you do not control, limit where the engine's network can reach (internal services, cloud metadata addresses).
 - **A shared engine**: set `SELECTPDF_ENGINE_HTTP_CACHE=clear`, so no conversion is served a response another caller's conversion fetched. Cookies and storage are cleared after every conversion in any case.
@@ -650,7 +652,7 @@ SELECTPDF_ENGINE_TOKEN=<the same token>
 
 ### Sizing
 
-One engine converts several pages at once - as many as it has CPUs by default - and queues the rest. Measured with a light document of one or two pages, one engine container limited to N CPUs:
+One engine converts several pages at once - as many as it has CPUs by default - and queues the rest. Typical figures for a light document of one or two pages, one engine container limited to N CPUs:
 
 | CPUs | One conversion | Conversions per second, fully loaded |
 |---|---|---|
@@ -659,7 +661,7 @@ One engine converts several pages at once - as many as it has CPUs by default - 
 | 4 | about 50 ms | about 18 |
 | 8 | about 50 ms | about 24 |
 
-Real pages take longer, mostly in fetching them. Throughput grows little beyond 4 to 8 CPUs per engine; for more, run more engine replicas behind one service. Memory stayed under 500 MB with eight light conversions at once; heavy pages (news sites, long reports) need more - give each engine 2 GB or more.
+Real pages add the time it takes to fetch them. One engine scales best up to 4 to 8 CPUs; for more throughput, run more engine replicas behind one service. Memory stayed under 500 MB with eight light conversions at once; heavy pages (news sites, long reports) need more - give each engine 2 GB or more.
 
 ## Fonts and languages
 
@@ -681,10 +683,10 @@ Reference it next to the other two packages:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.6.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.5.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
+                    Version="26.6.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.6.0" />
 </ItemGroup>
 ```
 
@@ -786,9 +788,7 @@ SelectPdf runs in Docker containers - Linux and Windows - with no extra installa
 
 ### Native Debug Symbols
 
-SelectPdf uses SkiaSharp for images and fonts. SkiaSharp 3.119.2 and later include the debug symbols of their native Windows libraries as runtime files - **libSkiaSharp.pdb**, about 85 MB for each Windows architecture, and **libHarfBuzzSharp.pdb** - so NuGet copies them into the **runtimes** folder of the application, about 300 MB in total. This applies to Linux deployments too when the application is published without a runtime identifier, because such a publish carries the files of every platform. The application never uses them (see [SkiaSharp issue 3519](https://github.com/mono/SkiaSharp/issues/3519)).
-
-The **SelectPdf.Universal** package leaves these two files out of the build and publish output of the application, and out of its **.deps.json** file. To keep them, for example to analyse a crash dump of the native SkiaSharp library, set the **SelectPdfKeepNativeSymbols** property in the application project:
+The **SelectPdf.Universal** package keeps the native debug symbol files of the libraries it depends on out of the build and publish output of the application, and out of its **.deps.json** file, which keeps a published application smaller. To keep them, set the **SelectPdfKeepNativeSymbols** property to true in the application project:
 
 ```xml
 <PropertyGroup>
@@ -822,7 +822,7 @@ Reference the managed **SelectPdf.Universal** package together with the **Select
 
 A minimal multi-stage Dockerfile for an ASP.NET application using SelectPdf (any supported .NET version works the same way):
 
-```text
+```
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
@@ -838,7 +838,7 @@ ENTRYPOINT ["dotnet", "MyApp.dll"]
 
 Build and run:
 
-```text
+```
 docker build -t myapp .
 docker run --rm -p 8080:8080 myapp
 ```
@@ -849,7 +849,7 @@ docker run --rm -p 8080:8080 myapp
 
 If restoring NuGet packages inside the Docker build is inconvenient (private feeds, offline build agents), publish on the host first — `dotnet publish -c Release -o publish` — and use a single-stage Dockerfile that just copies the publish output. The native engines are already in the publish folder, so the result is identical:
 
-```text
+```
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY publish/ .
@@ -862,7 +862,7 @@ ENTRYPOINT ["dotnet", "MyApp.dll"]
 
 A non-root user needs nothing extra. When the application is published on Linux - inside the Docker build, as above - the native package makes the engine files readable and executable for every user, so the image can switch to the built-in `app` user before the entry point:
 
-```text
+```
 USER app
 ENTRYPOINT ["dotnet", "MyApp.dll"]
 ```
@@ -873,7 +873,7 @@ An application published on Windows and copied into the image gets the same perm
 
 For ARM64 containers, reference **SelectPdf.Universal.Native.linux-arm64** instead of **linux-x64** — everything else stays the same (the `mcr.microsoft.com/dotnet` base tags are multi-architecture, so the same image reference selects the matching architecture automatically). On an ARM64 host, build and run as usual; from an x64 host you can cross-build and run under emulation:
 
-```text
+```
 docker build --platform linux/arm64 -t myapp-arm64 .
 docker run --rm --platform linux/arm64 -p 8080:8080 myapp-arm64
 ```
@@ -886,7 +886,7 @@ Reference the managed package together with **SelectPdf.Universal.Native.win-x64
 
 One container-specific step is required in the image (illustrated by the shipped Docker samples and verified end-to-end): **install the core Windows font families**. Server Core images ship almost no fonts, and the Chromium engine cannot start unless standard Windows font families are installed (third-party fonts alone are not enough; Segoe UI, Arial, Times New Roman, Verdana or Tahoma are). Copy them from Microsoft's full Windows Server image in a build stage and register them:
 
-```text
+```
 FROM mcr.microsoft.com/windows/server:ltsc2022 AS fonts
 # ... in the runtime stage:
 COPY --from=fonts ["C:/Windows/Fonts/segoeui.ttf", "C:/Windows/Fonts/segoeuib.ttf", \
@@ -909,8 +909,9 @@ Windows container images can only be built and run on a Windows host with Docker
 
 For batch conversion jobs, package a console application instead of a web application and mount a host folder to collect the produced files:
 
-```text
-docker run --rm -v "$PWD/out:/out" myconverter --url https://selectpdf.com -o /out/site.pdf
+```
+docker run --rm -v "$PWD/out:/out" myconverter \
+    --url https://selectpdf.com -o /out/site.pdf
 ```
 
 The container starts, performs the conversion, writes the PDF to the mounted folder and exits.
@@ -923,7 +924,7 @@ The images you build are standard OCI images — push them to any container regi
 
 ## Cloud deployments
 
-SelectPdf runs on the main cloud platforms of Microsoft, Amazon and Google. The conversion code is the same everywhere; what differs is how the application is packaged and how much processor and memory the platform gives it. Each page below walks through one platform step by step, with the settings that matter and the results measured there.
+SelectPdf runs on the main cloud platforms of Microsoft, Amazon and Google. The conversion code is the same everywhere; what differs is how the application is packaged and how much processor and memory the platform gives it. Each page below walks through one platform step by step, with the settings that matter and what to expect there.
 
 ### Supported platforms
 
@@ -936,7 +937,7 @@ SelectPdf runs on the main cloud platforms of Microsoft, Amazon and Google. The 
 | "AWS Elastic Beanstalk" (installation-and-deployment.md) | Windows (IIS), Linux | a source bundle of the web application |
 | "Google Cloud Run" (installation-and-deployment.md) | Linux | a container image, or a Cloud Run function |
 
-Each of them was verified in October 2026 with the same set of live web sites and with pages in English, Arabic, Hebrew, Hindi, Thai, Chinese, Japanese and Korean, every PDF compared with a conversion of the same page on a local Windows computer.
+Each of them was tested with the same set of live web sites and with pages in English, Arabic, Hebrew, Hindi, Thai, Chinese, Japanese and Korean, every PDF compared with a conversion of the same page on a local Windows computer.
 
 Any service that runs a Linux or Windows container also runs SelectPdf - see "Docker" (installation-and-deployment.md) - and so does any virtual machine (Azure Virtual Machines, Amazon EC2, Google Compute Engine).
 
@@ -953,7 +954,7 @@ Any service that runs a Linux or Windows container also runs SelectPdf - see "Do
 - **Processor and memory** - HTML conversion runs a complete Chromium browser. Plan for 2 virtual CPUs and 2 to 4 GB of memory per instance; a heavy page needs more than 2 GB.
 - **A writable, unpacked deployment** - the engine cannot be started from inside a mounted package (Azure's Run From Package on Windows, Flex Consumption).
 
-An instance keeps the Chromium engine loaded between conversions, so a conversion on a warm instance takes about as long as on a developer computer (around 1.5 seconds for a typical web page). The first conversion of a new instance takes longer while the engine starts; platforms that stop idle instances (AWS Lambda, and container services scaled to zero) pay that again after a quiet period.
+An instance keeps the Chromium engine loaded between conversions, so a conversion on a warm instance takes about as long as on a developer computer. The first conversion of a new instance takes longer while the engine starts; platforms that stop idle instances (AWS Lambda, and container services scaled to zero) pay that again after a quiet period.
 
 An instance converts up to `HtmlToPdfOptions.MaximumConcurrentConversions` pages at once (8 by default); set a platform's per-instance concurrency to the same number.
 
@@ -1014,7 +1015,7 @@ The steps use the Azure CLI; the Azure portal offers the same choices (Create a 
 
 **1. Create a resource group and a plan.** Premium v3 gives the fastest conversions (see Performance below); add `--is-linux` for a Linux plan:
 
-```text
+```
 az login
 az group create --name selectpdf-rg --location westeurope
 az appservice plan create --resource-group selectpdf-rg \
@@ -1023,21 +1024,21 @@ az appservice plan create --resource-group selectpdf-rg \
 
 **2. Create the web app** with the .NET 10 runtime - `DOTNETCORE:10.0` on Linux, `dotnet:10` on Windows:
 
-```text
+```
 az webapp create --resource-group selectpdf-rg --plan selectpdf-plan \
     --name selectpdf-web --runtime "DOTNETCORE:10.0"
 ```
 
 **3. Apply two settings.** **Always On** keeps the application loaded while idle, so the Chromium engine stays warm and a request never meets a starting worker. On Windows, also use a **64-bit** worker process: a new Windows web app starts as 32-bit.
 
-```text
+```
 az webapp config set --resource-group selectpdf-rg --name selectpdf-web \
     --always-on true --use-32bit-worker-process false
 ```
 
 **4. Publish and deploy** the application as a zip file:
 
-```text
+```
 dotnet publish -c Release -o publish
 cd publish && zip -r ../app.zip . && cd ..
 az webapp deploy --resource-group selectpdf-rg --name selectpdf-web \
@@ -1051,6 +1052,7 @@ On Windows, create the zip with `Compress-Archive publish\* app.zip`. From Visua
 ### Do not use Run From Package on Windows
 
 > **Important:** With the **WEBSITE_RUN_FROM_PACKAGE** setting, App Service mounts the deployment zip as wwwroot instead of extracting it, and the engine cannot be started from that mount. Every conversion then fails with *"Chromium engine process failed (exit code -1073741515) and no output JSON was produced"* - the Windows status STATUS_DLL_NOT_FOUND: the engine's libraries are in the package, but cannot be loaded from it.
+>
 > Remove the setting and deploy normally; zip deploy and Web Deploy extract the application into a writable wwwroot. In Visual Studio, leave **Run from package file** unselected in the publish profile.
 
 If Run From Package has to stay, copy the engine folder (`Chromium-CEF-154.0.28`) to a writable folder such as `%HOME%\site\engine` when the application starts, and set `HtmlToPdfOptions.ChromiumEnginePath` to the copy. App Service for Linux ignores the setting for a code application, so Linux is not affected.
@@ -1059,18 +1061,18 @@ If Run From Package has to stay, copy the engine folder (`Chromium-CEF-154.0.28`
 
 HTML conversion runs a complete browser and is processor bound, so the plan decides the speed:
 
-| Plan | Conversion time |
+| Plan | Use |
 |---|---|
-| **Premium v3** (P1v3 and up) | reference: selectpdf.com in about 1.3 seconds on Linux and 1.7 seconds on Windows, once warm |
-| **Basic** or **Standard** (for example S1) | about four times longer; heavy pages can reach the 60 second navigation timeout |
+| **Premium v3** (P1v3 and up) | the plan to choose when conversion time matters |
+| **Basic** or **Standard** (for example S1) | occasional or background conversions |
 
-Measured in September and October 2026 in West Europe. An S1 instance has one comparatively slow virtual core; choose Premium v3 when conversion time matters, and Basic or Standard for occasional or background conversions.
+Tested in West Europe on Windows and Linux. An S1 instance has a single virtual core; Premium v3 gives a conversion more processor.
 
-On Windows, every conversion pays a fixed graphics start-up cost unless `HtmlToPdfOptions.WebGlEnabled` is False, which is the default. Leave it off unless your pages draw with WebGL.
+Leave `HtmlToPdfOptions.WebGlEnabled` off (the default) unless your pages draw with WebGL.
 
 ### Windows worker bitness
 
-A 32-bit worker process can use the win-x64 package: the engine then runs in a process of its own (slower, about 3.7 seconds for selectpdf.com on P1v3). With the **win-x86** package a 32-bit worker keeps the engine loaded. A 64-bit worker with win-x64 is the recommended combination.
+A 32-bit worker process can use the win-x64 package: the engine then runs in a process of its own. With the **win-x86** package a 32-bit worker keeps the engine loaded. A 64-bit worker with win-x64 is the recommended combination.
 
 ### Sample
 
@@ -1099,7 +1101,7 @@ The same packages as a web application: **SelectPdf.Universal** with **SelectPdf
 
 **1. Create a resource group, a storage account and a plan** (`--is-linux` for Linux; `--sku EP1` for Elastic Premium):
 
-```text
+```
 az login
 az group create --name selectpdf-rg --location westeurope
 az storage account create --resource-group selectpdf-rg \
@@ -1110,7 +1112,7 @@ az functionapp plan create --resource-group selectpdf-rg \
 
 **2. Create the function app** on that plan, with Always On (a Dedicated plan option):
 
-```text
+```
 az functionapp create --resource-group selectpdf-rg \
     --name selectpdf-fn --plan selectpdf-fnplan \
     --storage-account selectpdfstorage --functions-version 4 \
@@ -1123,7 +1125,7 @@ On Windows use `--os-type Windows` and also pass `--use-32bit-worker-process fal
 
 **3. Publish and deploy**:
 
-```text
+```
 dotnet publish -c Release -o publish
 cd publish && zip -r ../fn.zip . && cd ..
 az functionapp deployment source config-zip --resource-group selectpdf-rg \
@@ -1176,7 +1178,7 @@ The official samples include a complete Azure Functions project for Windows and 
 
 ### What to expect
 
-Function apps run on the same machines as web applications, so the times of "Azure App Service" (installation-and-deployment.md) apply: on P1v3 a warm instance converts selectpdf.com in under 2 seconds, and Basic or Standard plans take several times longer.
+Function apps run on the same machines as web applications, so the plan advice of "Azure App Service" (installation-and-deployment.md) applies: choose Premium v3 when conversion time matters, and Basic or Standard for occasional or background conversions.
 
 ## Azure Container Apps
 
@@ -1188,16 +1190,16 @@ Reference the three packages in the application:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.6.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.5.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
+                    Version="26.6.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.6.0" />
 </ItemGroup>
 ```
 
 and publish it into a .NET image:
 
-```text
+```
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY . .
@@ -1217,7 +1219,7 @@ See "Docker" (installation-and-deployment.md) for more about images.
 
 **1. Prepare the subscription** (once):
 
-```text
+```
 az login
 az extension add --name containerapp --upgrade
 az provider register --namespace Microsoft.App --wait
@@ -1226,7 +1228,7 @@ az provider register --namespace Microsoft.OperationalInsights --wait
 
 **2. Create a resource group and a container registry, and push the image** (the registry name is global):
 
-```text
+```
 az group create --name selectpdf-rg --location westeurope
 az acr create --resource-group selectpdf-rg --name selectpdfregistry \
     --sku Basic --admin-enabled true
@@ -1237,7 +1239,7 @@ docker push selectpdfregistry.azurecr.io/myapp:1
 
 **3. Create the environment** and wait until it reports `Succeeded`, which can take several minutes:
 
-```text
+```
 az containerapp env create --name selectpdf-env \
     --resource-group selectpdf-rg --location westeurope
 az containerapp env show --name selectpdf-env --resource-group selectpdf-rg \
@@ -1246,7 +1248,7 @@ az containerapp env show --name selectpdf-env --resource-group selectpdf-rg \
 
 **4. Create the container app**:
 
-```text
+```
 az containerapp create --name selectpdf-app --resource-group selectpdf-rg \
     --environment selectpdf-env \
     --image selectpdfregistry.azurecr.io/myapp:1 \
@@ -1259,11 +1261,11 @@ az containerapp create --name selectpdf-app --resource-group selectpdf-rg \
 
 - `--cpu 2 --memory 4Gi` is the largest consumption size; Chromium needs both.
 - `--scale-rule-http-concurrency 8` starts another replica when one is converting 8 pages, the number SelectPdf converts at once by default.
-- `--min-replicas 0` scales to zero when idle, and the first request then waits about 20 seconds for a replica to start. Use `--min-replicas 1` to keep one ready.
+- `--min-replicas 0` scales to zero when idle, and the first request then waits for a replica to start. Use `--min-replicas 1` to keep one ready.
 
 ### What to expect
 
-Measured in October 2026 (West Europe, consumption profile, 2 vCPU / 4 GiB): every conversion succeeded, every language rendered, and a warm replica converted selectpdf.com in about 1.3 seconds.
+Tested (West Europe, consumption profile, 2 vCPU / 4 GiB): every conversion succeeded and every language rendered.
 
 ### Sample
 
@@ -1302,14 +1304,14 @@ Use the Lambda .NET base image and the packages for the function's architecture:
   <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="3.0.1" />
   <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson"
                     Version="3.0.1" />
-  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.6.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.5.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
+                    Version="26.6.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.6.0" />
 </ItemGroup>
 ```
 
-```text
+```
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY . .
@@ -1369,14 +1371,14 @@ You need the AWS CLI (`aws configure`) and Docker. The commands use region `eu-n
 
 **1. Build the image.** `--provenance=false --sbom=false` matter: Lambda refuses the multi-manifest images Docker builds by default ("The image manifest, config or layer media type ... is not supported").
 
-```text
+```
 docker build --platform linux/amd64 --provenance=false --sbom=false \
     -t selectpdf-lambda .
 ```
 
 **2. Push it to Amazon ECR:**
 
-```text
+```
 aws ecr create-repository --repository-name selectpdf-lambda
 aws ecr get-login-password | docker login --username AWS \
     --password-stdin 123456789012.dkr.ecr.eu-north-1.amazonaws.com
@@ -1389,7 +1391,7 @@ docker push 123456789012.dkr.ecr.eu-north-1.amazonaws.com/selectpdf-lambda:1
 
 **4. Create the function** with 2048 MB of memory (Lambda gives processor time in proportion to memory) and a 120 second timeout:
 
-```text
+```
 IMAGE=123456789012.dkr.ecr.eu-north-1.amazonaws.com/selectpdf-lambda:1
 aws lambda create-function --function-name selectpdf-lambda \
     --package-type Image --memory-size 2048 --timeout 120 \
@@ -1399,7 +1401,7 @@ aws lambda create-function --function-name selectpdf-lambda \
 
 **5. Give it a URL** (`AWS_IAM` requires signed requests; `NONE` makes it public):
 
-```text
+```
 aws lambda create-function-url-config --function-name selectpdf-lambda \
     --auth-type AWS_IAM
 ```
@@ -1412,9 +1414,9 @@ A Lambda response is limited to 6 MB and the PDF travels base64-encoded in it, s
 
 ### What to expect
 
-Measured in October 2026 (eu-north-1, 2048 MB): every conversion succeeded on x86_64 and arm64, with every language rendered and the pages matching a Windows conversion. A warm function converts selectpdf.com in about 1.5 seconds (x86_64) to 2.3 seconds (arm64).
+Tested (eu-north-1, 2048 MB): every conversion succeeded on x86_64 and arm64, with every language rendered and the pages matching a Windows conversion.
 
-Lambda replaces an environment after a few idle minutes, and the first conversion of a new environment takes 10 to 50 seconds while Chromium starts. Provisioned concurrency keeps environments ready when that matters.
+Lambda replaces an environment after a few idle minutes, and the first conversion of a new environment takes longer, because Chromium starts with it. Provisioned concurrency keeps environments ready when that matters.
 
 ### Sample
 
@@ -1430,7 +1432,7 @@ Elastic Beanstalk deploys a zip file, the source bundle, whose shape depends on 
 
 **Windows Server / IIS.** Publish the application for `win-x64` - self-contained, so it does not depend on the .NET versions the platform installs - zip the publish folder as `site.zip`, and put it in the bundle next to an `aws-windows-deployment-manifest.json` that installs it as the root site:
 
-```text
+```
 {
   "manifestVersion": 1,
   "deployments": {
@@ -1448,7 +1450,7 @@ Elastic Beanstalk deploys a zip file, the source bundle, whose shape depends on 
 
 **Amazon Linux 2023.** Publish the application (framework-dependent, for the ".NET 10" platform) with the fonts package, add a `Procfile` with the command that starts it - the platform's nginx forwards to port 5000 - and zip the folder:
 
-```text
+```
 web: dotnet MyApp.dll --urls http://0.0.0.0:5000
 ```
 
@@ -1468,7 +1470,7 @@ With the CLI, upload the bundle to S3 and use `aws elasticbeanstalk create-appli
 
 ### What to expect
 
-Measured in October 2026 (eu-north-1, single m7i-flex.large instance): every conversion succeeded on both platforms, and the Windows output is identical to a conversion on a local Windows computer. The instance keeps the engine loaded, so selectpdf.com converts in about 1.1 seconds on Linux and 1.5 seconds on Windows; the first conversion after a deployment takes longer (about 8 seconds on Windows, 3 on Linux).
+Every conversion succeeded on both platforms, and the Windows output is identical to a conversion on a local Windows computer. The instance keeps the engine loaded between conversions; the first conversion after a deployment also starts the engine.
 
 ### Sample
 
@@ -1484,10 +1486,10 @@ Reference the three packages in the application:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="SelectPdf.Universal" Version="26.5.0" />
+  <PackageReference Include="SelectPdf.Universal" Version="26.6.0" />
   <PackageReference Include="SelectPdf.Universal.Native.linux-x64"
-                    Version="26.5.0" />
-  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.5.0" />
+                    Version="26.6.0" />
+  <PackageReference Include="SelectPdf.Universal.Fonts" Version="26.6.0" />
 </ItemGroup>
 ```
 
@@ -1497,7 +1499,7 @@ and build the image as in "Azure Container Apps" (installation-and-deployment.md
 
 **1. Set up the project** (once): create a project in the Google Cloud console, link a billing account, install the gcloud CLI, then:
 
-```text
+```
 gcloud auth login
 gcloud config set project YOUR_PROJECT_ID
 gcloud config set run/region europe-north1
@@ -1509,7 +1511,7 @@ gcloud auth configure-docker europe-north1-docker.pkg.dev
 
 **2. Build and push the image:**
 
-```text
+```
 docker build --platform linux/amd64 \
     -t europe-north1-docker.pkg.dev/YOUR_PROJECT_ID/selectpdf/myapp .
 docker push europe-north1-docker.pkg.dev/YOUR_PROJECT_ID/selectpdf/myapp
@@ -1517,7 +1519,7 @@ docker push europe-north1-docker.pkg.dev/YOUR_PROJECT_ID/selectpdf/myapp
 
 **3. Deploy:**
 
-```text
+```
 gcloud run deploy myapp \
     --image europe-north1-docker.pkg.dev/YOUR_PROJECT_ID/selectpdf/myapp \
     --cpu 2 --memory 4Gi --timeout 300 --concurrency 8 \
@@ -1535,7 +1537,7 @@ The same code runs as a Cloud Run function (`gcloud functions deploy --gen2 --ru
 
 ### What to expect
 
-Measured in October 2026 (europe-north1, 2 vCPU): every conversion succeeded in both execution environments and as a function, with every language rendered. A warm instance converts selectpdf.com in about 1.4 seconds; the first conversion of a new instance takes 5 to 10 seconds. Cloud Run keeps an idle instance for a while, and `--min-instances 1` keeps one ready. A response can be up to 32 MB, so large PDFs are returned directly.
+Tested (europe-north1, 2 vCPU): every conversion succeeded in both execution environments and as a function, with every language rendered. The first conversion of a new instance also starts the engine. Cloud Run keeps an idle instance for a while, and `--min-instances 1` keeps one ready. A response can be up to 32 MB, so large PDFs are returned directly.
 
 ### Sample
 

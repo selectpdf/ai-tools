@@ -1,12 +1,12 @@
 # Troubleshooting and security recommendations
 
-Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Troubleshooting
 
 ### Conversion failure. The rendering engine could not be found.
 
-The HTML-to-PDF conversion needs the native Chromium (CEF) engine folder (**Chromium-CEF-154.0.28**) next to the application. It is supplied by the **SelectPdf.Universal.Native.<rid>** package and is copied to the output folder at build time. If it is missing at run time, confirm the correct Native package (matching your deployment runtime identifier) is installed and published. The engine folder path can also be set explicitly with `HtmlToPdfOptions.ChromiumEnginePath`. More details in the deployment section.
+The HTML-to-PDF conversion needs the native Chromium (CEF) engine folder (**Chromium-CEF-154.0.28**) next to the application. It is supplied by the **SelectPdf.Universal.Native.<rid>** package and is copied to the output folder at build time. If it is missing at run time, confirm the correct Native package (matching your deployment runtime identifier) is installed and published. The engine folder path can also be set explicitly with `HtmlToPdfOptions.ChromiumEnginePath`. More details in the "Deployment" (installation-and-deployment.md) section.
 
 ### Conversion failure. Exception of type 'System.OutOfMemoryException' was thrown.
 
@@ -57,11 +57,11 @@ Our tool launches a new process that renders the html. The application needs eno
 This is usually a timing issue - the web fonts have not finished loading when the page is captured. Add a small delay before the conversion to allow the page more time to load its fonts:
 
 ```csharp
-			converter.Options.ConversionDelay = 2;
+converter.Options.ConversionDelay = 2;
 ```
 
 ```vbnet
-			converter.Options.ConversionDelay = 2
+converter.Options.ConversionDelay = 2
 ```
 
 ### Issue with web fonts on HTML to PDF conversion.
@@ -83,10 +83,10 @@ Solution 2: Modify the html and set the style *page-break-inside: avoid* on the 
 The "page-break-inside" property sets whether a page break is allowed INSIDE a specified element. The element can be anything (image, table, table row, div, text, etc).
 
 ```html
-			<div style="page-break-inside: avoid">
-			The content of this div element will not be split into several pages (if possible)
-			because "page-break-inside" property is set to "avoid".
-			</div>        	
+<div style="page-break-inside: avoid">
+The content of this div element will not be split into several pages (if possible)
+because "page-break-inside" property is set to "avoid".
+</div>
 ```
 
 ### HTML to PDF. Conversion error: Navigation timeout.
@@ -117,7 +117,17 @@ The error message is self-explanatory and the error can be caused by multiple th
 
 ### HTML to PDF conversion fails on a minimal Linux server or container.
 
-The Chromium engine renders headless (no X server or Xvfb is needed), but it depends on the usual Chromium system libraries. A desktop Linux distribution already has them; a minimal server or container image may not. Install the Chromium runtime dependencies (NSS, glib/gobject/gio, atk/at-spi, the X11 client libraries, gbm, cairo, pango, alsa, dbus, cups, expat, xkbcommon, udev), or place the bundled `.so` closure alongside the engine. See the deployment section.
+The native package includes every library Chromium needs, so a minimal glibc image (Debian 11+, Ubuntu 20.04+, RHEL 9+) converts with no `apt-get` step and no X server. Check that the `SelectPdf.Universal.Native` package matches the platform (`linux-x64` or `linux-arm64`) and that the engine folder was published with the application. Alpine and other musl-based images convert through the "The remote engine" (installation-and-deployment.md). See the "Deployment" (installation-and-deployment.md) section.
+
+### A video on the page prints as an empty box.
+
+The Chromium engine plays open video and audio formats - VP8, VP9 and AV1 video, and MP3 audio - but includes no proprietary codecs, so a video encoded with H.264 or AAC prints as an empty box. Give the `video` element a `poster` image, which prints in its place, or offer the video in a WebM (VP9 or AV1) source as well.
+
+### A PDF document cannot be opened because it is damaged.
+
+A damaged document - a damaged or missing cross-reference table, wrong stream lengths, a document catalog the trailer does not point to - is repaired when it is opened, as PDF viewers do, so it can still be appended to another document. This is controlled by `GlobalProperties.AutoRepair`, True by default. Set it to False to refuse such documents instead: opening one then throws an exception.
+
+A repaired document is saved in full rather than as an update to the file it was read from, so a digital signature it carried no longer verifies once it is saved. A document opened with a wrong password is refused either way.
 
 ## Security recommendations
 
@@ -125,58 +135,58 @@ SelectPdf Html To Pdf Converter is a .NET library that offers the possibility to
 
 If you convert your own files to pdf and know exactly what they contain, you are fine. But if you take external files/code to convert to PDF from users you do not know, follow the following recommendations.
 
-**Control input**
+### Control input
 
 Check the content of the web page being converted. Look for code (especially javascript) that might harm your system. Sanitizing user input can be difficult and attackers can sometimes find a way around the protection.
 
-**Retrict access**
+### Restrict access
 
 If you only access the system from certain locations, restrict the access to it limiting the IP addresses allowed.
 
-**Disable javascript execution**
+### Disable javascript execution
 
 If you do not need to execute javascript, disable it setting the following property:
 
 ```csharp
-	converter.Options.JavaScriptEnabled = false;
+converter.Options.JavaScriptEnabled = false;
 ```
 
 ```vbnet
-	converter.Options.JavaScriptEnabled = False
+converter.Options.JavaScriptEnabled = False
 ```
 
-**Disable access to local files**
+### Disable access to local files
 
 If you do not need to access local server files during the conversion, disable access setting the following property:
 
 ```csharp
-	SelectPdf.Universal.GlobalProperties.ForceDenyLocalFileAccess = true;
+SelectPdf.Universal.GlobalProperties.ForceDenyLocalFileAccess = true;
 ```
 
 ```vbnet
-	SelectPdf.Universal.GlobalProperties.ForceDenyLocalFileAccess = True
+SelectPdf.Universal.GlobalProperties.ForceDenyLocalFileAccess = True
 ```
 
-**Isolate conversions of pages you do not trust**
+### Isolate conversions of pages you do not trust
 
 By default the engine may run inside your application's process (`GlobalProperties.ChromiumEngineHostMode`). A page you do not trust can be converted in a separate engine process instead, so that a crash or a hang stays out of your application:
 
 ```csharp
-	converter.Options.ForceOutOfProcess = true;
+converter.Options.ForceOutOfProcess = true;
 ```
 
 ```vbnet
-	converter.Options.ForceOutOfProcess = True
+converter.Options.ForceOutOfProcess = True
 ```
 
-**Do not share the HTTP cache between users**
+### Do not share the HTTP cache between users
 
 When the engine runs inside your application it keeps its HTTP cache from one conversion to the next by default (`HtmlToPdfOptions.HttpCache`), which makes repeated conversions faster. The cache is keyed by address, not by the user a conversion runs for, so a response one conversion fetched can be served to the next. If your application converts pages on behalf of different users whose content must stay separate, start every conversion with an empty cache - or keep only resources from other sites, which never includes the converted page's own responses:
 
 ```csharp
-	converter.Options.HttpCache = HttpCacheMode.Clear;   // or HttpCacheMode.ThirdParty
+converter.Options.HttpCache = HttpCacheMode.Clear;   // or HttpCacheMode.ThirdParty
 ```
 
 ```vbnet
-	converter.Options.HttpCache = HttpCacheMode.Clear   ' or HttpCacheMode.ThirdParty
+converter.Options.HttpCache = HttpCacheMode.Clear   ' or HttpCacheMode.ThirdParty
 ```

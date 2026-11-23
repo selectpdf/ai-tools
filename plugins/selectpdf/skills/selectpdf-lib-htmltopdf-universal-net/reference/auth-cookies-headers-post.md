@@ -1,12 +1,12 @@
 # Authentication, cookies, HTTP headers, POST and proxy
 
-Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Web page authentication
 
 Select.Pdf HTML to PDF Converter can convert any web page a browser can open, however some web pages may require authentication before access can be granted. In such cases additional information must be supplied to the converter so that the converter can login to be granted access to the page.
 
-#### HTTP Authentication
+### HTTP Authentication
 
 HTTP authentication is handled on the HTTP protocol level. When a page that requires HTTP authentication is accessed, the browser will display a login dialog where the user can enter an username and password. Once the correct user name and password is entered, access is granted and the page is displayed.
 
@@ -15,48 +15,48 @@ Select.Pdf HTML to PDF converter can automatically access pages that require HTT
 The following sample code shows how to convert an url that requires HTTP authentication:
 
 ```csharp
-			        	// instantiate a html to pdf converter object
-			            HtmlToPdf converter = new HtmlToPdf();
-			
-			            // set authentication options
-			            converter.Options.Authentication.Username = username;
-			            converter.Options.Authentication.Password = password;
-			
-			            // create a new pdf document converting an url
-			            PdfDocument doc = converter.ConvertUrl(url);
-			
-			            // save pdf document
-			            doc.Save("Sample.pdf");
-			
-			            // close pdf document
-			            doc.Close();
+	// instantiate a html to pdf converter object
+    HtmlToPdf converter = new HtmlToPdf();
+
+    // set authentication options
+    converter.Options.Authentication.Username = username;
+    converter.Options.Authentication.Password = password;
+
+    // create a new pdf document converting an url
+    PdfDocument doc = converter.ConvertUrl(url);
+
+    // save pdf document
+    doc.Save("Sample.pdf");
+
+    // close pdf document
+    doc.Close();
 ```
 
 ```vbnet
-			        	' instantiate a html to pdf converter object
-			            Dim converter As New HtmlToPdf()
-			
-			            ' set authentication options
-			            converter.Options.Authentication.Username = username
-			            converter.Options.Authentication.Password = password
-			
-			            ' create a new pdf document converting an url
-			            Dim doc As PdfDocument = converter.ConvertUrl(url)
-			
-			            ' save pdf document
-			            doc.Save("Sample.pdf")
-			
-			            ' close pdf document
-			            doc.Close()
+	' instantiate a html to pdf converter object
+    Dim converter As New HtmlToPdf()
+
+    ' set authentication options
+    converter.Options.Authentication.Username = username
+    converter.Options.Authentication.Password = password
+
+    ' create a new pdf document converting an url
+    Dim doc As PdfDocument = converter.ConvertUrl(url)
+
+    ' save pdf document
+    doc.Save("Sample.pdf")
+
+    ' close pdf document
+    doc.Close()
 ```
 
-#### Integrated Windows Authentication
+### Integrated Windows Authentication
 
 Select.Pdf HTML to PDF supports Integrated Windows Authentication if the NTML provider is used. The current user credentials will be used by the converter to authenticate automatically.
 
-If the automatic windows authentication does not work and the converter cannot resolve the authentication using the current user credentials, the `HtmlToPdfAuthenticationOptions` object can be used to specify an username and a valid password, like in the above HTTP Authentication section.
+If the automatic windows authentication does not work and the converter cannot resolve the authentication using the current user credentials, the `HtmlToPdfAuthenticationOptions` object can be used to specify an username and a valid password, like in the above "Web page authentication" (auth-cookies-headers-post.md) section.
 
-#### Cookie (Forms) Authentication
+### Cookie (Forms) Authentication
 
 Select.Pdf Library for .NET can convert web pages that authenticate the user with a cookie - ASP.NET Core cookie authentication, or ASP.NET Forms Authentication on the .NET Framework.
 
@@ -67,42 +67,42 @@ The cookie name and value are read from the request the application is currently
 This sample code shows how to convert an url that requires cookie based authentication from a page of the same application:
 
 ```csharp
-			        	// instantiate a html to pdf converter object
-			            HtmlToPdf converter = new HtmlToPdf();
+	// instantiate a html to pdf converter object
+    HtmlToPdf converter = new HtmlToPdf();
 
-			            // send the application's authentication cookie to the page being converted,
-			            // so the converter is seen by it as the already signed in user
-			            converter.Options.HttpCookies.Add(authCookieName, authCookieValue);
+    // send the application's authentication cookie to the page being converted,
+    // so the converter is seen by it as the already signed in user
+    converter.Options.HttpCookies.Add(authCookieName, authCookieValue);
 
-			            // create a new pdf document converting an url
-			            PdfDocument doc = converter.ConvertUrl(url);
+    // create a new pdf document converting an url
+    PdfDocument doc = converter.ConvertUrl(url);
 
-			            // save pdf document
-			            doc.Save("Sample.pdf");
+    // save pdf document
+    doc.Save("Sample.pdf");
 
-			            // close pdf document
-			            doc.Close();
+    // close pdf document
+    doc.Close();
 ```
 
 ```vbnet
-			        	' instantiate a html to pdf converter object
-			            Dim converter As New HtmlToPdf()
+	' instantiate a html to pdf converter object
+    Dim converter As New HtmlToPdf()
 
-			            ' send the application's authentication cookie to the page being converted,
-			            ' so the converter is seen by it as the already signed in user
-			            converter.Options.HttpCookies.Add(authCookieName, authCookieValue)
+    ' send the application's authentication cookie to the page being converted,
+    ' so the converter is seen by it as the already signed in user
+    converter.Options.HttpCookies.Add(authCookieName, authCookieValue)
 
-			            ' create a new pdf document converting an url
-			            Dim doc As PdfDocument = converter.ConvertUrl(url)
+    ' create a new pdf document converting an url
+    Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-			            ' save pdf document
-			            doc.Save("Sample.pdf")
+    ' save pdf document
+    doc.Save("Sample.pdf")
 
-			            ' close pdf document
-			            doc.Close()
+    ' close pdf document
+    doc.Close()
 ```
 
-#### Custom Login Page Authentication
+### Custom Login Page Authentication
 
 In case the web page to be converted is protected by a general login mechanism, the Select.Pdf Html To Pdf Converter will not be able to access the page. To work around this problem, instead of converting the url directly, the page html code should be retrieve using some other method and that html code should be converted to pdf instead of the full url.
 
@@ -113,91 +113,91 @@ IMPORTANT: If external resources (such as javascript/css files or images) are re
 Once the application has the html of the page, the conversion is the same as any other html string conversion:
 
 ```csharp
-			        	// instantiate a html to pdf converter object
-			            HtmlToPdf converter = new HtmlToPdf();
+	// instantiate a html to pdf converter object
+    HtmlToPdf converter = new HtmlToPdf();
 
-			            // create a new pdf document converting the html the application rendered
-			            // (baseUrl resolves the relative resources referenced by that html)
-			            PdfDocument doc = converter.ConvertHtmlString(htmlString, baseUrl);
+    // create a new pdf document converting the html the application rendered
+    // (baseUrl resolves the relative resources referenced by that html)
+    PdfDocument doc = converter.ConvertHtmlString(htmlString, baseUrl);
 
-			            // save pdf document
-			            doc.Save("Sample.pdf");
+    // save pdf document
+    doc.Save("Sample.pdf");
 
-			            // close pdf document
-			            doc.Close();
+    // close pdf document
+    doc.Close();
 ```
 
 ```vbnet
-			        	' instantiate a html to pdf converter object
-			            Dim converter As New HtmlToPdf()
+	' instantiate a html to pdf converter object
+    Dim converter As New HtmlToPdf()
 
-			            ' create a new pdf document converting the html the application rendered
-			            ' (baseUrl resolves the relative resources referenced by that html)
-			            Dim doc As PdfDocument = converter.ConvertHtmlString(htmlString, baseUrl)
+    ' create a new pdf document converting the html the application rendered
+    ' (baseUrl resolves the relative resources referenced by that html)
+    Dim doc As PdfDocument = converter.ConvertHtmlString(htmlString, baseUrl)
 
-			            ' save pdf document
-			            doc.Save("Sample.pdf")
+    ' save pdf document
+    doc.Save("Sample.pdf")
 
-			            ' close pdf document
-			            doc.Close()
+    ' close pdf document
+    doc.Close()
 ```
 
-#### Custom Login Page Authentication with Login Options
+### Custom Login Page Authentication with Login Options
 
 In case the web page to be converted is protected by a general login mechanism, the SelectPdf Html To Pdf Converter can get past the login page if correct username/password and page fields are provided.
 
 This sample code shows how to get past the login page of Facebook:
 
 ```csharp
-			            string url = @"https://www.facebook.com";
-			            
-			        	// instantiate a html to pdf converter object
-			            HtmlToPdf converter = new HtmlToPdf();
-			
-						// set login parameters
-			            converter.Options.LoginOptions.LoginPage = @"https://www.facebook.com";
-			            converter.Options.LoginOptions.UsernameFieldSelector = @"#email";
-			            converter.Options.LoginOptions.PasswordFieldSelector = @"#pass";
-			            converter.Options.LoginOptions.SubmitButtonSelector = @"#u_0_2";
-			            converter.Options.LoginOptions.Username = @"PUT YOUR USERNAME HERE";
-			            converter.Options.LoginOptions.Password = @"PUT YOUR PASSWORD HERE";
-			            converter.Options.LoginOptions.DelayBefore = 1000;
-			            converter.Options.LoginOptions.DelayAfter = 2000;
-    
-			            // create a new pdf document converting an url
-			            PdfDocument doc = converter.ConvertUrl(url);
-			
-			            // save pdf document
-			            doc.Save("Sample.pdf");
-			
-			            // close pdf document
-			            doc.Close();
+            string url = @"https://www.facebook.com";
+
+        	// instantiate a html to pdf converter object
+            HtmlToPdf converter = new HtmlToPdf();
+
+			// set login parameters
+            converter.Options.LoginOptions.LoginPage = @"https://www.facebook.com";
+            converter.Options.LoginOptions.UsernameFieldSelector = @"#email";
+            converter.Options.LoginOptions.PasswordFieldSelector = @"#pass";
+            converter.Options.LoginOptions.SubmitButtonSelector = @"#u_0_2";
+            converter.Options.LoginOptions.Username = @"PUT YOUR USERNAME HERE";
+            converter.Options.LoginOptions.Password = @"PUT YOUR PASSWORD HERE";
+            converter.Options.LoginOptions.DelayBefore = 1000;
+            converter.Options.LoginOptions.DelayAfter = 2000;
+
+            // create a new pdf document converting an url
+            PdfDocument doc = converter.ConvertUrl(url);
+
+            // save pdf document
+            doc.Save("Sample.pdf");
+
+            // close pdf document
+            doc.Close();
 ```
 
 ```vbnet
-			        	Dim url As String = "https://www.facebook.com"
-			        	
-			        	' instantiate a html to pdf converter object
-			            Dim converter As New HtmlToPdf()
-			
-					    ' set login parameters
-					    converter.Options.LoginOptions.LoginPage = "https://www.facebook.com"
-					    converter.Options.LoginOptions.UsernameFieldSelector = "#email"
-					    converter.Options.LoginOptions.PasswordFieldSelector = "#pass"
-					    converter.Options.LoginOptions.SubmitButtonSelector = "#u_0_2"
-					    converter.Options.LoginOptions.Username = "PUT YOUR USERNAME HERE"
-					    converter.Options.LoginOptions.Password = "PUT YOUR PASSWORD HERE"
-					    converter.Options.LoginOptions.DelayBefore = 1000
-					    converter.Options.LoginOptions.DelayAfter = 2000
-			
-			            ' create a new pdf document converting an url
-			            Dim doc As PdfDocument = converter.ConvertUrl(url)
-			
-			            ' save pdf document
-			            doc.Save("Sample.pdf")
-			
-			            ' close pdf document
-			            doc.Close()
+        	Dim url As String = "https://www.facebook.com"
+
+        	' instantiate a html to pdf converter object
+            Dim converter As New HtmlToPdf()
+
+		    ' set login parameters
+		    converter.Options.LoginOptions.LoginPage = "https://www.facebook.com"
+		    converter.Options.LoginOptions.UsernameFieldSelector = "#email"
+		    converter.Options.LoginOptions.PasswordFieldSelector = "#pass"
+		    converter.Options.LoginOptions.SubmitButtonSelector = "#u_0_2"
+		    converter.Options.LoginOptions.Username = "PUT YOUR USERNAME HERE"
+		    converter.Options.LoginOptions.Password = "PUT YOUR PASSWORD HERE"
+		    converter.Options.LoginOptions.DelayBefore = 1000
+		    converter.Options.LoginOptions.DelayAfter = 2000
+
+            ' create a new pdf document converting an url
+            Dim doc As PdfDocument = converter.ConvertUrl(url)
+
+            ' save pdf document
+            doc.Save("Sample.pdf")
+
+            ' close pdf document
+            doc.Close()
 ```
 
 ## HTTP cookies

@@ -1,5 +1,5 @@
 ---
-description: Generate, edit and render PDFs in .NET (C# / VB.NET) with SelectPdf.Universal, the cross-platform commercial SelectPdf library (SelectPdf.Universal plus SelectPdf.Universal.Native.<rid>, or one SelectPdf.Universal.Windows / .Linux / .Linux.Arm64 / .MacOS package; namespace SelectPdf.Universal) on Windows, Linux (x64, ARM64), macOS on Apple Silicon and Docker, or with the remote engine container (Alpine / musl). Use for HTML-to-PDF and HTML-to-image with Chromium (sync or async), tables of contents with page numbers, HTML forms to fillable PDF fields, Word to PDF, building PDFs from text, images, shapes and templates, merging and stamping existing PDFs, AcroForms, digital signatures (PFX, certificate store, PKCS#11 tokens, HSMs and key services, long-term validation) and signature validation, redaction, encryption, PDF-to-text and PDF-to-image, tagged PDF/UA-1 and PDF/UA-2, PDF/A-1a to PDF/A-4, and ZUGFeRD / Factur-X e-invoices. Trigger whenever a .NET app uses SelectPdf.Universal or needs SelectPdf on Linux, macOS or in containers. This is the local library, NOT the online REST API (for that, see the selectpdf-api-* skills).
+description: Generate, edit and render PDFs in .NET (C# / VB.NET) with SelectPdf.Universal, the cross-platform commercial SelectPdf library (SelectPdf.Universal plus SelectPdf.Universal.Native.<rid>, or one SelectPdf.Universal.Windows / .Linux / .Linux.Arm64 / .MacOS package; namespace SelectPdf.Universal) on Windows, Linux (x64, ARM64), macOS on Apple Silicon and Docker, or with the remote engine container (Alpine / musl). Use for HTML-to-PDF and HTML-to-image with Chromium (sync or async), tables of contents with page numbers, HTML forms to fillable PDF fields, Word, Excel and PowerPoint to PDF, PDF to Word, Excel and PowerPoint, building PDFs from text, images, shapes and templates, merging, splitting, stamping and linearizing existing PDFs, layers, AcroForms and XFA forms, digital signatures (PFX, certificate store, PKCS#11 tokens, HSMs and key services, long-term validation) and signature validation, redaction and sanitizing, encryption, PDF-to-text, PDF-to-image and image extraction, tagged PDF/UA-1 and PDF/UA-2, PDF/A-1a to PDF/A-4, PDF/A, PDF/UA and PDF/X validation and preflight, and ZUGFeRD / Factur-X e-invoices. Trigger whenever a .NET app uses SelectPdf.Universal or needs SelectPdf on Linux, macOS or in containers. This is the local library, NOT the online REST API (for that, see the selectpdf-api-* skills).
 globs:
 alwaysApply: false
 ---
@@ -8,7 +8,7 @@ alwaysApply: false
 
 Expert guidance for **SelectPdf.Universal**, the cross-platform SelectPdf library for .NET: Windows (x64,
 x86), Linux (x64, ARM64), macOS on Apple Silicon and Docker containers. HTML is rendered with Chromium.
-Current as of **v26.5**.
+Current as of **v26.6**.
 
 ## Pick the right rule first
 
@@ -99,13 +99,15 @@ returns a `byte[]`.
 
 ## Mental model
 
-1. **Converters** — `HtmlToPdf`, `HtmlToImage` (returns encoded image bytes), `WordToPdf`. Configure through
-   `converter.Options`; get back a `PdfDocument` (or image bytes).
+1. **Converters** — `HtmlToPdf`, `HtmlToImage` (returns encoded image bytes), `WordToPdf`, `ExcelToPdf`,
+   `PowerPointToPdf`. Configure through `converter.Options`; get back a `PdfDocument` (or image bytes).
+   `PdfToWord`, `PdfToExcel` and `PdfToPowerPoint` go the other way and return the Office file's bytes.
 2. **The PDF object model** — `PdfDocument` / `PdfPage` with elements (`PdfTextElement`, `PdfImageElement`,
-   `PdfHtmlElement`, `PdfWordElement`, graphics, templates). Create from scratch or load an existing file, then
+   `PdfHtmlElement`, `PdfWordElement`, `PdfExcelElement`, `PdfPowerPointElement`, graphics, templates). Create from scratch or load an existing file, then
    `Save(...)` and `Close()` (or `Dispose()` / `using`).
 3. **Managers for existing files** — `PdfRedactionManager`, `PdfFormManager`, `PdfSecurityManager`,
-   `PdfResizeManager`, `PdfPortfolioManager`: `Load`, work, `Save`.
+   `PdfResizeManager`, `PdfPortfolioManager`: `Load`, work, `Save`. `PdfValidator` and `PdfPreflight` check
+   and fix PDF/A, PDF/UA and PDF/X conformance.
 
 Rules that always apply:
 - `using SelectPdf.Universal;` (and `SelectPdf.Universal.Drawing` for `RectangleF`, `PointF`, `SizeF`, `Color`).
@@ -128,13 +130,15 @@ Rules that always apply:
 | Links, bookmarks, table of contents with page numbers (`HtmlToPdfOptions.TableOfContents`), open actions | [`links-bookmarks-toc.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/links-bookmarks-toc.md) |
 | Element positions in the PDF; authentication, cookies, HTTP headers, POST, proxy | [`web-elements-and-auth.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/web-elements-and-auth.md) |
 | Build a PDF from scratch: text, images, HTML elements, graphics, page settings, templates | [`pdf-creation-elements.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/pdf-creation-elements.md) |
-| Modify existing PDFs: merge (`PdfDocument.Append`), resize, stamps and watermarks, portfolios, compression and image downsampling (`ImagesMaxResolution`) | [`edit-merge-split-stamp.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/edit-merge-split-stamp.md) |
+| Modify existing PDFs: merge (`PdfDocument.Append`), split, resize, stamps and watermarks, portfolios, compression and image downsampling (`ImagesMaxResolution`), layers, page objects, fast web view (linearize) | [`edit-merge-split-stamp.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/edit-merge-split-stamp.md) |
 | Encryption (RC4, AES, AES-GCM, AES-256 R6), permissions, digital signatures (PFX, certificate store, PKCS#11 tokens and HSMs, external signers and two-step signing, long-term validation, SHA-256/384/512, signature appearance) and signature validation | [`security-and-signatures.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/security-and-signatures.md) |
-| Fill PDF forms | [`forms.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/forms.md) |
-| PDF to text, text search, PDF to image | [`extract-text-image-search.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/extract-text-image-search.md) |
-| Tagged PDF/UA-1 and PDF/UA-2, PDF/A (1a, 1b, 2a, 2b, 2u, 3a, 3b, 3u, 4, 4e, 4f), PDF/X-1a, ZUGFeRD / Factur-X invoices | [`accessibility-and-compliance.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/accessibility-and-compliance.md) |
+| Fill PDF forms (AcroForms and XFA forms) | [`forms.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/forms.md) |
+| PDF to text, text search, PDF to image, extracting images | [`extract-text-image-search.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/extract-text-image-search.md) |
+| Tagged PDF/UA-1 and PDF/UA-2, alternate text for images in existing PDFs, PDF/A (1a, 1b, 2a, 2b, 2u, 3a, 3b, 3u, 4, 4e, 4f), PDF/X-1a, ZUGFeRD / Factur-X invoices, validating and fixing (preflight) PDF/A, PDF/UA and PDF/X | [`accessibility-and-compliance.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/accessibility-and-compliance.md) |
 | Word (DOCX, DOC, RTF, Markdown and more) to PDF; Word documents as PDF elements | [`word-to-pdf.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/word-to-pdf.md) |
-| Remove content by area, text or regular expression | [`redaction.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/redaction.md) |
+| Excel (XLSX, XLS, CSV) and PowerPoint (PPTX) to PDF; workbooks and presentations as PDF elements | [`office-to-pdf.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/office-to-pdf.md) |
+| PDF to Word (DOCX, RTF, ODT, HTML, Markdown), Excel (XLSX) and PowerPoint (PPTX) | [`pdf-to-office.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/pdf-to-office.md) |
+| Remove content by area, text or regular expression; sanitize PDFs from untrusted sources | [`redaction.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/redaction.md) |
 | Render a web page or HTML to an image | [`html-to-image.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/html-to-image.md) |
 | Troubleshooting, security recommendations for untrusted input | [`troubleshooting-and-security.md`](https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/selectpdf-lib-universal-net/reference/troubleshooting-and-security.md) |
 
@@ -171,8 +175,8 @@ Rules that always apply:
 
 ## Faithfulness
 
-The reference files are converted from the shipped SelectPdf.Universal v26.5 help topics, with the official
-C# and VB.NET samples; every sample was compiled against the SelectPdf.Universal 26.5.0 NuGet package. Only
+The reference files are converted from the shipped SelectPdf.Universal v26.6 help topics, with the official
+C# and VB.NET samples; every sample was compiled against the SelectPdf.Universal 26.6.0 NuGet package. Only
 use APIs, enums and options that appear in them. Do not invent members, and do not carry classic-only members
 over. Online documentation: https://selectpdf.com/pdf-library/.
 
@@ -189,8 +193,10 @@ Base: `https://github.com/selectpdf/ai-tools/blob/main/plugins/selectpdf/skills/
 - `installation-and-deployment.md`
 - `links-bookmarks-toc.md`
 - `migrating-from-classic.md`
+- `office-to-pdf.md`
 - `page-setup-headers-footers.md`
 - `pdf-creation-elements.md`
+- `pdf-to-office.md`
 - `redaction.md`
 - `security-and-signatures.md`
 - `troubleshooting-and-security.md`

@@ -1,6 +1,6 @@
 # PDF to text, text search and PDF to image
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## PDF to text
 
@@ -22,45 +22,45 @@ Starting with version 22.1 of SelectPdf, text can be extracted from specific coo
 Using the Pdf To Text Converter is very easy. The first thing that needs to be done is the namespace importing.
 
 ```csharp
-			using SelectPdf.Universal;
+using SelectPdf.Universal;
 ```
 
 ```vbnet
-			Imports SelectPdf.Universal
+Imports SelectPdf.Universal
 ```
 
 Sample code that shows how to extract the text from a PDF document using Select.Pdf Library for .NET:
 
 ```csharp
-			// instantiate a pdf to text converter object
-            PdfToText pdfToText = new PdfToText();
+// instantiate a pdf to text converter object
+PdfToText pdfToText = new PdfToText();
 
-            // load PDF file
-            pdfToText.Load(filePdf);
+// load PDF file
+pdfToText.Load(filePdf);
 
-            // set the properties
-            pdfToText.Layout = textLayout;
-            pdfToText.StartPageNumber = startPage;
-            pdfToText.EndPageNumber = endPage;
+// set the properties
+pdfToText.Layout = textLayout;
+pdfToText.StartPageNumber = startPage;
+pdfToText.EndPageNumber = endPage;
 
-            // extract the text
-            string text = pdfToText.GetText();
+// extract the text
+string text = pdfToText.GetText();
 ```
 
 ```vbnet
-			' instantiate a pdf to text converter object
-	        Dim pdfToText As New PdfToText()
-	
-	        ' load PDF file
-	        pdfToText.Load(filePdf)
-	
-	        ' set the properties
-	        pdfToText.Layout = textLayout
-	        pdfToText.StartPageNumber = startPage
-	        pdfToText.EndPageNumber = endPage
-	
-	        ' extract the text
-	        Dim text As String = pdfToText.GetText()
+' instantiate a pdf to text converter object
+Dim pdfToText As New PdfToText()
+
+' load PDF file
+pdfToText.Load(filePdf)
+
+' set the properties
+pdfToText.Layout = textLayout
+pdfToText.StartPageNumber = startPage
+pdfToText.EndPageNumber = endPage
+
+' extract the text
+Dim text As String = pdfToText.GetText()
 ```
 
 ### Pdf To Text Converter Properties
@@ -82,7 +82,7 @@ Sample code that shows how to extract the text from a PDF document using Select.
 - `TextLayout.Original` (default) preserves the spatial layout of the source PDF, padding the text so that columns stay aligned. Best for forms, invoices and tables where the visual column structure carries meaning.
 - `TextLayout.Reading` produces the text in reading order, one run after another. Best for free-running prose or when feeding the output into a search index or natural-language pipeline.
 
-**Plain text.** `PdfToText.GetText` returns a plain .NET `String` - the right choice for downstream processing (indexing, diffing, search).
+**Plain text.** `PdfToText.GetText` returns a plain .NET `string` - the right choice for downstream processing (indexing, diffing, search).
 
 **Encoding.** The strings returned by `GetText` are standard .NET UTF-16 strings. When persisting the result to a file or stream, pick a text encoding explicitly - for example `System.Text.Encoding.UTF8` - so the output round-trips correctly for non-ASCII content (the sample below demonstrates this).
 
@@ -93,92 +93,92 @@ Sample code that shows how to extract the text from a PDF document using Select.
 This sample shows how to use SelectPdf Pdf Library for .NET to extract text from a PDF document, also setting a few properties.
 
 ```csharp
-			// the test file
-            string filePdf = @"C:\Path\to\document.pdf";
+// the test file
+string filePdf = "document.pdf";
 
-            // settings
-            string text_layout = textLayoutValue;
-            TextLayout textLayout = (TextLayout)Enum.Parse(typeof(TextLayout),
-                text_layout, true);
+// settings
+string text_layout = textLayoutValue;
+TextLayout textLayout = (TextLayout)Enum.Parse(typeof(TextLayout),
+    text_layout, true);
 
-            int startPage = 1;
-            try
-            {
-                startPage = Convert.ToInt32(startPageValue);
-            }
-            catch { }
+int startPage = 1;
+try
+{
+    startPage = Convert.ToInt32(startPageValue);
+}
+catch { }
 
-            int endPage = 0;
-            try
-            {
-                endPage = Convert.ToInt32(endPageValue);
-            }
-            catch { }
+int endPage = 0;
+try
+{
+    endPage = Convert.ToInt32(endPageValue);
+}
+catch { }
 
-            // instantiate a pdf to text converter object
-            PdfToText pdfToText = new PdfToText();
+// instantiate a pdf to text converter object
+PdfToText pdfToText = new PdfToText();
 
-            // load PDF file
-            pdfToText.Load(filePdf);
+// load PDF file
+pdfToText.Load(filePdf);
 
-            // set the properties
-            pdfToText.Layout = textLayout;
-            pdfToText.StartPageNumber = startPage;
-            pdfToText.EndPageNumber = endPage;
+// set the properties
+pdfToText.Layout = textLayout;
+pdfToText.StartPageNumber = startPage;
+pdfToText.EndPageNumber = endPage;
 
-            // extract the text
-            string text = pdfToText.GetText();
+// extract the text
+string text = pdfToText.GetText();
 
-            // the extracted text can be written straight to a file as well,
-            // without going through GetText - SaveText writes it as UTF-8
-            pdfToText.SaveText("output.txt");
+// the extracted text can be written straight to a file as well,
+// without going through GetText - SaveText writes it as UTF-8
+pdfToText.SaveText("output.txt");
 
-            // or as UTF-8 bytes, to be sent over the wire by the application
-            byte[] utf8 = System.Text.Encoding.UTF8.GetBytes(text);
+// or as UTF-8 bytes, to be sent over the wire by the application
+byte[] utf8 = System.Text.Encoding.UTF8.GetBytes(text);
 ```
 
 ```vbnet
-			' the test file
-	        Dim filePdf As String = "C:\Path\to\document.pdf"
-	
-	        ' settings
-	        Dim text_layout As String = textLayoutValue
-	        Dim textLayout As TextLayout = _
-	            DirectCast([Enum].Parse(GetType(TextLayout), text_layout, True),  _
-	            TextLayout)
-	
-	        Dim startPage As Integer = 1
-	        Try
-	            startPage = Convert.ToInt32(startPageValue)
-	        Catch
-	        End Try
-	
-	        Dim endPage As Integer = 0
-	        Try
-	            endPage = Convert.ToInt32(endPageValue)
-	        Catch
-	        End Try
-	
-	        ' instantiate a pdf to text converter object
-	        Dim pdfToText As New PdfToText()
-	
-	        ' load PDF file
-	        pdfToText.Load(filePdf)
-	
-	        ' set the properties
-	        pdfToText.Layout = textLayout
-	        pdfToText.StartPageNumber = startPage
-	        pdfToText.EndPageNumber = endPage
-	
-	        ' extract the text
-	        Dim text As String = pdfToText.GetText()
-	
-	        ' the extracted text can be written straight to a file as well,
-	        ' without going through GetText - SaveText writes it as UTF-8
-	        pdfToText.SaveText("output.txt")
+' the test file
+Dim filePdf As String = "document.pdf"
 
-	        ' or as UTF-8 bytes, to be sent over the wire by the application
-	        Dim utf8 As Byte() = System.Text.Encoding.UTF8.GetBytes(text)
+' settings
+Dim text_layout As String = textLayoutValue
+Dim textLayout As TextLayout = _
+    DirectCast([Enum].Parse(GetType(TextLayout), text_layout, True),  _
+    TextLayout)
+
+Dim startPage As Integer = 1
+Try
+    startPage = Convert.ToInt32(startPageValue)
+Catch
+End Try
+
+Dim endPage As Integer = 0
+Try
+    endPage = Convert.ToInt32(endPageValue)
+Catch
+End Try
+
+' instantiate a pdf to text converter object
+Dim pdfToText As New PdfToText()
+
+' load PDF file
+pdfToText.Load(filePdf)
+
+' set the properties
+pdfToText.Layout = textLayout
+pdfToText.StartPageNumber = startPage
+pdfToText.EndPageNumber = endPage
+
+' extract the text
+Dim text As String = pdfToText.GetText()
+
+' the extracted text can be written straight to a file as well,
+' without going through GetText - SaveText writes it as UTF-8
+pdfToText.SaveText("output.txt")
+
+' or as UTF-8 bytes, to be sent over the wire by the application
+Dim utf8 As Byte() = System.Text.Encoding.UTF8.GetBytes(text)
 ```
 
 ## Searching text
@@ -192,86 +192,122 @@ This can be done using the `PdfToText.Search(string)` method of the `PdfToText` 
 This sample shows how to use SelectPdf PDF Library for .NET to search for text in a PDF document. A new PDF will be created highlighting the text that has been found.
 
 ```csharp
-			// the test file
-            string filePdf = @"C:\Path\to\document.pdf";
+// the test file
+string filePdf = "document.pdf";
 
-            // settings
-            bool caseSensitive = false;
-            bool wholeWordsOnly = false;
+// settings
+bool caseSensitive = false;
+bool wholeWordsOnly = false;
 
-            // instantiate a pdf to text converter object
-            PdfToText pdfToText = new PdfToText();
+// instantiate a pdf to text converter object
+PdfToText pdfToText = new PdfToText();
 
-            // load PDF file
-            pdfToText.Load(filePdf);
+// load PDF file
+pdfToText.Load(filePdf);
 
-            // search for text and retrieve all found text positions
-            TextPosition[] positions = pdfToText.Search(searchText, 
-                caseSensitive, wholeWordsOnly);
+// search for text and retrieve all found text positions
+TextPosition[] positions = pdfToText.Search(searchText, 
+    caseSensitive, wholeWordsOnly);
 
-            // open the existing PDF document in editing mode
-            PdfDocument doc = new PdfDocument(filePdf);
+// open the existing PDF document in editing mode
+PdfDocument doc = new PdfDocument(filePdf);
 
-            // highlight the found text in the existing PDF document
-            for (int i = 0; i < positions.Length; i++)
-            {
-                TextPosition position = (TextPosition)positions[i];
+// highlight the found text in the existing PDF document
+for (int i = 0; i < positions.Length; i++)
+{
+    TextPosition position = (TextPosition)positions[i];
 
-                PdfPage page = doc.Pages[position.PageNumber - 1];
+    PdfPage page = doc.Pages[position.PageNumber - 1];
 
-                PdfRectangleElement rect = new PdfRectangleElement(
-                    position.X, position.Y, position.Width, position.Height);
-                rect.BackColor = new PdfColor(240, 240, 0);
-                rect.Transparency = 30;
-                page.Add(rect);
-            }
+    PdfRectangleElement rect = new PdfRectangleElement(
+        position.X, position.Y, position.Width, position.Height);
+    rect.BackColor = new PdfColor(240, 240, 0);
+    rect.Transparency = 30;
+    page.Add(rect);
+}
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-        	' the test file
-	        Dim filePdf As String = "C:\Path\to\document.pdf"
-	
-	        ' settings
-	        Dim caseSensitive As Boolean = False
-	        Dim wholeWordsOnly As Boolean = False
-	
-	        ' instantiate a pdf to text converter object
-	        Dim pdfToText As New PdfToText()
-	
-	        ' load PDF file
-	        pdfToText.Load(filePdf)
-	
-	        ' search for text and retrieve all found text positions
-	        Dim positions As TextPosition() = pdfToText.Search( _
-	            searchText, caseSensitive, wholeWordsOnly)
-	
-	        ' open the existing PDF document in editing mode
-	        Dim doc As New PdfDocument(filePdf)
-	
-	        ' highlight the found text in the existing PDF document
-	        For i As Integer = 0 To positions.Length - 1
-	            Dim position As TextPosition = DirectCast(positions(i), TextPosition)
-	
-	            Dim page As PdfPage = doc.Pages(position.PageNumber - 1)
-	
-	            Dim rect As New PdfRectangleElement( _
-	                position.X, position.Y, position.Width, position.Height)
-	            rect.BackColor = New PdfColor(240, 240, 0)
-	            rect.Transparency = 30
-	            page.Add(rect)
-	        Next
-	
-	        ' save pdf document
-	        doc.Save("Sample.pdf")
-	
-	        ' close pdf document
-	        doc.Close()
+' the test file
+Dim filePdf As String = "document.pdf"
+
+' settings
+Dim caseSensitive As Boolean = False
+Dim wholeWordsOnly As Boolean = False
+
+' instantiate a pdf to text converter object
+Dim pdfToText As New PdfToText()
+
+' load PDF file
+pdfToText.Load(filePdf)
+
+' search for text and retrieve all found text positions
+Dim positions As TextPosition() = pdfToText.Search( _
+    searchText, caseSensitive, wholeWordsOnly)
+
+' open the existing PDF document in editing mode
+Dim doc As New PdfDocument(filePdf)
+
+' highlight the found text in the existing PDF document
+For i As Integer = 0 To positions.Length - 1
+    Dim position As TextPosition = DirectCast(positions(i), TextPosition)
+
+    Dim page As PdfPage = doc.Pages(position.PageNumber - 1)
+
+    Dim rect As New PdfRectangleElement( _
+        position.X, position.Y, position.Width, position.Height)
+    rect.BackColor = New PdfColor(240, 240, 0)
+    rect.Transparency = 30
+    page.Add(rect)
+Next
+
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document
+doc.Close()
+```
+
+### Every word with its position and font
+
+`PdfToText.GetWords` returns every word of the document (the pages from `PdfTool.StartPageNumber` to `PdfTool.EndPageNumber`), and `PdfToText.GetWords(int)` those of one page, as `PdfTextWord` objects: the text, the page, the rectangle the word covers - in points from the top-left corner of the page, as for the search above - the name and size of its font, the direction it runs in and whether a space follows it. This is what layout analysis and data extraction need: the words of a table column, the headings of a document by their font size, a value found next to its label.
+
+The words come in reading order, as `PdfToText.GetText` reads the text: columns one after the other, a right-to-left word (Arabic, Hebrew) in the order it is read and a right-to-left line from its right end, vertical writing down its columns.
+
+```csharp
+PdfToText pdfToText = new PdfToText();
+pdfToText.Load("document.pdf");
+
+// the headings of the first page: the words in a large font
+foreach (PdfTextWord word in pdfToText.GetWords(1))
+{
+    if (word.FontSize >= 16)
+        Console.WriteLine("{0} ({1} {2}pt) at {3}, {4}",
+            word.Text, word.FontName, word.FontSize, word.X, word.Y);
+}
+
+pdfToText.Close();
+```
+
+```vbnet
+Dim pdfToText As New PdfToText()
+pdfToText.Load("document.pdf")
+
+' the headings of the first page: the words in a large font
+For Each word As PdfTextWord In pdfToText.GetWords(1)
+    If word.FontSize >= 16 Then
+        Console.WriteLine("{0} ({1} {2}pt) at {3}, {4}", _
+            word.Text, word.FontName, word.FontSize, word.X, word.Y)
+    End If
+Next
+
+pdfToText.Close()
 ```
 
 ## PDF to image
@@ -391,4 +427,59 @@ rasterizer.Save()
 ' option 3: bundle all selected pages into a single multi-frame TIFF
 Dim tiff As Byte() = rasterizer.ConvertToTiff()
 System.IO.File.WriteAllBytes("pages.tiff", tiff)
+```
+
+## Extracting images
+
+SelectPdf Library for .NET extracts the raster images a PDF document carries - photographs, scans, logos - with `PdfImageExtractor`. Where "PDF to image" (extract-text-image-search.md) renders whole pages, the extractor returns the pictures themselves at the resolution they are stored in. Text and vector graphics are not images and are not returned.
+
+Load the document with one of the `PdfTool.Load(string)` overloads, then get the images as encoded bytes with `PdfImageExtractor.ExtractImages` or write them to files with `PdfImageExtractor.Save`. Images come in the order they appear, page by page.
+
+### Properties
+
+- `PdfTool.StartPageNumber` and `PdfTool.EndPageNumber` - the pages searched (1-based; an end of 0 means up to the last page).
+- `PdfTool.UserPassword` - the password of an encrypted document.
+- `PdfImageExtractor.ImagesFormat` - the format the images are returned and written in: PNG (the default, lossless), JPEG, BMP or TIFF.
+- `PdfImageExtractor.ImagesPath` and `PdfImageExtractor.ImagesPrefix` - where `Save` writes the images, named prefix + page number + "-" + the image's number on that page (`image-1-1.png`, `image-1-2.png`, `image-2-1.png`, ...).
+
+### Sample Code
+
+```csharp
+using (PdfImageExtractor extractor = new PdfImageExtractor())
+{
+    extractor.Load("catalog.pdf");
+
+    // option 1: the images as PNG byte arrays
+    byte[][] images = extractor.ExtractImages();
+    for (int i = 0; i < images.Length; i++)
+        System.IO.File.WriteAllBytes("image" + (i + 1) + ".png", images[i]);
+
+    // option 2: the images of pages 2 to 4 written as JPEG files
+    extractor.StartPageNumber = 2;
+    extractor.EndPageNumber = 4;
+    extractor.ImagesFormat = PdfImageFormat.Jpeg;
+    extractor.ImagesPath = "images";
+    extractor.ImagesPrefix = "catalog-";
+    extractor.Save();
+}
+```
+
+```vbnet
+Using extractor As New PdfImageExtractor()
+    extractor.Load("catalog.pdf")
+
+    ' option 1: the images as PNG byte arrays
+    Dim images As Byte()() = extractor.ExtractImages()
+    For i As Integer = 0 To images.Length - 1
+        System.IO.File.WriteAllBytes("image" & (i + 1) & ".png", images(i))
+    Next
+
+    ' option 2: the images of pages 2 to 4 written as JPEG files
+    extractor.StartPageNumber = 2
+    extractor.EndPageNumber = 4
+    extractor.ImagesFormat = PdfImageFormat.Jpeg
+    extractor.ImagesPath = "images"
+    extractor.ImagesPrefix = "catalog-"
+    extractor.Save()
+End Using
 ```

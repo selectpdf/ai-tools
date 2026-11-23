@@ -1,21 +1,21 @@
 # Headers, footers and page numbering
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Headers and footers in HTML to PDF
 
-The "Headers and footers" (page-setup-headers-footers.md) page describes how to add headers and footers to a `PdfDocument` using "Templates" (pdf-creation-elements.md). That is the approach to be used if the html to pdf conversion is done using `PdfHtmlElement` objects as described here.
+The "Headers and footers" (page-setup-headers-footers.md) page describes how to add headers and footers to a `PdfDocument` using "Templates" (pdf-creation-elements.md). That is the approach to be used if the html to pdf conversion is done using `PdfHtmlElement` objects as described "HTML elements" (pdf-creation-elements.md).
 
 When the pdf conversion is done using the main `HtmlToPdf` converter object, there is another way of adding headers and footers to the generated pdf document. That is done using the `HtmlToPdf.Header` and `HtmlToPdf.Footer` properties of the `HtmlToPdf` converter object.
 
-#### Header Options
+### Header Options
 
 To display a custom header in the generated pdf, the `HtmlToPdfOptions.DisplayHeader` property of the `HtmlToPdfOptions` object must be set to *true*. If the DisplayHeader property of the Options object is false, the header will not be displayed and all the options set for the header will have no effect.
 
 The header of the pdf document generated from the html to pdf conversion can be customized using the `HtmlToPdf.Header` property of the `HtmlToPdf` converter object. That is an instance of `PdfHeader` class and has the following properties:
 
 - `PdfHeader.Height` - The height of the pdf document header.
-- `PdfHeader.DisplayOnFirstPage` - Controls the visibility of the header on the first page of the generated pdf document.
+- `PdfHeader.DisplayOnFirstPage` - Controls the visibility of the header on the first page of the generated pdf document. When the header is hidden on the first page only, that page's content starts where the header would have been.
 - `PdfHeader.DisplayOnOddPages` - Controls the visibility of the header on the odd numbered pages of the generated pdf document.
 - `PdfHeader.DisplayOnEvenPages` - Controls the visibility of the header on the even numbered pages of the generated pdf document.
 - `PdfHeader.FirstPageNumber` - Controls the page number for the first page being rendered.
@@ -23,9 +23,9 @@ The header of the pdf document generated from the html to pdf conversion can be 
 
 To add content to the pdf header, `PdfHeader` class exposes the `PdfHeader.Add(PdfSectionElement)` method. That can be used to add 3 types of objects to the header:
 
-- Text - using `PdfTextSection` objects. This type of object is very similar with `PdfTextElement` described here.
-- Image - using `PdfImageSection` objects. This type of object is very similar with `PdfImageElement` described here.
-- HTML using `PdfHtmlSection` objects. This type of object is very similar with `PdfHtmlElement` described here.
+- Text - using `PdfTextSection` objects. This type of object is very similar with `PdfTextElement` described "Text elements" (pdf-creation-elements.md).
+- Image - using `PdfImageSection` objects. This type of object is very similar with `PdfImageElement` described "Image elements" (pdf-creation-elements.md).
+- HTML using `PdfHtmlSection` objects. This type of object is very similar with `PdfHtmlElement` described "HTML elements" (pdf-creation-elements.md).
 
 Page numbers can be added to pdf document headers using `PdfTextSection` objects. The page number is displayed setting a *{page_number}* placeholder in a `PdfTextSection.Text` property of a `PdfTextSection` object that can be added to the header. By default the page numbers start with 1. This can be changed using the `PdfHeader.FirstPageNumber` property of the `PdfHeader` object.
 
@@ -34,56 +34,56 @@ The total number of pages is displayed setting a *{total_pages}* placeholder in 
 The following code sample shows how to add a custom header to the pdf document generated from a html to pdf conversion:
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // header settings
-            converter.Options.DisplayHeader = true;
-            converter.Header.DisplayOnFirstPage = true;
-            converter.Header.DisplayOnOddPages = true;
-            converter.Header.DisplayOnEvenPages = true;
-            converter.Header.Height = 50;
+// header settings
+converter.Options.DisplayHeader = true;
+converter.Header.DisplayOnFirstPage = true;
+converter.Header.DisplayOnOddPages = true;
+converter.Header.DisplayOnEvenPages = true;
+converter.Header.Height = 50;
 
-			// add some html content to the header
-            PdfHtmlSection headerHtml = new PdfHtmlSection(headerUrl);
-            converter.Header.Add(headerHtml);
+// add some html content to the header
+PdfHtmlSection headerHtml = new PdfHtmlSection(headerUrl);
+converter.Header.Add(headerHtml);
 
-			// create a new pdf document converting an url
-            PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-			// save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' instantiate a html to pdf converter object
-            Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-            ' header settings
-            converter.Options.DisplayHeader = True
-            converter.Header.DisplayOnFirstPage = True
-            converter.Header.DisplayOnOddPages = True
-            converter.Header.DisplayOnEvenPages = True
-            converter.Header.Height = 50
+' header settings
+converter.Options.DisplayHeader = True
+converter.Header.DisplayOnFirstPage = True
+converter.Header.DisplayOnOddPages = True
+converter.Header.DisplayOnEvenPages = True
+converter.Header.Height = 50
 
-			' add some html content to the header
-            Dim headerHtml As New PdfHtmlSection(headerUrl)
-            converter.Header.Add(headerHtml)
-            
-            ' create a new pdf document converting an url
-            Dim doc As PdfDocument = converter.ConvertUrl(url)
+' add some html content to the header
+Dim headerHtml As New PdfHtmlSection(headerUrl)
+converter.Header.Add(headerHtml)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-            ' close pdf document
-            doc.Close()
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document
+doc.Close()
 ```
 
-#### Footer Options
+### Footer Options
 
 To display a custom footer in the generated pdf, the `HtmlToPdfOptions.DisplayFooter` property of the `HtmlToPdfOptions` object must be set to *true*. If the DisplayFooter property of the Options object is false, the footer will not be displayed and all the options set for the footer will have no effect.
 
@@ -98,9 +98,9 @@ The footer of the pdf document generated from the html to pdf conversion can be 
 
 To add content to the pdf footer, `PdfFooter` class exposes the `PdfFooter.Add(PdfSectionElement)` method. That can be used to add 3 types of objects to the footer:
 
-- Text - using `PdfTextSection` objects. This type of object is very similar with `PdfTextElement` described here.
-- Image - using `PdfImageSection` objects. This type of object is very similar with `PdfImageElement` described here.
-- HTML using `PdfHtmlSection` objects. This type of object is very similar with `PdfHtmlElement` described here.
+- Text - using `PdfTextSection` objects. This type of object is very similar with `PdfTextElement` described "Text elements" (pdf-creation-elements.md).
+- Image - using `PdfImageSection` objects. This type of object is very similar with `PdfImageElement` described "Image elements" (pdf-creation-elements.md).
+- HTML using `PdfHtmlSection` objects. This type of object is very similar with `PdfHtmlElement` described "HTML elements" (pdf-creation-elements.md).
 
 Page numbers can be added to pdf document footer using `PdfTextSection` objects. The page number is displayed setting a *{page_number}* placeholder in a `PdfTextSection.Text` property of a `PdfTextSection` object that can be added to the footer. By default the page numbers start with 1. This can be changed using the `PdfFooter.FirstPageNumber` property of the `PdfFooter` object.
 
@@ -109,70 +109,70 @@ The total number of pages is displayed setting a *{total_pages}* placeholder in 
 The following code sample shows how to add a custom footer to the pdf document generated from a html to pdf conversion:
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // footer settings
-            converter.Options.DisplayFooter = true;
-            converter.Footer.DisplayOnFirstPage = true;
-            converter.Footer.DisplayOnOddPages = true;
-            converter.Footer.DisplayOnEvenPages = true;
-            converter.Footer.Height = 50;
+// footer settings
+converter.Options.DisplayFooter = true;
+converter.Footer.DisplayOnFirstPage = true;
+converter.Footer.DisplayOnOddPages = true;
+converter.Footer.DisplayOnEvenPages = true;
+converter.Footer.Height = 50;
 
-			// add some html content to the footer
-            PdfHtmlSection footerHtml = new PdfHtmlSection(footerUrl);
-            converter.Footer.Add(footerHtml);
+// add some html content to the footer
+PdfHtmlSection footerHtml = new PdfHtmlSection(footerUrl);
+converter.Footer.Add(footerHtml);
 
-			// page numbers can be added using a PdfTextSection object
-            PdfTextSection text = new PdfTextSection(0, 10,
-                "Page: {page_number} of {total_pages}  ",
-                PdfFont.CreateFromSystemFont("Arial", 8f));
-            text.HorizontalAlign = PdfTextHorizontalAlign.Right;
-            converter.Footer.Add(text);
+// page numbers can be added using a PdfTextSection object
+PdfTextSection text = new PdfTextSection(0, 10,
+    "Page: {page_number} of {total_pages}  ",
+    PdfFont.CreateFromSystemFont("Arial", 8f));
+text.HorizontalAlign = PdfTextHorizontalAlign.Right;
+converter.Footer.Add(text);
 
-			// create a new pdf document converting an url
-            PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-			// save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' instantiate a html to pdf converter object
-            Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-            ' header settings
-            converter.Options.DisplayFooter = True
-            converter.Footer.DisplayOnFirstPage = True
-            converter.Footer.DisplayOnOddPages = True
-            converter.Footer.DisplayOnEvenPages = True
-            converter.Footer.Height = 50
+' header settings
+converter.Options.DisplayFooter = True
+converter.Footer.DisplayOnFirstPage = True
+converter.Footer.DisplayOnOddPages = True
+converter.Footer.DisplayOnEvenPages = True
+converter.Footer.Height = 50
 
-			' add some html content to the footer
-            Dim footerHtml As New PdfHtmlSection(footerUrl)
-            converter.Footer.Add(footerHtml)
-            
-            ' page numbers can be added using a PdfTextSection object
-            Dim text As New PdfTextSection(0, 10, _
-                "Page: {page_number} of {total_pages}  ", _
-                PdfFont.CreateFromSystemFont("Arial", 8F))
-            text.HorizontalAlign = PdfTextHorizontalAlign.Right
-            converter.Footer.Add(text)
-            
-            ' create a new pdf document converting an url
-            Dim doc As PdfDocument = converter.ConvertUrl(url)
+' add some html content to the footer
+Dim footerHtml As New PdfHtmlSection(footerUrl)
+converter.Footer.Add(footerHtml)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' page numbers can be added using a PdfTextSection object
+Dim text As New PdfTextSection(0, 10, _
+    "Page: {page_number} of {total_pages}  ", _
+    PdfFont.CreateFromSystemFont("Arial", 8F))
+text.HorizontalAlign = PdfTextHorizontalAlign.Right
+converter.Footer.Add(text)
 
-            ' close pdf document
-            doc.Close()
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
+
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document
+doc.Close()
 ```
 
-#### Setting a Different Header or Footer for a Specific Pdf Page
+### Setting a Different Header or Footer for a Specific Pdf Page
 
 The `HtmlToPdf.Header` and `HtmlToPdf.Footer` described above are document wide - they are repeated on every page selected by their display options. A single page can override them after the conversion, through the `PdfPage` objects of the generated document:
 
@@ -187,106 +187,106 @@ The template is created with `PdfDocument.AddTemplate(float, float)` and filled 
 The following sample code shows how to customize the header of the 3rd page of a generated pdf document:
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // header settings
-            converter.Options.DisplayHeader = true;
-            converter.Header.DisplayOnFirstPage = true;
-            converter.Header.DisplayOnOddPages = true;
-            converter.Header.DisplayOnEvenPages = true;
-            converter.Header.Height = 50;
+// header settings
+converter.Options.DisplayHeader = true;
+converter.Header.DisplayOnFirstPage = true;
+converter.Header.DisplayOnOddPages = true;
+converter.Header.DisplayOnEvenPages = true;
+converter.Header.Height = 50;
 
-			// add some html content to the header
-            PdfHtmlSection headerHtml = new PdfHtmlSection(headerUrl);
-            converter.Header.Add(headerHtml);
+// add some html content to the header
+PdfHtmlSection headerHtml = new PdfHtmlSection(headerUrl);
+converter.Header.Add(headerHtml);
 
-			// create a new pdf document converting an url
-            PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-            // custom header on page 3 only
-            if (doc.Pages.Count >= 3)
-            {
-                PdfPage page = doc.Pages[2];
+// custom header on page 3 only
+if (doc.Pages.Count >= 3)
+{
+    PdfPage page = doc.Pages[2];
 
-                // a template as wide as the page and as tall as the header band
-                PdfTemplate customHeader = doc.AddTemplate(page.PageSize.Width, 50);
+    // a template as wide as the page and as tall as the header band
+    PdfTemplate customHeader = doc.AddTemplate(page.PageSize.Width, 50);
 
-                PdfHtmlElement customHtml = new PdfHtmlElement(
-                    "<div><b>This is the custom header that will appear only on page 3!" +
-                    "</b></div>",
-                    string.Empty);
-                customHeader.Add(customHtml);
+    PdfHtmlElement customHtml = new PdfHtmlElement(
+        "<div><b>This is the custom header that will appear only on page 3!" +
+        "</b></div>",
+        string.Empty);
+    customHeader.Add(customHtml);
 
-                // replaces the document header, on this page only
-                page.CustomHeader = customHeader;
-            }
+    // replaces the document header, on this page only
+    page.CustomHeader = customHeader;
+}
 
-            // the document header can also simply be hidden on a given page
-            // (the space it reserves is kept, so the page content does not move)
-            if (doc.Pages.Count >= 4)
-            {
-                doc.Pages[3].DisplayHeader = false;
-            }
+// the document header can also simply be hidden on a given page
+// (the space it reserves is kept, so the page content does not move)
+if (doc.Pages.Count >= 4)
+{
+    doc.Pages[3].DisplayHeader = false;
+}
 
-			// save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' instantiate a html to pdf converter object
-            Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-            ' header settings
-            converter.Options.DisplayHeader = True
-            converter.Header.DisplayOnFirstPage = True
-            converter.Header.DisplayOnOddPages = True
-            converter.Header.DisplayOnEvenPages = True
-            converter.Header.Height = 50
+' header settings
+converter.Options.DisplayHeader = True
+converter.Header.DisplayOnFirstPage = True
+converter.Header.DisplayOnOddPages = True
+converter.Header.DisplayOnEvenPages = True
+converter.Header.Height = 50
 
-			' add some html content to the header
-            Dim headerHtml As New PdfHtmlSection(headerUrl)
-            converter.Header.Add(headerHtml)
+' add some html content to the header
+Dim headerHtml As New PdfHtmlSection(headerUrl)
+converter.Header.Add(headerHtml)
 
-            ' create a new pdf document converting an url
-            Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-            ' custom header on page 3 only
-            If doc.Pages.Count >= 3 Then
-                Dim page As PdfPage = doc.Pages(2)
+' custom header on page 3 only
+If doc.Pages.Count >= 3 Then
+    Dim page As PdfPage = doc.Pages(2)
 
-                ' a template as wide as the page and as tall as the header band
-                Dim customHeader As PdfTemplate = doc.AddTemplate(page.PageSize.Width, 50)
+    ' a template as wide as the page and as tall as the header band
+    Dim customHeader As PdfTemplate = doc.AddTemplate(page.PageSize.Width, 50)
 
-                Dim customHtml As New PdfHtmlElement( _
-                    "<div><b>This is the custom header that will appear only on page 3!" & _
-                    "</b></div>", _
-                    String.Empty)
-                customHeader.Add(customHtml)
+    Dim customHtml As New PdfHtmlElement( _
+        "<div><b>This is the custom header that will appear only on page 3!" & _
+        "</b></div>", _
+        String.Empty)
+    customHeader.Add(customHtml)
 
-                ' replaces the document header, on this page only
-                page.CustomHeader = customHeader
-            End If
+    ' replaces the document header, on this page only
+    page.CustomHeader = customHeader
+End If
 
-            ' the document header can also simply be hidden on a given page
-            ' (the space it reserves is kept, so the page content does not move)
-            If doc.Pages.Count >= 4 Then
-                doc.Pages(3).DisplayHeader = False
-            End If
+' the document header can also simply be hidden on a given page
+' (the space it reserves is kept, so the page content does not move)
+If doc.Pages.Count >= 4 Then
+    doc.Pages(3).DisplayHeader = False
+End If
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Headers and footers
 
-Headers and Footers are custom types of pdf templates. They can be handled using the `PdfTemplateCollection.Header` and `PdfTemplateCollection.Footer` properties of the `PdfDocument` object.
+Headers and Footers are custom types of "Templates" (pdf-creation-elements.md). They can be handled using the `PdfTemplateCollection.Header` and `PdfTemplateCollection.Footer` properties of the `PdfDocument` object.
 
 Header is displayed at the top of the page. Footer is displayed at the bottom of the page. They contains elements that repeat on each page of the pdf document.
 
@@ -295,92 +295,92 @@ Header is displayed at the top of the page. Footer is displayed at the bottom of
 This sample code shows how to create a new PDF document using Select.Pdf, how to add several pages and set the header and footer of the pdf document.
 
 ```csharp
-	// create a new pdf document
-    PdfDocument doc = new PdfDocument();
-    doc.Margins = new PdfMargins(10, 10, 0, 0);
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
+doc.Margins = new PdfMargins(10, 10, 0, 0);
 
-    // create a new pdf font
-    PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
-    font.Size = 24;
+// create a new pdf font
+PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font.Size = 24;
 
-    // create a new pdf font
-    PdfFont font2 = doc.Fonts.Add(PdfStandardFont.Helvetica);
-    font2.Size = 12;
-    font2.IsUnderline = true;
+// create a new pdf font
+PdfFont font2 = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font2.Size = 12;
+font2.IsUnderline = true;
 
-    // add a new page to the document
-    PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-    // get image path
-    string imgFile = @"C:\Path\to\logo.png";
+// get image path
+string imgFile = "logo.png";
 
-    // header template (100 points in height) with image element
-    doc.Templates.Header = doc.Templates.Add(doc.Pages[0].ClientRectangle.Width, 100);
-    PdfImageElement img1 = new PdfImageElement(0, 0, imgFile);
-    doc.Templates.Header.Add(img1);
+// header template (100 points in height) with image element
+doc.Templates.Header = doc.Templates.Add(doc.Pages[0].ClientRectangle.Width, 100);
+PdfImageElement img1 = new PdfImageElement(0, 0, imgFile);
+doc.Templates.Header.Add(img1);
 
-    // footer template (100 points in height) with text element
-    doc.Templates.Footer = doc.Templates.Add(doc.Pages[0].ClientRectangle.Width, 100);
-    PdfTextElement text1 = new PdfTextElement(0, 50, 
-        "Footer text: Document generated by Select.Pdf", font2);
-    text1.ForeColor = new PdfColor(0, 0, 255);
-    doc.Templates.Footer.Add(text1);
+// footer template (100 points in height) with text element
+doc.Templates.Footer = doc.Templates.Add(doc.Pages[0].ClientRectangle.Width, 100);
+PdfTextElement text1 = new PdfTextElement(0, 50, 
+    "Footer text: Document generated by Select.Pdf", font2);
+text1.ForeColor = new PdfColor(0, 0, 255);
+doc.Templates.Footer.Add(text1);
 
-    // create a new text element and add it to the page if page elements are added 
-    // after header and footer is set, they will not be displayed in those areas.
-    PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
-    page.Add(text);
+// create a new text element and add it to the page if page elements are added 
+// after header and footer is set, they will not be displayed in those areas.
+PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
+page.Add(text);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' create a new pdf document
-    Dim doc As New PdfDocument()
-    doc.Margins = New PdfMargins(10, 10, 0, 0)
+' create a new pdf document
+Dim doc As New PdfDocument()
+doc.Margins = New PdfMargins(10, 10, 0, 0)
 
-    ' create a new pdf font
-    Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-    font.Size = 24
+' create a new pdf font
+Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font.Size = 24
 
-    ' create a new pdf font
-    Dim font2 As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-    font2.Size = 12
-    font2.IsUnderline = True
+' create a new pdf font
+Dim font2 As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font2.Size = 12
+font2.IsUnderline = True
 
-    ' add a new page to the document
-    Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-    ' get image path
-    Dim imgFile As String = "C:\Path\to\logo.png"
+' get image path
+Dim imgFile As String = "logo.png"
 
-    ' header template (100 points in height) with image element
-    doc.Templates.Header = doc.Templates.Add(doc.Pages(0).ClientRectangle.Width, 100)
-    Dim img1 As New PdfImageElement(0, 0, imgFile)
-    doc.Templates.Header.Add(img1)
+' header template (100 points in height) with image element
+doc.Templates.Header = doc.Templates.Add(doc.Pages(0).ClientRectangle.Width, 100)
+Dim img1 As New PdfImageElement(0, 0, imgFile)
+doc.Templates.Header.Add(img1)
 
-    ' footer template (100 points in height) with text element
-    doc.Templates.Footer = doc.Templates.Add(doc.Pages(0).ClientRectangle.Width, 100)
-    Dim text1 As New PdfTextElement(0, 50, _
-            "Footer text: Document generated by Select.Pdf", font2)
-    text1.ForeColor = New PdfColor(0, 0, 255)
-    doc.Templates.Footer.Add(text1)
+' footer template (100 points in height) with text element
+doc.Templates.Footer = doc.Templates.Add(doc.Pages(0).ClientRectangle.Width, 100)
+Dim text1 As New PdfTextElement(0, 50, _
+        "Footer text: Document generated by Select.Pdf", font2)
+text1.ForeColor = New PdfColor(0, 0, 255)
+doc.Templates.Footer.Add(text1)
 
-    ' create a new text element and add it to the page
-    ' if page elements are added after header and footer is set, 
-    ' they will not be displayed in those areas.
-    Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
-    page.Add(text)
+' create a new text element and add it to the page
+' if page elements are added after header and footer is set, 
+' they will not be displayed in those areas.
+Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
+page.Add(text)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Page numbering
@@ -402,71 +402,71 @@ A few properties of the `PdfTemplate` class can be used to customize page number
 This sample code shows how to create a new PDF document using Select.Pdf, how to add several pages and automatic page numbering in the document footer.
 
 ```csharp
-			// create a new pdf document
-            PdfDocument doc = new PdfDocument();
-            doc.Margins = new PdfMargins(10, 10, 0, 0);
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
+doc.Margins = new PdfMargins(10, 10, 0, 0);
 
-            // create a new pdf font
-            PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
-            font.Size = 24;
+// create a new pdf font
+PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font.Size = 24;
 
-            // add a new page to the document
-            PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-            // footer template (100 points in height) with text element
-            doc.Templates.Footer = doc.Templates.Add(doc.Pages[0].ClientRectangle.Width, 100);
-            PdfTextElement text1 = new PdfTextElement(0, 50, 
-                "Page: {page_number} of {total_pages}.", font);
-            text1.ForeColor = new PdfColor(0, 0, 255);
-            doc.Templates.Footer.Add(text1);
+// footer template (100 points in height) with text element
+doc.Templates.Footer = doc.Templates.Add(doc.Pages[0].ClientRectangle.Width, 100);
+PdfTextElement text1 = new PdfTextElement(0, 50, 
+    "Page: {page_number} of {total_pages}.", font);
+text1.ForeColor = new PdfColor(0, 0, 255);
+doc.Templates.Footer.Add(text1);
 
-            // create a new text element and add it to the page
-            // if page elements are added after header and footer is set, 
-            // they will not be displayed in those areas.
-            PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
-            page.Add(text);
+// create a new text element and add it to the page
+// if page elements are added after header and footer is set, 
+// they will not be displayed in those areas.
+PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
+page.Add(text);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' create a new pdf document
-    Dim doc As New PdfDocument()
-    doc.Margins = New PdfMargins(10, 10, 0, 0)
+' create a new pdf document
+Dim doc As New PdfDocument()
+doc.Margins = New PdfMargins(10, 10, 0, 0)
 
-    ' create a new pdf font
-    Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-    font.Size = 24
+' create a new pdf font
+Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font.Size = 24
 
-    ' add a new page to the document
-    Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-    ' footer template (100 points in height) with text element
-    doc.Templates.Footer = doc.Templates.Add(doc.Pages(0).ClientRectangle.Width, 100)
-    Dim text1 As New PdfTextElement(0, 50, "Page: {page_number} of {total_pages}.", font)
-    text1.ForeColor = New PdfColor(0, 0, 255)
-    doc.Templates.Footer.Add(text1)
+' footer template (100 points in height) with text element
+doc.Templates.Footer = doc.Templates.Add(doc.Pages(0).ClientRectangle.Width, 100)
+Dim text1 As New PdfTextElement(0, 50, "Page: {page_number} of {total_pages}.", font)
+text1.ForeColor = New PdfColor(0, 0, 255)
+doc.Templates.Footer.Add(text1)
 
-    ' create a new text element and add it to the page
-    ' if page elements are added after header and footer is set, 
-    ' they will not be displayed in those areas.
-    Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
-    page.Add(text)
+' create a new text element and add it to the page
+' if page elements are added after header and footer is set, 
+' they will not be displayed in those areas.
+Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
+page.Add(text)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Headers and footers on existing PDFs
 
-SelectPdf Library for .NET can be used to add headers and footers to existing PDF documents. With existing documents, the method described in "Headers and footers" (page-setup-headers-footers.md) section cannot be used. That only works with newly created PDF files.
+SelectPdf Library for .NET can be used to add headers and footers to existing PDF documents. Existing documents take two steps (the method described in "Headers and footers" (page-setup-headers-footers.md) section is for newly created PDF files).
 
 To add headers and footers to existing PDF documents, first a resize of the content is performed (using the method described in "Resizing pages" (edit-merge-split-stamp.md) section) to create space for the header/footer and then PDF templates are added (using the method described in "Templates" (pdf-creation-elements.md) section).
 
@@ -476,8 +476,8 @@ The sample code below shows how to modify an existing PDF document using SelectP
 
 ```csharp
 // the test file
-string filePdf = @"C:\Path\to\document.pdf";
-string imgFile = @"C:\Path\to\logo.png";
+string filePdf = "document.pdf";
+string imgFile = "logo.png";
 
 // resize the content
 PdfResizeManager resizer = new PdfResizeManager();
@@ -518,8 +518,8 @@ resizer.Close();
 
 ```vbnet
 ' the test file
-Dim filePdf As String = "C:\Path\to\document.pdf"
-Dim imgFile As String = "C:\Path\to\logo.png"
+Dim filePdf As String = "document.pdf"
+Dim imgFile As String = "logo.png"
 
 ' resize the content
 Dim resizer As New PdfResizeManager()

@@ -7,8 +7,8 @@ description: >-
   package; namespace SelectPdf.Universal) on Windows, Linux (x64, ARM64), macOS on Apple Silicon and Docker, or
   with the remote engine container (Alpine / musl). Use for HTML-to-PDF with Chromium (sync or async) with
   page setup, headers/footers, page numbering, links, bookmarks, web authentication, cookies, HTTP headers and
-  proxy. Free for commercial use, capped at 5 pages per document. For PDF creation/editing, Word to PDF,
-  forms, signatures, redaction or longer output use selectpdf-lib-universal-net; for the classic Windows
+  proxy. Free for commercial use, capped at 5 pages per document. For PDF creation/editing, Word, Excel and
+  PowerPoint to PDF, PDF to Office, forms, signatures, redaction or longer output use selectpdf-lib-universal-net; for the classic Windows
   edition use selectpdf-lib-htmltopdf-net; for the online REST API use a selectpdf-api-* skill.
 ---
 
@@ -16,15 +16,15 @@ description: >-
 
 Expert guidance for **SelectPdf.HtmlToPdf.Universal**, the free cross-platform HTML to PDF converter:
 Windows (x64, x86), Linux (x64, ARM64), macOS on Apple Silicon and Docker, rendering with Chromium.
-HTML→PDF only, **5 pages per document**. Current as of **v26.5**.
+HTML→PDF only, **5 pages per document**. Current as of **v26.6**.
 
 ## Pick the right skill first
 
 - **Free cross-platform Community Edition (this skill)** — `SelectPdf.HtmlToPdf.Universal` +
   `SelectPdf.Universal.Native.<rid>` (or one `SelectPdf.HtmlToPdf.<Platform>` package); code uses
   `using SelectPdf.Universal;`.
-- **Full cross-platform library** — documents over 5 pages, HTML to image, PDF creation or editing, Word to
-  PDF, tables of contents with page numbers, HTML forms to fillable fields, forms, signatures, redaction,
+- **Full cross-platform library** — documents over 5 pages, HTML to image, PDF creation or editing, Word,
+  Excel and PowerPoint to PDF, PDF to Word, Excel and PowerPoint, PDF/A validation, tables of contents with page numbers, HTML forms to fillable fields, forms, signatures, redaction,
   tagged PDF/UA, PDF/A level A or e-invoices → **`selectpdf-lib-universal-net`**.
   It uses the same namespace and the same code, so moving up is a package swap.
 - **Classic Windows Community Edition** — `Select.HtmlToPdf` / `Select.HtmlToPdf.NetCore`, code uses
@@ -107,7 +107,7 @@ Rules that always apply:
 |---|---|
 | Packages (one per platform, or converter + native), license, the Chromium engine, the remote engine container, fonts and languages, deployment to Windows, Linux, macOS, Docker, Azure, AWS, Google Cloud | `reference/installation-and-deployment.md` |
 | Port code from the classic `Select.HtmlToPdf` edition | `reference/migrating-from-classic.md` |
-| Convert URL / HTML; async and cancellation; page settings, delays, media type, fitting wide content, page breaks, table headers, links, automatic bookmarks, document properties, viewer preferences, security, other options (PDF/A, image downsampling) | `reference/html-to-pdf.md` |
+| Convert URL / HTML; async and cancellation; page settings, delays, media type, fitting wide content, page breaks, table headers, links, automatic bookmarks, document properties, viewer preferences, security, fast web view (linearize), other options (PDF/A, image downsampling) | `reference/html-to-pdf.md` |
 | Headers, footers, page numbering | `reference/page-setup-headers-footers.md` |
 | Web page authentication, cookies, HTTP headers, POST, proxy | `reference/auth-cookies-headers-post.md` |
 | Troubleshooting, security recommendations for untrusted input | `reference/troubleshooting-and-security.md` |
@@ -131,7 +131,7 @@ Rules that always apply:
 
 ## Faithfulness
 
-The reference files are converted from the shipped SelectPdf.HtmlToPdf.Universal v26.5 help topics, with the
-official C# and VB.NET samples; every sample was compiled against the SelectPdf.HtmlToPdf.Universal 26.5.0
+The reference files are converted from the shipped SelectPdf.HtmlToPdf.Universal v26.6 help topics, with the
+official C# and VB.NET samples; every sample was compiled against the SelectPdf.HtmlToPdf.Universal 26.6.0
 NuGet package. Only use APIs, enums and options that appear in them, and do not document full-library
 features in this skill. Online documentation: https://selectpdf.com/html-to-pdf/docs/.

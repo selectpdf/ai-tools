@@ -1,12 +1,12 @@
 # HTML to PDF conversion
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## The HTML to PDF converter
 
 One of the most important features of Select.Pdf Library for .NET is the **Html to Pdf Converter**.
 
-HTML content can be added to a pdf document in several ways. If a complex document is created that will contain several types of pdf elements and the html content that will be added is only a small part of the total content, `PdfHtmlElement` objects can be used to convert web pages or raw html content and add the conversion result to the pdf document. This is better described here.
+HTML content can be added to a pdf document in several ways. If a complex document is created that will contain several types of pdf elements and the html content that will be added is only a small part of the total content, `PdfHtmlElement` objects can be used to convert web pages or raw html content and add the conversion result to the pdf document. This is better described "HTML elements" (pdf-creation-elements.md).
 
 If the pdf is generated mostly as a result of an html to pdf conversion, the `HtmlToPdf` object should be used instead. The `HtmlToPdf` and related classes and properties will be described in this page and in all pages under "Html to Pdf Converter" of Select.Pdf Developers Guide.
 
@@ -15,71 +15,71 @@ If the pdf is generated mostly as a result of an html to pdf conversion, the `Ht
 Using the Html to Pdf Converter is very easy. The first thing that needs to be done is the namespace importing.
 
 ```csharp
-			using SelectPdf.Universal;
+using SelectPdf.Universal;
 ```
 
 ```vbnet
-			Imports SelectPdf.Universal
+Imports SelectPdf.Universal
 ```
 
 Sample code that shows how to convert an url to pdf using Select.Pdf Library for .NET:
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // create a new pdf document converting an url
-            PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' instantiate a html to pdf converter object
-            Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-            ' create a new pdf document converting an url
-            Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 Sample code that shows how to convert raw html code to pdf using Select.Pdf Library for .NET:
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // create a new pdf document converting the html code
-            PdfDocument doc = converter.ConvertHtmlString(htmlString, baseUrl);
+// create a new pdf document converting the html code
+PdfDocument doc = converter.ConvertHtmlString(htmlString, baseUrl);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' instantiate a html to pdf converter object
-            Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-            ' create a new pdf document converting the html code
-            Dim doc As PdfDocument = converter.ConvertHtmlString(htmlString, baseUrl)
+' create a new pdf document converting the html code
+Dim doc As PdfDocument = converter.ConvertHtmlString(htmlString, baseUrl)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ### Html to Pdf Converter Properties
@@ -105,43 +105,43 @@ To convert an url (or local file) to pdf, `HtmlToPdf` class exposes the `HtmlToP
 This sample code shows how to use Select.Pdf html to pdf converter to convert an url to pdf, also setting a few properties.
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // set converter options
-            converter.Options.PdfPageSize = pageSize;
-            converter.Options.PdfPageOrientation = pdfOrientation;
-            converter.Options.WebPageWidth = webPageWidth;
-            converter.Options.WebPageHeight = webPageHeight;
+// set converter options
+converter.Options.PdfPageSize = pageSize;
+converter.Options.PdfPageOrientation = pdfOrientation;
+converter.Options.WebPageWidth = webPageWidth;
+converter.Options.WebPageHeight = webPageHeight;
 
-            // create a new pdf document converting an url
-            PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' set converter options
-    converter.Options.PdfPageSize = pageSize
-    converter.Options.PdfPageOrientation = pdfOrientation
-    converter.Options.WebPageWidth = webPageWidth
-    converter.Options.WebPageHeight = webPageHeight
+' set converter options
+converter.Options.PdfPageSize = pageSize
+converter.Options.PdfPageOrientation = pdfOrientation
+converter.Options.WebPageWidth = webPageWidth
+converter.Options.WebPageHeight = webPageHeight
 
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Converting an HTML string
@@ -157,43 +157,43 @@ The first method, that has only the *htmlString* parameter, can be used to conve
 This sample code shows how to use Select.Pdf html to pdf converter to convert an html string to pdf, also setting a few properties.
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // set converter options
-            converter.Options.PdfPageSize = pageSize;
-            converter.Options.PdfPageOrientation = pdfOrientation;
-            converter.Options.WebPageWidth = webPageWidth;
-            converter.Options.WebPageHeight = webPageHeight;
+// set converter options
+converter.Options.PdfPageSize = pageSize;
+converter.Options.PdfPageOrientation = pdfOrientation;
+converter.Options.WebPageWidth = webPageWidth;
+converter.Options.WebPageHeight = webPageHeight;
 
-            // create a new pdf document converting an html string
-            PdfDocument doc = converter.ConvertHtmlString(htmlString, baseUrl);
+// create a new pdf document converting an html string
+PdfDocument doc = converter.ConvertHtmlString(htmlString, baseUrl);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' set converter options
-    converter.Options.PdfPageSize = pageSize
-    converter.Options.PdfPageOrientation = pdfOrientation
-    converter.Options.WebPageWidth = webPageWidth
-    converter.Options.WebPageHeight = webPageHeight
+' set converter options
+converter.Options.PdfPageSize = pageSize
+converter.Options.PdfPageOrientation = pdfOrientation
+converter.Options.WebPageWidth = webPageWidth
+converter.Options.WebPageHeight = webPageHeight
 
-    ' create a new pdf document converting an html string
-    Dim doc As PdfDocument = converter.ConvertHtmlString(htmlString, baseUrl)
+' create a new pdf document converting an html string
+Dim doc As PdfDocument = converter.ConvertHtmlString(htmlString, baseUrl)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Asynchronous conversion
@@ -350,8 +350,8 @@ Cancelling the token given to `PdfCanvas.AddAsync(PdfPageElement, CancellationTo
 
 Select.Pdf Library for .NET can be used to convert multiple urls (or html strings) into the same pdf document. There are 2 approaches to this task:
 
-- Using `HtmlToPdf` main converter object to generate individual documents for each web page and then using the method described here to merge the the individual pdf documents into a final pdf document.
-- Using `PdfHtmlElement` described here, adding several objects of this type, one for each conversion, to the same `PdfDocument` object.
+- Using `HtmlToPdf` main converter object to generate individual documents for each web page and then using the method described "Merging PDFs" (edit-merge-split-stamp.md) to merge the the individual pdf documents into a final pdf document.
+- Using `PdfHtmlElement` described "HTML elements" (pdf-creation-elements.md), adding several objects of this type, one for each conversion, to the same `PdfDocument` object.
 
 The first method has the disadvange that all individual web page conversions will appear in the final pdf starting with a new page, while using the second method, the successive conversions can be added on new pages or at the end of the previous content on the same page of the pdf document.
 
@@ -360,131 +360,131 @@ The first method has the disadvange that all individual web page conversions wil
 This sample code shows how to convert 3 individual urls into the same pdf document using `HtmlToPdf` approach.
 
 ```csharp
-        	// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-			// convert individual urls
-            PdfDocument doc1 = converter.ConvertUrl(url1);
-            PdfDocument doc2 = converter.ConvertUrl(url2);
-            PdfDocument doc3 = converter.ConvertUrl(url3);
+// convert individual urls
+PdfDocument doc1 = converter.ConvertUrl(url1);
+PdfDocument doc2 = converter.ConvertUrl(url2);
+PdfDocument doc3 = converter.ConvertUrl(url3);
 
-            // create a new pdf document
-            PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-            // add the pages of those 3 documents to the new document
-            doc.Append(doc1);
-            doc.Append(doc2);
-            doc.Append(doc3);
+// add the pages of those 3 documents to the new document
+doc.Append(doc1);
+doc.Append(doc2);
+doc.Append(doc3);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 
-            // close the original pdf documents
-            doc1.Close();
-            doc2.Close();
-            doc3.Close();
+// close the original pdf documents
+doc1.Close();
+doc2.Close();
+doc3.Close();
 ```
 
 ```vbnet
-        	' instantiate a html to pdf converter object
-            Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-			' convert individual urls
-            Dim doc1 As PdfDocument = converter.ConvertUrl(url1)
-            Dim doc2 As PdfDocument = converter.ConvertUrl(url2)
-            Dim doc3 As PdfDocument = converter.ConvertUrl(url3)
+' convert individual urls
+Dim doc1 As PdfDocument = converter.ConvertUrl(url1)
+Dim doc2 As PdfDocument = converter.ConvertUrl(url2)
+Dim doc3 As PdfDocument = converter.ConvertUrl(url3)
 
-            ' create a new pdf document
-            Dim doc As New PdfDocument()
+' create a new pdf document
+Dim doc As New PdfDocument()
 
-            ' add the pages of those 3 documents to the new document
-            doc.Append(doc1)
-            doc.Append(doc2)
-            doc.Append(doc3)
+' add the pages of those 3 documents to the new document
+doc.Append(doc1)
+doc.Append(doc2)
+doc.Append(doc3)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 
-            ' close the original pdf documents
-            doc1.Close()
-            doc2.Close()
-            doc3.Close()
+' close the original pdf documents
+doc1.Close()
+doc2.Close()
+doc3.Close()
 ```
 
 This sample code shows how to convert 3 individual urls into the same pdf document using `PdfHtmlElement` approach.
 
 ```csharp
-	// create a new pdf document 
-    PdfDocument doc = new PdfDocument();
+// create a new pdf document 
+PdfDocument doc = new PdfDocument();
 
-    // add a new page to the document
-    PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-    // add the first url
-    PdfHtmlElement html1 = new PdfHtmlElement(url1);
-    PdfRenderingResult result = page.Add(html1);
+// add the first url
+PdfHtmlElement html1 = new PdfHtmlElement(url1);
+PdfRenderingResult result = page.Add(html1);
 
-    // get the last page of the previous conversion
-    PdfPage page2 = doc.Pages[result.PdfPageLastIndex];
+// get the last page of the previous conversion
+PdfPage page2 = doc.Pages[result.PdfPageLastIndex];
 
-    // add the second url
-    PdfHtmlElement html2 = new PdfHtmlElement(result.PdfPageLastRectangle.Left, 
-        result.PdfPageLastRectangle.Bottom, url2);
-    result = page2.Add(html2);
+// add the second url
+PdfHtmlElement html2 = new PdfHtmlElement(result.PdfPageLastRectangle.Left, 
+    result.PdfPageLastRectangle.Bottom, url2);
+result = page2.Add(html2);
 
-    // get the last page of the previous conversion
-    PdfPage page3 = doc.Pages[result.PdfPageLastIndex];
+// get the last page of the previous conversion
+PdfPage page3 = doc.Pages[result.PdfPageLastIndex];
 
-    // add the third url
-    PdfHtmlElement html3 = new PdfHtmlElement(result.PdfPageLastRectangle.Left, 
-        result.PdfPageLastRectangle.Bottom, url3);
-    result = page3.Add(html3);
+// add the third url
+PdfHtmlElement html3 = new PdfHtmlElement(result.PdfPageLastRectangle.Left, 
+    result.PdfPageLastRectangle.Bottom, url3);
+result = page3.Add(html3);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' create a new pdf document 
-            Dim doc As New PdfDocument()
+' create a new pdf document 
+Dim doc As New PdfDocument()
 
-            ' add a new page to the document
-            Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-            ' add the first url
-            Dim html1 As New PdfHtmlElement(url1)
-            Dim result As PdfRenderingResult = page.Add(html1)
+' add the first url
+Dim html1 As New PdfHtmlElement(url1)
+Dim result As PdfRenderingResult = page.Add(html1)
 
-            ' get the last page of the previous conversion
-            Dim page2 As PdfPage = doc.Pages(result.PdfPageLastIndex)
+' get the last page of the previous conversion
+Dim page2 As PdfPage = doc.Pages(result.PdfPageLastIndex)
 
-            ' add the second url
-            Dim html2 As New PdfHtmlElement(result.PdfPageLastRectangle.Left, _
-                                            result.PdfPageLastRectangle.Bottom, url2)
-            result = page2.Add(html2)
+' add the second url
+Dim html2 As New PdfHtmlElement(result.PdfPageLastRectangle.Left, _
+                                result.PdfPageLastRectangle.Bottom, url2)
+result = page2.Add(html2)
 
-            ' get the last page of the previous conversion
-            Dim page3 As PdfPage = doc.Pages(result.PdfPageLastIndex)
+' get the last page of the previous conversion
+Dim page3 As PdfPage = doc.Pages(result.PdfPageLastIndex)
 
-            ' add the third url
-            Dim html3 As New PdfHtmlElement(result.PdfPageLastRectangle.Left, _
-                                            result.PdfPageLastRectangle.Bottom, url3)
-            result = page3.Add(html3)
+' add the third url
+Dim html3 As New PdfHtmlElement(result.PdfPageLastRectangle.Left, _
+                                result.PdfPageLastRectangle.Bottom, url3)
+result = page3.Add(html3)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Converting the current page
@@ -604,90 +604,90 @@ After a conversion, the generated PDF document can be saved on disk, can be sent
 This sample shows the simplest code that can be used to convert an url to pdf using SelectPdf Pdf Library for .NET and then email the generated PDF document as an attachment.
 
 ```csharp
-	// the message the application shows the user when it is done
-	string statusMessage;
+// the message the application shows the user when it is done
+string statusMessage;
 
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    try
-    {
-        // create a new pdf document converting an url
-        PdfDocument doc = converter.ConvertUrl(url);
+try
+{
+    // create a new pdf document converting an url
+    PdfDocument doc = converter.ConvertUrl(url);
 
-        // create memory stream to save PDF
-        MemoryStream pdfStream = new MemoryStream();
+    // create memory stream to save PDF
+    MemoryStream pdfStream = new MemoryStream();
 
-        // save pdf document into a MemoryStream
-        doc.Save(pdfStream);
+    // save pdf document into a MemoryStream
+    doc.Save(pdfStream);
 
-        // reset stream position
-        pdfStream.Position = 0;
+    // reset stream position
+    pdfStream.Position = 0;
 
-        // create email message
-        MailMessage message = new MailMessage();
-        message.From = new MailAddress("support@selectpdf.com");
-        message.To.Add(new MailAddress(emailAddress));
-        message.Subject = "SelectPdf Sample - Convert and Email as Attachment";
-        message.Body = "This email should have attached the PDF document " + 
-            "resulted from the conversion of the following url to pdf: " + 
-            url;
-        message.Attachments.Add(new Attachment(pdfStream, "Document.pdf"));
+    // create email message
+    MailMessage message = new MailMessage();
+    message.From = new MailAddress("support@selectpdf.com");
+    message.To.Add(new MailAddress(emailAddress));
+    message.Subject = "SelectPdf Sample - Convert and Email as Attachment";
+    message.Body = "This email should have attached the PDF document " + 
+        "resulted from the conversion of the following url to pdf: " + 
+        url;
+    message.Attachments.Add(new Attachment(pdfStream, "Document.pdf"));
 
-        // send email
-        new SmtpClient().Send(message);
+    // send email
+    new SmtpClient().Send(message);
 
-        // close pdf document
-        doc.Close();
+    // close pdf document
+    doc.Close();
 
-        statusMessage = "Email sent";
-    }
-    catch (Exception ex)
-    {
-        statusMessage = "An error occurred: " + ex.Message;
-    }
+    statusMessage = "Email sent";
+}
+catch (Exception ex)
+{
+    statusMessage = "An error occurred: " + ex.Message;
+}
 ```
 
 ```vbnet
-        	' the message the application shows the user when it is done
-        	Dim statusMessage As String
+' the message the application shows the user when it is done
+Dim statusMessage As String
 
-        	' instantiate a html to pdf converter object
-	        Dim converter As New HtmlToPdf()
-	
-	        Try
-	            ' create a new pdf document converting an url
-	            Dim doc As PdfDocument = converter.ConvertUrl(url)
-	
-	            ' create memory stream to save PDF
-	            Dim pdfStream As New MemoryStream()
-	
-	            ' save pdf document into a MemoryStream
-	            doc.Save(pdfStream)
-	
-	            ' reset stream position
-	            pdfStream.Position = 0
-	
-	            ' create email message
-	            Dim message As New MailMessage()
-	            message.From = New MailAddress("support@selectpdf.com")
-	            message.[To].Add(New MailAddress(emailAddress))
-	            message.Subject = "SelectPdf Sample - Convert and Email as Attachment"
-	            message.Body = "This email should have attached the PDF document " + _
-	                "resulted from the conversion of the following url to pdf: " + url
-	            message.Attachments.Add(New Attachment(pdfStream, "Document.pdf"))
-	
-	            ' send email
-	            Dim smtp As New SmtpClient()
-	            smtp.Send(message)
-	
-	            ' close pdf document
-	            doc.Close()
-	
-	            statusMessage = "Email sent"
-	        Catch ex As Exception
-	            statusMessage = "An error occurred: " + ex.Message
-	        End Try
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
+
+Try
+    ' create a new pdf document converting an url
+    Dim doc As PdfDocument = converter.ConvertUrl(url)
+
+    ' create memory stream to save PDF
+    Dim pdfStream As New MemoryStream()
+
+    ' save pdf document into a MemoryStream
+    doc.Save(pdfStream)
+
+    ' reset stream position
+    pdfStream.Position = 0
+
+    ' create email message
+    Dim message As New MailMessage()
+    message.From = New MailAddress("support@selectpdf.com")
+    message.[To].Add(New MailAddress(emailAddress))
+    message.Subject = "SelectPdf Sample - Convert and Email as Attachment"
+    message.Body = "This email should have attached the PDF document " + _
+        "resulted from the conversion of the following url to pdf: " + url
+    message.Attachments.Add(New Attachment(pdfStream, "Document.pdf"))
+
+    ' send email
+    Dim smtp As New SmtpClient()
+    smtp.Send(message)
+
+    ' close pdf document
+    doc.Close()
+
+    statusMessage = "Email sent"
+Catch ex As Exception
+    statusMessage = "An error occurred: " + ex.Message
+End Try
 ```
 
 ### Web.config Settings
@@ -695,14 +695,14 @@ This sample shows the simplest code that can be used to convert an url to pdf us
 Remember that System.Net.Mail only works if the SMTP settings are configured. Here is a sample configuration:
 
 ```xml
-		  <system.net>
-		    <mailSettings>
-		      <smtp from="test@foo.com">
-		        <network host="smtpserver1" port="25" userName="username"
-		                 password="secret" defaultCredentials="true" />
-		      </smtp>
-		    </mailSettings>
-		  </system.net>        
+<system.net>
+  <mailSettings>
+    <smtp from="test@foo.com">
+      <network host="smtpserver1" port="25" userName="username"
+               password="secret" defaultCredentials="true" />
+    </smtp>
+  </mailSettings>
+</system.net>
 ```
 
 ## Starting the conversion from JavaScript
@@ -724,6 +724,7 @@ Important:
 Below it's the html of a test page that waits for 3 seconds after it loads and then calls the javascript conversion method. Converting it in `HtmlToPdfStartupMode.Manual` mode will display the time elapsed. Converting it in `HtmlToPdfStartupMode.Automatic` mode will not show that 3 seconds time interval.
 
 ```html
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -787,43 +788,43 @@ Below it's the html of a test page that waits for 3 seconds after it loads and t
 This sample code shows how to manually start the html to pdf conversion of the Select.Pdf Library for .NET using a Javascript call. The *url* parameter points to the page above.
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // set startup mode
-    converter.Options.StartupMode = HtmlToPdfStartupMode.Manual;
+// set startup mode
+converter.Options.StartupMode = HtmlToPdfStartupMode.Manual;
 
-    // set timeout
-    converter.Options.NavigationTimeout = 10;
+// set timeout
+converter.Options.NavigationTimeout = 10;
 
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' set startup mode
-    converter.Options.StartupMode = HtmlToPdfStartupMode.Manual
+' set startup mode
+converter.Options.StartupMode = HtmlToPdfStartupMode.Manual
 
-    ' set timeout
-    converter.Options.NavigationTimeout = 10
+' set timeout
+converter.Options.NavigationTimeout = 10
 
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Conversion delay and timeouts
@@ -841,49 +842,49 @@ By default, a navigation timeout raises an exception and no document is produced
 This sample code shows how the html to pdf converter can be used to convert a web page to pdf using Select.Pdf Pdf Library for .NET and how to set the conversion delay and timeout properties.
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // specify the number of seconds the conversion is delayed
-    converter.Options.ConversionDelay = 2;
+// specify the number of seconds the conversion is delayed
+converter.Options.ConversionDelay = 2;
 
-    // set the page timeout (in seconds)
-    converter.Options.NavigationTimeout = 30;
+// set the page timeout (in seconds)
+converter.Options.NavigationTimeout = 30;
 
-    // render the page instead of raising an exception if the timeout expires
-    converter.Options.RenderPageOnTimeout = true;
+// render the page instead of raising an exception if the timeout expires
+converter.Options.RenderPageOnTimeout = true;
 
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' specify the number of seconds the conversion is delayed
-    converter.Options.ConversionDelay = 2
+' specify the number of seconds the conversion is delayed
+converter.Options.ConversionDelay = 2
 
-    ' set the page timeout (in seconds)
-    converter.Options.NavigationTimeout = 30
+' set the page timeout (in seconds)
+converter.Options.NavigationTimeout = 30
 
-    ' render the page instead of raising an exception if the timeout expires
-    converter.Options.RenderPageOnTimeout = True
+' render the page instead of raising an exception if the timeout expires
+converter.Options.RenderPageOnTimeout = True
 
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Page settings
@@ -894,7 +895,7 @@ Select.Pdf Html to Pdf Converter can be used to control how the pdf pages look l
 - Page orientation
 - Page margins
 
-**Page size**
+### Page size
 
 SelectPdf supports the following standard page sizes:
 
@@ -905,7 +906,7 @@ SelectPdf supports the following standard page sizes:
 
 To set the page size for the html to pdf conversion, the `HtmlToPdfOptions.PdfPageSize` property of the `HtmlToPdfOptions` object needs to be used. Pages with custom page sizes can also be created using Select.Pdf. A custom page size can be set using the `HtmlToPdfOptions.PdfPageCustomSize` property.
 
-**Page orientation**
+### Page orientation
 
 SelectPdf supports the following page orientations:
 
@@ -914,7 +915,7 @@ SelectPdf supports the following page orientations:
 
 To set the page orientation for the html to pdf conversion, the `HtmlToPdfOptions.PdfPageOrientation` property of the `HtmlToPdfOptions` object needs to be used.
 
-**Page margins**
+### Page margins
 
 Page margins can be set using `HtmlToPdfOptions.MarginLeft`, `HtmlToPdfOptions.MarginRight`, `HtmlToPdfOptions.MarginTop`, `HtmlToPdfOptions.MarginBottom` properties of the `HtmlToPdfOptions` object.
 
@@ -923,58 +924,58 @@ Page margins can be set using `HtmlToPdfOptions.MarginLeft`, `HtmlToPdfOptions.M
 This sample code shows how to use Select.Pdf html to pdf converter to convert an url to pdf, also setting page size, orientation and margins.
 
 ```csharp
-			// instantiate a html to pdf converter object
-            HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-            // set converter options
-            converter.Options.PdfPageSize = PdfPageSize.A4;
-            converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
-            converter.Options.MarginLeft = 10;
-            converter.Options.MarginRight = 10;
-            converter.Options.MarginTop = 20;
-            converter.Options.MarginBottom = 20;
+// set converter options
+converter.Options.PdfPageSize = PdfPageSize.A4;
+converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+converter.Options.MarginLeft = 10;
+converter.Options.MarginRight = 10;
+converter.Options.MarginTop = 20;
+converter.Options.MarginBottom = 20;
 
-            // create a new pdf document converting an url
-            PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-            // save pdf document
-            doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-            // close pdf document
-            doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-			' instantiate a html to pdf converter object
-            Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-            ' set converter options
-            converter.Options.PdfPageSize = PdfPageSize.A4
-            converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait
-            converter.Options.MarginLeft = 10
-            converter.Options.MarginRight = 10
-            converter.Options.MarginTop = 20
-            converter.Options.MarginBottom = 20
+' set converter options
+converter.Options.PdfPageSize = PdfPageSize.A4
+converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait
+converter.Options.MarginLeft = 10
+converter.Options.MarginRight = 10
+converter.Options.MarginTop = 20
+converter.Options.MarginBottom = 20
 
-            ' create a new pdf document converting an url
-            Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-            ' save pdf document
-            doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-            ' close pdf document
-            doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Resizing content during conversion
 
 Html pages that are converted to pdf and pdf pages in the generated document usually do not have the same size. Because of that, Select.Pdf Library needs to perform some operations on the content rendered from the web page to be able to display it in the pdf page.
 
-**Pdf Page Size**
+### Pdf Page Size
 
 The size of the pdf pages can be specified using `HtmlToPdfOptions.PdfPageSize` property of the `HtmlToPdfOptions` object. More details about this in the following section: "Page settings" (html-to-pdf.md).
 
-**Web Page Size**
+### Web Page Size
 
 Select.Pdf Html to Pdf Converter has an internal browser that renders the web page just like a regular browser. There are some properties that control how the web page will look in the internal browser:
 
@@ -991,7 +992,7 @@ Select.Pdf Html to Pdf Converter has an internal browser that renders the web pa
   A fixed size taller than the space available on the pdf page is spread over as many pages as it needs - it is not squeezed onto a single page. Every page but the last is a full page, and the last one is cut at the height asked for: the content below it is removed from the document, not hidden. A line of text is never cut: when one crosses that height the last page ends above it, so it can be a line shorter than the height asked for. Bookmarks, mapped web elements, links and internal destinations follow the same height.
   Note: `HtmlToPdfOptions.WebPageFixedSize` needs a page height set with `HtmlToPdfOptions.WebPageHeight` - there is no size to fix the browser at otherwise. With the default value (0) this property is ignored. A `HtmlToPdfOptions.PageRanges` set alongside it is honoured within the fixed size.
 
-**Content Resizing**
+### Content Resizing
 
 Because a web page generally has a different width compared with a standard pdf page, the content is scaled to fit the pdf page. As an example, most web sites are optimized for browsers with page widths of at least 1024px or 1280px. A standard A4 page has 595 x 842 points. 1 point is 1/72 inch. 1 pixel is 1/96 inch. This means that an A4 page width is 793px. Because the web page width (1024px or more) is larger than this pdf page width, the rendered content is scaled down to fit the pdf page width.
 
@@ -1006,51 +1007,51 @@ The width applies with print media as well, so a page that brings its own print 
 The following sample code shows the simplest code that can be used to convert an url to pdf:
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
-    
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
+
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
-    
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
+
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 ```
 
 The above code is equivalent with the following sample code where the default values are explicitly specified:
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
-    
-    // set converter options
-    converter.Options.PdfPageSize = PdfPageSize.A4;
-    converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    converter.Options.WebPageWidth = 1024;
-    converter.Options.WebPageHeight = 0;
-    converter.Options.WebPageFixedSize = false;
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// set converter options
+converter.Options.PdfPageSize = PdfPageSize.A4;
+converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+
+converter.Options.WebPageWidth = 1024;
+converter.Options.WebPageHeight = 0;
+converter.Options.WebPageFixedSize = false;
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
-    
-    ' set converter options
-    converter.Options.PdfPageSize = PdfPageSize.A4
-    converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    converter.Options.WebPageWidth = 1024
-    converter.Options.WebPageHeight = 0
-    converter.Options.WebPageFixedSize = False
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' set converter options
+converter.Options.PdfPageSize = PdfPageSize.A4
+converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait
+
+converter.Options.WebPageWidth = 1024
+converter.Options.WebPageHeight = 0
+converter.Options.WebPageFixedSize = False
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 ```
 
 ## CSS media types
@@ -1064,37 +1065,37 @@ Media type can be set using the `HtmlToPdfOptions.CssMediaType` property of the 
 This sample code shows how to convert an url to pdf using Select.Pdf Pdf Library for .NET and also use a media type during the conversion.
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // set css @media print
-    converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print;
+// set css @media print
+converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print;
 
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' set css @media print
-    converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print
+' set css @media print
+converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print
 
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Partial page conversion
@@ -1238,37 +1239,37 @@ In other words, the elements that will be excluded are defined using CSS selecto
 This sample code shows how the html to pdf converter can exclude all images when the web page is converted to pdf.
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // exclude all images
-    converter.Options.HiddenWebElements.CssSelectors = new string[] {"img"};
+// exclude all images
+converter.Options.HiddenWebElements.CssSelectors = new string[] {"img"};
 
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' exclude all images
-    converter.Options.HiddenWebElements.CssSelectors = New String() {"img"}
+' exclude all images
+converter.Options.HiddenWebElements.CssSelectors = New String() {"img"}
 
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Page breaks
@@ -1279,37 +1280,37 @@ By default, the html to pdf converter offered by Select.Pdf Library automaticall
 
 Content pagination can be controlled from HTML/CSS. CSS styles can be used to manually change the pagination:
 
-**page-break-before: always**
+#### page-break-before: always
 
 The "page-break-before" property sets whether a page break should occur BEFORE a specified element. The element can be anything (image, table, table row, div, text, etc).
 
 ```html
-			<div style="page-break-before: always">
-			A page break will be inserted BEFORE this div element
-			because "page-break-before" property is set to "always".
-			</div>        	
+<div style="page-break-before: always">
+A page break will be inserted BEFORE this div element
+because "page-break-before" property is set to "always".
+</div>
 ```
 
-**page-break-after: always**
+#### page-break-after: always
 
 The "page-break-after" property sets whether a page break should occur AFTER a specified element. The element can be anything (image, table, table row, div, text, etc).
 
 ```html
-			<div style="page-break-after: always">
-			A page break will be inserted AFTER this div element
-			because "page-break-after" property is set to "always".
-			</div>        	
+<div style="page-break-after: always">
+A page break will be inserted AFTER this div element
+because "page-break-after" property is set to "always".
+</div>
 ```
 
-**page-break-inside: avoid**
+#### page-break-inside: avoid
 
 The "page-break-inside" property sets whether a page break is allowed INSIDE a specified element. The element can be anything (image, table, table row, div, text, etc).
 
 ```html
-			<div style="page-break-inside: avoid">
-			The content of this div element will not be split into several pages (if possible)
-			because "page-break-inside" property is set to "avoid".
-			</div>        	
+<div style="page-break-inside: avoid">
+The content of this div element will not be split into several pages (if possible)
+because "page-break-inside" property is set to "avoid".
+</div>
 ```
 
 ## Repeating table headers
@@ -1325,6 +1326,7 @@ The header is repeated when the page is rendered with the print media type, so a
 The following html table will repeat the table header at the top of each pdf page when converted to pdf.
 
 ```html
+
 <table>
   <thead style="display: table-header-group;">
    <tr>
@@ -1355,37 +1357,37 @@ The following html table will repeat the table header at the top of each pdf pag
 The converter renders the page with the print media type, so the header repeats on every page.
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // repeat the table headers: render with css @media print
-    converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print;
+// repeat the table headers: render with css @media print
+converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print;
 
-    // create a new pdf document converting the html
-    PdfDocument doc = converter.ConvertHtmlString(html);
+// create a new pdf document converting the html
+PdfDocument doc = converter.ConvertHtmlString(html);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' repeat the table headers: render with css @media print
-    converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print
+' repeat the table headers: render with css @media print
+converter.Options.CssMediaType = HtmlToPdfCssMediaType.Print
 
-    ' create a new pdf document converting the html
-    Dim doc As PdfDocument = converter.ConvertHtmlString(html)
+' create a new pdf document converting the html
+Dim doc As PdfDocument = converter.ConvertHtmlString(html)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## PDF document properties
@@ -1409,53 +1411,53 @@ To access the web page properties, after the conversion, the `HtmlToPdf` object 
 This sample code shows how to convert a web page to pdf using Select.Pdf and set the basic pdf document information (title, subject, keywords) with the values taken from the webpage.
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-    // get conversion result (contains document info from the web page)
-    HtmlToPdfResult result = converter.ConversionResult;
+// get conversion result (contains document info from the web page)
+HtmlToPdfResult result = converter.ConversionResult;
 
-    // set the document properties
-    doc.DocumentInformation.Title = result.WebPageInformation.Title;
-    doc.DocumentInformation.Subject = result.WebPageInformation.Description;
-    doc.DocumentInformation.Keywords = result.WebPageInformation.Keywords;
+// set the document properties
+doc.DocumentInformation.Title = result.WebPageInformation.Title;
+doc.DocumentInformation.Subject = result.WebPageInformation.Description;
+doc.DocumentInformation.Keywords = result.WebPageInformation.Keywords;
 
-    doc.DocumentInformation.Author = "Select.Pdf Samples";
-    doc.DocumentInformation.CreationDate = DateTime.Now;
+doc.DocumentInformation.Author = "Select.Pdf Samples";
+doc.DocumentInformation.CreationDate = DateTime.Now;
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' get conversion result (contains document info from the web page)
-    Dim result As HtmlToPdfResult = converter.ConversionResult
+' get conversion result (contains document info from the web page)
+Dim result As HtmlToPdfResult = converter.ConversionResult
 
-    ' set the document properties
-    doc.DocumentInformation.Title = result.WebPageInformation.Title
-    doc.DocumentInformation.Subject = result.WebPageInformation.Description
-    doc.DocumentInformation.Keywords = result.WebPageInformation.Keywords
+' set the document properties
+doc.DocumentInformation.Title = result.WebPageInformation.Title
+doc.DocumentInformation.Subject = result.WebPageInformation.Description
+doc.DocumentInformation.Keywords = result.WebPageInformation.Keywords
 
-    doc.DocumentInformation.Author = "Select.Pdf Samples"
-    doc.DocumentInformation.CreationDate = DateTime.Now
+doc.DocumentInformation.Author = "Select.Pdf Samples"
+doc.DocumentInformation.CreationDate = DateTime.Now
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Viewer preferences
@@ -1481,57 +1483,57 @@ The following customizations can be done using the `HtmlToPdfViewerPreferences` 
 This sample code shows how to convert from html to pdf using Select.Pdf and set the pdf viewer preferences.
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // set converter options
-    converter.Options.ViewerPreferences.CenterWindow = true;
-    converter.Options.ViewerPreferences.DisplayDocTitle = true;
-    converter.Options.ViewerPreferences.FitWindow = true;
-    converter.Options.ViewerPreferences.HideMenuBar = true;
-    converter.Options.ViewerPreferences.HideToolbar = true;
-    converter.Options.ViewerPreferences.HideWindowUI = true;
+// set converter options
+converter.Options.ViewerPreferences.CenterWindow = true;
+converter.Options.ViewerPreferences.DisplayDocTitle = true;
+converter.Options.ViewerPreferences.FitWindow = true;
+converter.Options.ViewerPreferences.HideMenuBar = true;
+converter.Options.ViewerPreferences.HideToolbar = true;
+converter.Options.ViewerPreferences.HideWindowUI = true;
 
-    converter.Options.ViewerPreferences.PageLayout = PdfViewerPageLayout.SinglePage;
-    converter.Options.ViewerPreferences.PageMode = PdfViewerPageMode.UseNone;
-    converter.Options.ViewerPreferences.NonFullScreenPageMode =
-        PdfViewerFullScreenExitMode.UseNone;
+converter.Options.ViewerPreferences.PageLayout = PdfViewerPageLayout.SinglePage;
+converter.Options.ViewerPreferences.PageMode = PdfViewerPageMode.UseNone;
+converter.Options.ViewerPreferences.NonFullScreenPageMode =
+    PdfViewerFullScreenExitMode.UseNone;
 
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' set converter options
-    converter.Options.ViewerPreferences.CenterWindow = True
-    converter.Options.ViewerPreferences.DisplayDocTitle = True
-    converter.Options.ViewerPreferences.FitWindow = True
-    converter.Options.ViewerPreferences.HideMenuBar = True
-    converter.Options.ViewerPreferences.HideToolbar = True
-    converter.Options.ViewerPreferences.HideWindowUI = True
+' set converter options
+converter.Options.ViewerPreferences.CenterWindow = True
+converter.Options.ViewerPreferences.DisplayDocTitle = True
+converter.Options.ViewerPreferences.FitWindow = True
+converter.Options.ViewerPreferences.HideMenuBar = True
+converter.Options.ViewerPreferences.HideToolbar = True
+converter.Options.ViewerPreferences.HideWindowUI = True
 
-    converter.Options.ViewerPreferences.PageLayout = PdfViewerPageLayout.SinglePage
-    converter.Options.ViewerPreferences.PageMode = PdfViewerPageMode.UseNone
-    converter.Options.ViewerPreferences.NonFullScreenPageMode =
-        PdfViewerFullScreenExitMode.UseNone
+converter.Options.ViewerPreferences.PageLayout = PdfViewerPageLayout.SinglePage
+converter.Options.ViewerPreferences.PageMode = PdfViewerPageMode.UseNone
+converter.Options.ViewerPreferences.NonFullScreenPageMode =
+    PdfViewerFullScreenExitMode.UseNone
 
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## Security settings
@@ -1556,55 +1558,55 @@ Setting a password is enough to encrypt the document with AES-256: that is the d
 This sample code shows how to convert from html to pdf using Select.Pdf, how to set a password to be able to view or modify the document and also specify user permissions for the pdf document (if the user can print, copy content, fill forms, modify, etc).
 
 ```csharp
-	// instantiate a html to pdf converter object
-    HtmlToPdf converter = new HtmlToPdf();
+// instantiate a html to pdf converter object
+HtmlToPdf converter = new HtmlToPdf();
 
-    // set document passwords
-    converter.Options.SecurityOptions.OwnerPassword = "test1";
-    converter.Options.SecurityOptions.UserPassword = "test2";
+// set document passwords
+converter.Options.SecurityOptions.OwnerPassword = "test1";
+converter.Options.SecurityOptions.UserPassword = "test2";
 
-    //set document permissions
-    converter.Options.SecurityOptions.CanAssembleDocument = false;
-    converter.Options.SecurityOptions.CanCopyContent = true;
-    converter.Options.SecurityOptions.CanEditAnnotations = true;
-    converter.Options.SecurityOptions.CanEditContent = true;
-    converter.Options.SecurityOptions.CanFillFormFields = true;
-    converter.Options.SecurityOptions.CanPrint = true;
-    
-    // create a new pdf document converting an url
-    PdfDocument doc = converter.ConvertUrl(url);
+//set document permissions
+converter.Options.SecurityOptions.CanAssembleDocument = false;
+converter.Options.SecurityOptions.CanCopyContent = true;
+converter.Options.SecurityOptions.CanEditAnnotations = true;
+converter.Options.SecurityOptions.CanEditContent = true;
+converter.Options.SecurityOptions.CanFillFormFields = true;
+converter.Options.SecurityOptions.CanPrint = true;
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// create a new pdf document converting an url
+PdfDocument doc = converter.ConvertUrl(url);
 
-    // close pdf document
-    doc.Close();
+// save pdf document
+doc.Save("Sample.pdf");
+
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' instantiate a html to pdf converter object
-    Dim converter As New HtmlToPdf()
+' instantiate a html to pdf converter object
+Dim converter As New HtmlToPdf()
 
-    ' set document passwords
-    converter.Options.SecurityOptions.OwnerPassword = "test1"
-    converter.Options.SecurityOptions.UserPassword = "test2"
+' set document passwords
+converter.Options.SecurityOptions.OwnerPassword = "test1"
+converter.Options.SecurityOptions.UserPassword = "test2"
 
-    'set document permissions
-    converter.Options.SecurityOptions.CanAssembleDocument = False
-    converter.Options.SecurityOptions.CanCopyContent = True
-    converter.Options.SecurityOptions.CanEditAnnotations = True
-    converter.Options.SecurityOptions.CanEditContent = True
-    converter.Options.SecurityOptions.CanFillFormFields = True
-    converter.Options.SecurityOptions.CanPrint = True
-    
-    ' create a new pdf document converting an url
-    Dim doc As PdfDocument = converter.ConvertUrl(url)
+'set document permissions
+converter.Options.SecurityOptions.CanAssembleDocument = False
+converter.Options.SecurityOptions.CanCopyContent = True
+converter.Options.SecurityOptions.CanEditAnnotations = True
+converter.Options.SecurityOptions.CanEditContent = True
+converter.Options.SecurityOptions.CanFillFormFields = True
+converter.Options.SecurityOptions.CanPrint = True
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' create a new pdf document converting an url
+Dim doc As PdfDocument = converter.ConvertUrl(url)
 
-    ' close pdf document
-    doc.Close()
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document
+doc.Close()
 ```
 
 ## HTML forms to PDF form fields
@@ -1685,83 +1687,23 @@ In a tagged document (`HtmlToPdfOptions.Tagged`, PDF/UA, PDF/A level A) every fi
 
 Select.Pdf Html to Pdf Converter for .NET offers a lot of customization options. Most of them were described in our developer's guide.
 
-Here is a full list with all **html to pdf converter** options:
+Here is a full list with all **html to pdf converter** options, by subject:
+
+### Page size and layout
 
 `HtmlToPdf.Header` - controls the properties of the custom header of the generated pdf document. This was covered in more details in "Headers and footers in HTML to PDF" (page-setup-headers-footers.md) section.
 
 `HtmlToPdf.Footer` - controls the properties of the custom footer of the generated pdf document. This was covered in more details in "Headers and footers in HTML to PDF" (page-setup-headers-footers.md) section.
 
-`HtmlToPdfOptions.AccessibilityStandard` - The accessibility standard the generated document declares: PDF/UA-1 or PDF/UA-2 (`PdfUAStandard`). Declaring a standard turns tagging on; PDF/UA-2 also writes the document as PDF 2.0. This was covered in more details in the "Accessible PDF and PDF/A" (accessibility-and-compliance.md) section.
-
 `HtmlToPdfOptions.AllowContentHeightResize` - Controls whether the page the content ends on is shortened to where the content ends. The default value is True. Set it to False to keep every page of the rendered document at its full height.
-
-`HtmlToPdfOptions.Authentication` - Handles authentication options if the web page being converted requires authentication. This was covered in more details in "Web page authentication" (web-elements-and-auth.md) section.
-
-`HtmlToPdfOptions.ChromiumEnginePath` - The full path of the folder containing the Chromium engine binaries. Set it only when the engine is not deployed next to the application. This was covered in more details in the "The Chromium engine" (installation-and-deployment.md) section.
-
-`HtmlToPdfOptions.ChromiumEngineTemporaryFilesPath` - A folder where the Chromium engine writes its temporary files. When not set, the system temporary folder is used. The application needs write permissions on this folder.
-
-`HtmlToPdfOptions.ClickElementsSelectors` - CSS selectors of web page elements that are clicked before the page is converted, for example the close button of a cookie banner that covers the content.
-
-`HtmlToPdfOptions.ClickElementsDelayBefore` - The delay in milliseconds before each element click. The default value is 20 ms.
-
-`HtmlToPdfOptions.ClickElementsDelayAfter` - The delay in milliseconds after each element click. The default value is 200 ms.
-
-`HtmlToPdfOptions.ColorSpace` - Gets or sets the color space of the generated pdf document. This is an instance of `PdfColorSpace` type.
-
-`HtmlToPdfOptions.ConversionDelay` - An additional time in seconds the converter waits after the web page has loaded, before it is rendered. This was covered in more details in "Conversion delay and timeouts" (html-to-pdf.md) section.
-
-`HtmlToPdfOptions.CreateFormFields` - Converts the controls of the html forms into fillable PDF form fields. This was covered in more details in "HTML forms to PDF form fields" (html-to-pdf.md) section.
-
-`HtmlToPdfOptions.CssMediaType` - Indicates what css styles are used when the web page is rendered. This was covered in more details in "CSS media types" (html-to-pdf.md) section.
-
-`HtmlToPdfOptions.CustomCSS` - CSS styles injected into the converted page, for example to hide an element or to change fonts for print.
-
-`HtmlToPdfOptions.DenyLocalFileAccess` - Prevents the converted page from loading local files. The default value is False. Set it to True when converting HTML that is not trusted; see "Security recommendations" (troubleshooting-and-security.md).
 
 `HtmlToPdfOptions.DisplayFooter` - Controls if a custom footer is displayed in the generated pdf document. This was covered in more details in "Headers and footers in HTML to PDF" (page-setup-headers-footers.md) section.
 
 `HtmlToPdfOptions.DisplayHeader` - Controls if a custom header is displayed in the generated pdf document. This was covered in more details in "Headers and footers in HTML to PDF" (page-setup-headers-footers.md) section.
 
-The converter always embeds the fonts needed to render the document, so the text displays correctly on any machine even when those fonts are not installed.
-
-`HtmlToPdfOptions.DrawBackground` - Controls whether the web page background is rendered in the pdf document. The default value is True.
-
-`HtmlToPdfOptions.EnableOfflineMode` - Puts the internal browser in offline mode, so every network request made by the page fails. Useful to convert an HTML string that must not reach the network. The default value is False.
-
-`HtmlToPdfOptions.ExternalLinksEnabled` - Controls the rendering of external hyperlinks in pdf. This was covered in more details in "Links in HTML to PDF" (links-bookmarks-toc.md) section.
-
-`HtmlToPdfOptions.ForceOutOfProcess` - Runs this conversion in a separate engine process, whatever `GlobalProperties.ChromiumEngineHostMode` selects for the application. Use it to isolate a page that is not trusted, or likely to crash or hang the browser, or to give one conversion settings the in-process host fixes for the whole process at its first conversion (WebGL, the proxy). It costs the start of an engine process. The default value is False.
-
 `HtmlToPdfOptions.GenerateSinglePagePdf` - Generates a single-page pdf document: the page is resized to hold the whole content. The default value is False.
 
-`HtmlToPdfOptions.HiddenWebElements` - Gets a reference to the object that controls the visibility of some web elements in the generated pdf document. This was covered in more details in "Excluding elements" (html-to-pdf.md) section.
-
-`HtmlToPdfOptions.HttpCookies` - Gets the collection of custom HTTP cookies used for the conversion. This was covered in more details in "HTTP cookies" (web-elements-and-auth.md) section.
-
-`HtmlToPdfOptions.HttpHeaders` - Get the collection of custom HTTP headers used for the conversion. This was covered in more details in "HTTP headers" (web-elements-and-auth.md) section.
-
-`HtmlToPdfOptions.HttpPostParameters` - Gets the collection of custom HTTP POST parameters used for the conversion.. This was covered in more details in "HTTP POST requests" (web-elements-and-auth.md) section.
-
-`HtmlToPdfOptions.InternalLinksEnabled` - Controls the conversion of internal html links to internal pdf links. This was covered in more details in "Links in HTML to PDF" (links-bookmarks-toc.md) section.
-
-`HtmlToPdfOptions.JavaScriptEnabled` - Enable scripts when rendering the url or html string.
-
-`HtmlToPdfOptions.JpegCompressionEnabled` - Gets or sets a flag indicating if the JPEG compression is enabled or not for the images in the generated pdf document.
-
-`HtmlToPdfOptions.JpegCompressionLevel` - Gets or sets the compression level of images in the generated pdf document.
-
-`HtmlToPdfOptions.ImagesMaxResolution` - The highest resolution, in pixels per inch, an image is kept at: images drawn at a higher resolution are resampled down to it. The default value is 0, which keeps every image at its resolution.
-
-`HtmlToPdfOptions.LazyImagesLoadingEnabled` - Scrolls through the page before it is converted, so images and content that load when they are scrolled into view are present in the pdf document. The default value is True.
-
-`HtmlToPdfOptions.LazyImagesLoadingDelay` - The delay in milliseconds after each scroll step when `HtmlToPdfOptions.LazyImagesLoadingEnabled` is True. The default value is 40 ms. Increase it for pages whose lazy content loads slowly.
-
-`HtmlToPdfOptions.LFN` - The path of a diagnostic log file written during the conversion. When not set, no log is written.
-
-`HtmlToPdfOptions.LoginOptions` - Fills in and submits a login form before the page is converted. This was covered in more details in "Web page authentication" (web-elements-and-auth.md) section.
-
-`HtmlToPdfOptions.ManagedContentTrimming` - Gets or sets whether the library decides where the rendered content ends on each page. The default value is True. With True, the page the content ends on is drawn only down to where the content ends, on a document of any length. With False, the page is shortened to the content only when the whole content fits on one page. Set it to False if pages are cut in the wrong place.
+`HtmlToPdfOptions.ManagedContentTrimming` - Gets or sets whether the library decides where the rendered content ends on each page. The default value is True. With True, the page the content ends on is drawn only down to where the content ends, on a document of any length. With False, the page is shortened to the content only when the whole content fits on one page. Set it to False to let the rendering engine decide where the content ends.
 
 `HtmlToPdfOptions.ManagedContentTrimmingMode` - Gets or sets how the rendering engine finds where the content ends when `HtmlToPdfOptions.ManagedContentTrimming` is True. The default value is `ManagedContentTrimmingMode.Ink`. With `ManagedContentTrimmingMode.Ink`, the engine measures where the last painted content is after the page is printed, so everything the page paints is kept. With `ManagedContentTrimmingMode.Marker`, the content ends where the page's layout ends, the way earlier versions cut; something painted outside the layout, such as a shadow or a positioned decoration, can be cut.
 
@@ -1773,25 +1715,111 @@ The converter always embeds the fonts needed to render the document, so the text
 
 `HtmlToPdfOptions.MarginTop` - The top margin of the pdf document. The margin is specified in points. 1 point is 1/72 inch.
 
-`HtmlToPdfOptions.MaxConversionTime` - The time in seconds allowed for rendering the pdf document after the page has loaded. The default value is 60 seconds. `HtmlToPdfOptions.NavigationTimeout` limits the page load before it.
-
-`HtmlToPdfOptions.MaximumConcurrentConversions` - This parameter must be set before the first conversion performed by the application. When this property is set with a negative value or zero, the concurrency level is maximum. The default value is 8. If the maximum number is reached and more conversion requests arrive, they wait in a queue for an available spot and are served in the order they arrived. The limit applies whichever way the engine is hosted (see `GlobalProperties.ChromiumEngineHostMode`).
-
-`HtmlToPdfOptions.NavigationTimeout` - The time in seconds the converter waits for the web page to load. This was covered in more details in "Conversion delay and timeouts" (html-to-pdf.md) section.
-
 `HtmlToPdfOptions.PageRanges` - Restricts the generated pdf document to some of the rendered pages, for example "1", "2-4" or "1-3,5,7-". An empty string (the default) keeps all pages.
-
-`HtmlToPdfOptions.PdfBookmarkOptions` - Gets a reference to the object that controls the bookmarks creation for the generated pdf document. This was covered in more details in "Automatic bookmarks" (links-bookmarks-toc.md) section.
-
-`HtmlToPdfOptions.PdfCompressionLevel` - This property controls the compression level of the generated pdf document.
-
-`HtmlToPdfOptions.PdfDocumentInformation` - Gets a reference to the object that specifies the generated pdf document properties. This was covered in more details in "PDF document properties" (html-to-pdf.md) section.
 
 `HtmlToPdfOptions.PdfPageCustomSize` - This property can be used to specify a custom pdf document page size. This was covered in more details in "Page settings" (html-to-pdf.md) section.
 
 `HtmlToPdfOptions.PdfPageOrientation` - This property controls the page orientation of the generated pdf document pages. This was covered in more details in "Page settings" (html-to-pdf.md) section.
 
 `HtmlToPdfOptions.PdfPageSize` - This property controls the size of the generated document pages. This was covered in more details in "Page settings" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.WebPageFixedSize` - Controls whether the content below `HtmlToPdfOptions.WebPageHeight` is left out of the generated pdf document. This was covered in more details in "Resizing content during conversion" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.WebPageHeight` - Gets or sets the height of the converted web page as it would appear in the internal browser used to render the html. This was covered in more details in "Resizing content during conversion" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.WebPageWidth` - Gets or sets the width of the converted web page as it would appear in the internal browser used to render the html. This was covered in more details in "Resizing content during conversion" (html-to-pdf.md) section.
+
+### Loading and rendering the page
+
+`HtmlToPdfOptions.ClickElementsSelectors` - CSS selectors of web page elements that are clicked before the page is converted, for example the close button of a cookie banner that covers the content.
+
+`HtmlToPdfOptions.ClickElementsDelayBefore` - The delay in milliseconds before each element click. The default value is 20 ms.
+
+`HtmlToPdfOptions.ClickElementsDelayAfter` - The delay in milliseconds after each element click. The default value is 200 ms.
+
+`HtmlToPdfOptions.ConversionDelay` - An additional time in seconds the converter waits after the web page has loaded, before it is rendered. This was covered in more details in "Conversion delay and timeouts" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.CssMediaType` - Indicates what css styles are used when the web page is rendered. This was covered in more details in "CSS media types" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.CustomCSS` - CSS styles injected into the converted page, for example to hide an element or to change fonts for print.
+
+`HtmlToPdfOptions.DrawBackground` - Controls whether the web page background is rendered in the pdf document. The default value is True.
+
+`HtmlToPdfOptions.EnableOfflineMode` - Puts the internal browser in offline mode, so every network request made by the page fails. Useful to convert an HTML string that must not reach the network. The default value is False.
+
+`HtmlToPdfOptions.HiddenWebElements` - Gets a reference to the object that controls the visibility of some web elements in the generated pdf document. This was covered in more details in "Excluding elements" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.JavaScriptEnabled` - Enable scripts when rendering the url or html string.
+
+`HtmlToPdfOptions.LazyImagesLoadingEnabled` - Scrolls through the page before it is converted, so images and content that load when they are scrolled into view are present in the pdf document. The default value is True.
+
+`HtmlToPdfOptions.LazyImagesLoadingDelay` - The delay in milliseconds after each scroll step when `HtmlToPdfOptions.LazyImagesLoadingEnabled` is True. The default value is 40 ms. Increase it for pages whose lazy content loads slowly.
+
+`HtmlToPdfOptions.MaxConversionTime` - The time in seconds allowed for rendering the pdf document after the page has loaded. The default value is 60 seconds. `HtmlToPdfOptions.NavigationTimeout` limits the page load before it.
+
+`HtmlToPdfOptions.NavigationTimeout` - The time in seconds the converter waits for the web page to load. This was covered in more details in "Conversion delay and timeouts" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.PostLoadingScript` - JavaScript code injected into the converted page and run after the page has loaded and after its own scripts.
+
+`HtmlToPdfOptions.PostLoadingScriptDelayAfter` - The delay in milliseconds after the post-loading script runs. The default value is 20 ms.
+
+`HtmlToPdfOptions.RenderPageOnTimeout` - Renders the page as far as it has loaded when `HtmlToPdfOptions.NavigationTimeout` expires, instead of failing the conversion. The default value is False. This was covered in more details in "Conversion delay and timeouts" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.StartupMode` - Use this property to specify how the conversion starts. This was covered in more details in "Starting the conversion from JavaScript" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.StartupScript` - Use this property to specify some JavaScript code that will be injected into the page that is converted.
+
+`HtmlToPdfOptions.VisibleWebElementSelector` - Use this property to convert only a certain section of the page, specified by a css selector. `HtmlToPdfOptions.VisibleWebElementId` is the obsolete form of the same option and accepts an element id only. This was covered in more details in "Partial page conversion" (html-to-pdf.md) section.
+
+`HtmlToPdfOptions.WebGlEnabled` - Gets or sets a flag indicating if WebGL is enabled in the internal browser. The default value is False; set it to True for pages that draw with WebGL. Turning it off makes conversions noticeably faster, at the cost of not being able to render WebGL content. This was covered in more details in "The Chromium engine" (installation-and-deployment.md) section.
+
+`HtmlToPdfOptions.WindowStatus` - When set, the converter waits until the page sets `window.status` to this value before converting it. If that does not happen before `HtmlToPdfOptions.NavigationTimeout` expires, the conversion fails with a navigation timeout.
+
+`HtmlToPdfOptions.WaitForWebFonts` - Waits up to 10 seconds for web fonts that are still loading before the page is printed, so text a script adds after the page has loaded is not printed in a fallback font. The default value is True. `PdfHtmlElement.WaitForWebFonts`, `PdfHtmlSection.WaitForWebFonts`, `HtmlToImage.WaitForWebFonts` and `HtmlToImageElement.WaitForWebFonts` do the same for the other html types.
+
+### Network and authentication
+
+`HtmlToPdfOptions.Authentication` - Handles authentication options if the web page being converted requires authentication. This was covered in more details in "Web page authentication" (web-elements-and-auth.md) section.
+
+`HtmlToPdfOptions.DenyLocalFileAccess` - Prevents the converted page from loading local files. The default value is False. Set it to True when converting HTML that is not trusted; see "Security recommendations" (troubleshooting-and-security.md).
+
+`HtmlToPdfOptions.HttpCookies` - Gets the collection of custom HTTP cookies used for the conversion. This was covered in more details in "HTTP cookies" (web-elements-and-auth.md) section.
+
+`HtmlToPdfOptions.HttpHeaders` - Get the collection of custom HTTP headers used for the conversion. This was covered in more details in "HTTP headers" (web-elements-and-auth.md) section.
+
+`HtmlToPdfOptions.HttpPostParameters` - Gets the collection of custom HTTP POST parameters used for the conversion.. This was covered in more details in "HTTP POST requests" (web-elements-and-auth.md) section.
+
+`HtmlToPdfOptions.LoginOptions` - Fills in and submits a login form before the page is converted. This was covered in more details in "Web page authentication" (web-elements-and-auth.md) section.
+
+`HtmlToPdfOptions.ProxyOptions` - Gets a reference to an object containing the proxy settings used to access the web page that is being converted. This was covered in more details in "Proxy servers" (web-elements-and-auth.md) section.
+
+`HtmlToPdfOptions.HttpCache` - Selects what the engine's HTTP cache keeps from this conversion for the next one: `HttpCacheMode.All` (the default) keeps everything, `HttpCacheMode.ThirdParty` keeps only resources from other sites than the converted page's own (fonts, style sheets and scripts served from content delivery networks, for example), and `HttpCacheMode.Clear` starts every conversion with an empty cache. Keeping the cache makes later conversions of pages that share resources faster. It applies when the engine runs inside the application; a conversion in its own engine process always starts with an empty cache. Cookies and site storage are cleared after every conversion whatever the mode.
+
+### The output document
+
+`HtmlToPdfOptions.AccessibilityStandard` - The accessibility standard the generated document declares: PDF/UA-1 or PDF/UA-2 (`PdfUAStandard`). Declaring a standard turns tagging on; PDF/UA-2 also writes the document as PDF 2.0. This was covered in more details in the "Accessible PDF and PDF/A" (accessibility-and-compliance.md) section.
+
+`HtmlToPdfOptions.ColorSpace` - Gets or sets the color space of the generated pdf document. This is an instance of `PdfColorSpace` type.
+
+`HtmlToPdfOptions.CreateFormFields` - Converts the controls of the html forms into fillable PDF form fields. This was covered in more details in "HTML forms to PDF form fields" (html-to-pdf.md) section.
+
+The converter always embeds the fonts needed to render the document, so the text displays correctly on any machine even when those fonts are not installed.
+
+`HtmlToPdfOptions.ExternalLinksEnabled` - Controls the rendering of external hyperlinks in pdf. This was covered in more details in "Links in HTML to PDF" (links-bookmarks-toc.md) section.
+
+`HtmlToPdfOptions.InternalLinksEnabled` - Controls the conversion of internal html links to internal pdf links. This was covered in more details in "Links in HTML to PDF" (links-bookmarks-toc.md) section.
+
+`HtmlToPdfOptions.JpegCompressionEnabled` - Gets or sets a flag indicating if the JPEG compression is enabled or not for the images in the generated pdf document.
+
+`HtmlToPdfOptions.JpegCompressionLevel` - Gets or sets the compression level of images in the generated pdf document.
+
+`HtmlToPdfOptions.ImagesMaxResolution` - The highest resolution, in pixels per inch, an image is kept at: images drawn at a higher resolution are resampled down to it. The default value is 0, which keeps every image at its resolution.
+
+`HtmlToPdfOptions.PdfBookmarkOptions` - Gets a reference to the object that controls the bookmarks creation for the generated pdf document. This was covered in more details in "Automatic bookmarks" (links-bookmarks-toc.md) section.
+
+`HtmlToPdfOptions.PdfCompressionLevel` - This property controls the compression level of the generated pdf document.
+
+`HtmlToPdfOptions.PdfDocumentInformation` - Gets a reference to the object that specifies the generated pdf document properties. This was covered in more details in "PDF document properties" (html-to-pdf.md) section.
 
 `HtmlToPdfOptions.PdfStandard` - Defines the pdf standard used by the generated pdf document. This is an instance of `PdfStandard` type. Use it to generate archival documents (PDF/A-1b to PDF/A-4, including the accessible PDF/A-1a, PDF/A-2a and PDF/A-3a) or PDF/X-1a print documents. This was covered in more details in the "Accessible PDF and PDF/A" (accessibility-and-compliance.md) section.
 
@@ -1801,36 +1829,22 @@ The converter always embeds the fonts needed to render the document, so the text
 
 `HtmlToPdfOptions.Language` - The natural language (e.g. "en-US") of a tagged PDF, recorded as the document language.
 
-`HtmlToPdfOptions.PostLoadingScript` - JavaScript code injected into the converted page and run after the page has loaded and after its own scripts.
-
-`HtmlToPdfOptions.PostLoadingScriptDelayAfter` - The delay in milliseconds after the post-loading script runs. The default value is 20 ms.
-
-`HtmlToPdfOptions.ProxyOptions` - Gets a reference to an object containing the proxy settings used to access the web page that is being converted. This was covered in more details in "Proxy servers" (web-elements-and-auth.md) section.
-
-`HtmlToPdfOptions.RenderPageOnTimeout` - Renders the page as far as it has loaded when `HtmlToPdfOptions.NavigationTimeout` expires, instead of failing the conversion. The default value is False. This was covered in more details in "Conversion delay and timeouts" (html-to-pdf.md) section.
-
-`HtmlToPdfOptions.RenderingEngine` - Selects where the Chromium rendering engine used by the converter runs: `RenderingEngine.Chromium`, the default, runs it on this machine, and `RenderingEngine.ChromiumRemote` sends the conversion to a remote SelectPdf engine (see "The remote engine" (installation-and-deployment.md)). When it is not set, the converter uses `GlobalProperties.RenderingEngine`, so it normally does not need to be set. This was covered in more details in the "The Chromium engine" (installation-and-deployment.md) section.
-
 `HtmlToPdfOptions.SecurityOptions` - Gets a reference to the object that specifies the generated pdf document security settings. This was covered in more details in "Security settings" (html-to-pdf.md) section.
-
-`HtmlToPdfOptions.StartupMode` - Use this property to specify how the conversion starts. This was covered in more details in "Starting the conversion from JavaScript" (html-to-pdf.md) section.
-
-`HtmlToPdfOptions.StartupScript` - Use this property to specify some JavaScript code that will be injected into the page that is converted.
 
 `HtmlToPdfOptions.ViewerPreferences` - Controls how the pdf document will appear in a pdf viewer (like Adobe Reader). This was covered in more details in "Viewer preferences" (html-to-pdf.md) section.
 
-`HtmlToPdfOptions.VisibleWebElementSelector` - Use this property to convert only a certain section of the page, specified by a css selector. `HtmlToPdfOptions.VisibleWebElementId` is the obsolete form of the same option and accepts an element id only. This was covered in more details in "Partial page conversion" (html-to-pdf.md) section.
-
 `HtmlToPdfOptions.WebElementsMappingOptions` - Gets a reference to the object controlling the retrieval of HTML elements position in the generated PDF. In order to retrieve the position in PDF for a list of HTML elements, the CssSelectors property of WebElementsMappingOptions must be set with an array of strings containing the selectors of the HTML elements. The positions of the HTML elements in the generated PDF document will be returned in the Result object. This was covered in more details in "Web element locations" (web-elements-and-auth.md) section.
 
-`HtmlToPdfOptions.WebGlEnabled` - Gets or sets a flag indicating if WebGL is enabled in the internal browser. The default value is False; set it to True for pages that draw with WebGL. Turning it off makes conversions noticeably faster, at the cost of not being able to render WebGL content. This was covered in more details in "The Chromium engine" (installation-and-deployment.md) section.
+### The rendering engine
 
-`HtmlToPdfOptions.HttpCache` - Selects what the engine's HTTP cache keeps from this conversion for the next one: `HttpCacheMode.All` (the default) keeps everything, `HttpCacheMode.ThirdParty` keeps only resources from other sites than the converted page's own (fonts, style sheets and scripts served from content delivery networks, for example), and `HttpCacheMode.Clear` starts every conversion with an empty cache. Keeping the cache makes later conversions of pages that share resources faster. It applies when the engine runs inside the application; a conversion in its own engine process always starts with an empty cache. Cookies and site storage are cleared after every conversion whatever the mode.
+`HtmlToPdfOptions.ChromiumEnginePath` - The full path of the folder containing the Chromium engine binaries. Set it only when the engine is not deployed next to the application. This was covered in more details in the "The Chromium engine" (installation-and-deployment.md) section.
 
-`HtmlToPdfOptions.WebPageFixedSize` - Controls whether the content below `HtmlToPdfOptions.WebPageHeight` is left out of the generated pdf document. This was covered in more details in "Resizing content during conversion" (html-to-pdf.md) section.
+`HtmlToPdfOptions.ChromiumEngineTemporaryFilesPath` - A folder where the Chromium engine writes its temporary files. When not set, the system temporary folder is used. The application needs write permissions on this folder.
 
-`HtmlToPdfOptions.WebPageHeight` - Gets or sets the height of the converted web page as it would appear in the internal browser used to render the html. This was covered in more details in "Resizing content during conversion" (html-to-pdf.md) section.
+`HtmlToPdfOptions.ForceOutOfProcess` - Runs this conversion in a separate engine process, whatever `GlobalProperties.ChromiumEngineHostMode` selects for the application. Use it to isolate a page that is not trusted, or likely to crash or hang the browser, or to give one conversion settings the in-process host fixes for the whole process at its first conversion (WebGL, the proxy). That conversion starts an engine process of its own. The default value is False.
 
-`HtmlToPdfOptions.WebPageWidth` - Gets or sets the width of the converted web page as it would appear in the internal browser used to render the html. This was covered in more details in "Resizing content during conversion" (html-to-pdf.md) section.
+`HtmlToPdfOptions.LFN` - The path of a diagnostic log file written during the conversion. When not set, no log is written.
 
-`HtmlToPdfOptions.WindowStatus` - When set, the converter waits until the page sets `window.status` to this value before converting it. If that does not happen before `HtmlToPdfOptions.NavigationTimeout` expires, the conversion fails with a navigation timeout.
+`HtmlToPdfOptions.MaximumConcurrentConversions` - This parameter must be set before the first conversion performed by the application. When this property is set with a negative value or zero, the concurrency level is maximum. The default value is 8. If the maximum number is reached and more conversion requests arrive, they wait in a queue for an available spot and are served in the order they arrived. The limit applies whichever way the engine is hosted (see `GlobalProperties.ChromiumEngineHostMode`).
+
+`HtmlToPdfOptions.RenderingEngine` - Selects where the Chromium rendering engine used by the converter runs: `RenderingEngine.Chromium`, the default, runs it on this machine, and `RenderingEngine.ChromiumRemote` sends the conversion to a remote SelectPdf engine (see "The remote engine" (installation-and-deployment.md)). When it is not set, the converter uses `GlobalProperties.RenderingEngine`, so it normally does not need to be set. This was covered in more details in the "The Chromium engine" (installation-and-deployment.md) section.

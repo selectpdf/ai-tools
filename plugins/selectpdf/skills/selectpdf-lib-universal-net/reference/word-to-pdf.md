@@ -1,6 +1,6 @@
 # Word to PDF
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## The Word to PDF converter
 
@@ -95,7 +95,7 @@ Every PDF/A level and PDF/X-1a are produced the way the html converter produces 
 
 Accessible (tagged) output is declared the way it is on the html converter: `WordToPdfOptions.Tagged` builds the logical structure - the Word document's headings, paragraphs, lists, tables with their header cells, pictures, links, footnotes and text boxes - and `WordToPdfOptions.AccessibilityStandard` declares PDF/UA-1 or PDF/UA-2 (which is written as PDF 2.0). A declared document needs a `WordToPdfOptions.Title` and a `WordToPdfOptions.Language`. `PdfStandard.PdfA3A` turns tagging on by itself, and combines with PDF/UA-1; PDF/A-4 is the archiving level that combines with PDF/UA-2. Running headers and footers are marked as pagination artifacts, and the fonts of a header or footer band are embedded on a declared document, PDF/UA requiring it.
 
-A picture without alternative text in the Word document is given the placeholder `Image`; give every picture a description in Word for a document that is accessible in substance and not only in form. A validator such as veraPDF is the way to check the produced document at the level it declares.
+A picture without alternative text in the Word document is given the placeholder `Image`; give every picture a description in Word for a document that is accessible in substance and not only in form. Check the produced document at the level it declares with `PdfValidator.Validate` ("Validating PDF/A, PDF/UA and PDF/X" (accessibility-and-compliance.md)).
 
 ## Word to PDF options
 
@@ -125,7 +125,7 @@ A picture without alternative text in the Word document is given the placeholder
 | `WordToPdfOptions.PageSetup` | `Document` | Whether the output pages keep the Word document's sizes (`Document`) or the text is reflowed onto the page size, orientation and margins of the options (`Options`). See "The Word to PDF converter" (word-to-pdf.md). |
 | `WordToPdfOptions.Password` | none | The password of an encrypted Word document. |
 | `WordToPdfOptions.Bookmarks` | `Headings` | What the pdf outline is made from: the document's headings (nested by level), its Word bookmarks, or nothing (`WordBookmarks`). |
-| `WordToPdfOptions.UpdateFields` | `true` | Update the document's fields (dates, page references, formulas) before rendering. |
+| `WordToPdfOptions.UpdateFields` | `false` | Recalculate every field before rendering. When false, the fields Word refreshes when it saves a PDF (dates and times, page numbers and counts, cross-references, sequence numbers) are updated and the others (formulas, document properties, merge fields) keep the result stored in the document, as Word shows them. |
 | `WordToPdfOptions.PreserveFormFields` | `false` | Keep the document's form fields as fillable pdf form fields instead of flattening them. |
 | `WordToPdfOptions.EmbedCompleteFonts` | `false` | Embed the complete font programs rather than the subsets the document uses. |
 | `WordToPdfOptions.AutoDetectComplexScript` | `false` | Detect and shape complex scripts (Arabic, Hebrew, Indic) even where the document does not mark them. |

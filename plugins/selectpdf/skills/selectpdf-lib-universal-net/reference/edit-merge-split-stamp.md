@@ -1,79 +1,81 @@
 # Modifying existing PDFs: merge, resize, stamps, portfolios, compression
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Modifying an existing PDF
 
 Select.Pdf Library for .NET can be used to load and modify existing pdf documents. The following sample code shows how to load a pdf document from a local file from the disk:
 
 ```csharp
-	// load pdf file from disk
-    PdfDocument doc = new PdfDocument(fileName);
+// load pdf file from disk
+PdfDocument doc = new PdfDocument(fileName);
 ```
 
 ```vbnet
-	' load pdf file from disk
-    Dim doc As New PdfDocument(fileName)
+' load pdf file from disk
+Dim doc As New PdfDocument(fileName)
 ```
 
 The `PdfDocument` object also provides constructors that can be used to load the pdf document from a stream.
 
 Once a pdf document is loaded, all operations described in this documentation can applied to it: add new pages to the document, remove existing pages, add new elements to new or existing pages, add new pdf templates.
 
+A damaged document is repaired when it is loaded, as PDF viewers do. Set `GlobalProperties.AutoRepair` to False to refuse such documents instead; a repaired document is saved in full, so a digital signature it carried no longer verifies.
+
 ### Sample Code
 
 This sample code shows how to use SelectPdf Library for .NET to load an existing document, add a new page to it and a new text element.
 
 ```csharp
-	// the initial file
-    string file = @"C:\Path\to\doc1.pdf";
+// the initial file
+string file = "doc1.pdf";
 
-    // load the pdf document
-    PdfDocument doc = new PdfDocument(file);
+// load the pdf document
+PdfDocument doc = new PdfDocument(file);
 
-    // add a new page to the document
-    PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-    // create a new pdf font (component standard font)
-    PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
-    font.Size = 20;
+// create a new pdf font (component standard font)
+PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font.Size = 20;
 
-    // create text element and add it to the new page
-    PdfTextElement text = new PdfTextElement(100, 100,
-        "Sample text added to an existing pdf document.", font);
-    page.Add(text);
+// create text element and add it to the new page
+PdfTextElement text = new PdfTextElement(100, 100,
+    "Sample text added to an existing pdf document.", font);
+page.Add(text);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-        	' the initial file
-	        Dim file As String = "C:\Path\to\doc1.pdf"
-	
-	        ' load the pdf document
-	        Dim doc As New PdfDocument(file)
-	
-	        ' add a new page to the document
-	        Dim page As PdfPage = doc.AddPage()
-	
-	        ' create a new pdf font (component standard font)
-	        Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-	        font.Size = 20
-	
-	        ' create text element and add it to the new page
-	        Dim text As New PdfTextElement(100, 100, _
-	                "Sample text added to an existing pdf document.", font)
-	        page.Add(text)
-	
-	        ' save pdf document
-	        doc.Save("Sample.pdf")
-	
-	        ' close pdf document
-	        doc.Close()
+' the initial file
+Dim file As String = "doc1.pdf"
+
+' load the pdf document
+Dim doc As New PdfDocument(file)
+
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
+
+' create a new pdf font (component standard font)
+Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font.Size = 20
+
+' create text element and add it to the new page
+Dim text As New PdfTextElement(100, 100, _
+        "Sample text added to an existing pdf document.", font)
+page.Add(text)
+
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document
+doc.Close()
 ```
 
 ## Merging PDFs
@@ -83,83 +85,85 @@ Select.Pdf can be used to merge several existing pdf documents into a single pdf
 To achive this task, individual pdf files need to be loaded into `PdfDocument` objects. The following sample code shows how to load an existing file from the disk:
 
 ```csharp
-	// load pdf file from disk
-    PdfDocument doc = new PdfDocument(fileName);
+// load pdf file from disk
+PdfDocument doc = new PdfDocument(fileName);
 ```
 
 ```vbnet
-	' load pdf file from disk
-    Dim doc As New PdfDocument(fileName)
+' load pdf file from disk
+Dim doc As New PdfDocument(fileName)
 ```
 
 Another important method that will be used by the pdf merge feature is `PdfDocument.Append(PdfDocument)` of the `PdfDocument` object. Using this method, a pdf document can be appended to another pdf document:
 
 ```csharp
-	// append doc1 to doc2
-    doc2.Append(doc1);
+// append doc1 to doc2
+doc2.Append(doc1);
 ```
 
 ```vbnet
-	' append doc1 to doc2
-    doc2.Append(doc1)
+' append doc1 to doc2
+doc2.Append(doc1)
 ```
+
+The appended pages keep their own layout, so the document's header and footer are not drawn on them; templates added with `PdfTemplateCollection.Add(float, float)` (a watermark, for example) are drawn on every page. The same applies to a page added with `PdfPageCollection.Add(PdfPage)`.
 
 ### Sample Code
 
 This sample code shows how to use SelectPdf Library for .NET to merge 2 different pdf documents into a new pdf document.
 
 ```csharp
-	// the 2 initial files
-    string file1 = @"C:\Path\to\doc1.pdf";
-    string file2 = @"C:\Path\to\doc2.pdf";
+// the 2 initial files
+string file1 = "doc1.pdf";
+string file2 = "doc2.pdf";
 
-    // load the 2 pdf documents
-    PdfDocument doc1 = new PdfDocument(file1);
-    PdfDocument doc2 = new PdfDocument(file2);
+// load the 2 pdf documents
+PdfDocument doc1 = new PdfDocument(file1);
+PdfDocument doc2 = new PdfDocument(file2);
 
-    // create a new pdf document
-    PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-    // add the pages of those 2 documents to the new document
-    doc.Append(doc1);
-    doc.Append(doc2);
+// add the pages of those 2 documents to the new document
+doc.Append(doc1);
+doc.Append(doc2);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 
-    // close the original pdf documents
-    doc1.Close();
-    doc2.Close();
+// close the original pdf documents
+doc1.Close();
+doc2.Close();
 ```
 
 ```vbnet
-	' the 2 initial files
-    Dim file1 As String = "C:\Path\to\doc1.pdf"
-    Dim file2 As String = "C:\Path\to\doc2.pdf"
+' the 2 initial files
+Dim file1 As String = "doc1.pdf"
+Dim file2 As String = "doc2.pdf"
 
-    ' load the 2 pdf documents
-    Dim doc1 As New PdfDocument(file1)
-    Dim doc2 As New PdfDocument(file2)
+' load the 2 pdf documents
+Dim doc1 As New PdfDocument(file1)
+Dim doc2 As New PdfDocument(file2)
 
-    ' create a new pdf document
-    Dim doc As New PdfDocument()
+' create a new pdf document
+Dim doc As New PdfDocument()
 
-    ' add the pages of those 2 documents to the new document
-    doc.Append(doc1)
-    doc.Append(doc2)
+' add the pages of those 2 documents to the new document
+doc.Append(doc1)
+doc.Append(doc2)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 
-    ' close the original pdf documents
-    doc1.Close()
-    doc2.Close()
+' close the original pdf documents
+doc1.Close()
+doc2.Close()
 ```
 
 ### Merging inputs in different shapes
@@ -171,30 +175,30 @@ The `Append` method of the `PdfDocument` class accepts inputs in different shape
 - `PdfDocument.Append(PdfDocument)`
 
 ```csharp
-	// merge a file and a stream into a new document
-    using (FileStream fs = File.OpenRead("second.pdf"))
-    {
-        PdfDocument merged = new PdfDocument();
+// merge a file and a stream into a new document
+using (FileStream fs = File.OpenRead("second.pdf"))
+{
+    PdfDocument merged = new PdfDocument();
 
-        merged.Append("first.pdf");
-        merged.Append(fs);
+    merged.Append("first.pdf");
+    merged.Append(fs);
 
-        merged.Save("combined.pdf");
-        merged.Close();
-    }
+    merged.Save("combined.pdf");
+    merged.Close();
+}
 ```
 
 ```vbnet
-	' merge a file and a stream into a new document
-    Using fs As FileStream = File.OpenRead("second.pdf")
-        Dim merged As New PdfDocument()
+' merge a file and a stream into a new document
+Using fs As FileStream = File.OpenRead("second.pdf")
+    Dim merged As New PdfDocument()
 
-        merged.Append("first.pdf")
-        merged.Append(fs)
+    merged.Append("first.pdf")
+    merged.Append(fs)
 
-        merged.Save("combined.pdf")
-        merged.Close()
-    End Using
+    merged.Save("combined.pdf")
+    merged.Close()
+End Using
 ```
 
 ### Merging tagged (accessible) documents
@@ -205,7 +209,7 @@ See "Accessible PDF and PDF/A" (accessibility-and-compliance.md) for tagged and 
 
 ### Merging into PDF/A documents
 
-A document created with a PDF/A standard (`PdfDocument.ctor(PdfStandard)`) takes pages only from documents that conform to its level: the same PDF/A part with at least the same conformance (for example a PDF/A-3a or PDF/A-3u source into a PDF/A-3b document). Appending a document that claims no PDF/A conformance, or another part, throws an exception rather than producing a file whose PDF/A claim is false. A document with no PDF/A standard takes any source.
+A document created with a PDF/A standard (`PdfDocument.PdfDocument(PdfStandard)`) takes pages only from documents that conform to its level: the same PDF/A part with at least the same conformance (for example a PDF/A-3a or PDF/A-3u source into a PDF/A-3b document). Appending a document that claims no PDF/A conformance, or another part, throws an exception rather than producing a file whose PDF/A claim is false. A document with no PDF/A standard takes any source.
 
 ### Appending to an existing file
 
@@ -224,6 +228,80 @@ doc.Append("appendix.pdf")
 doc.Save("report.pdf")
 doc.Close()
 ```
+
+## Splitting PDFs
+
+SelectPdf Library for .NET splits existing PDF documents with `PdfSplitManager`: it extracts pages into a new document, or divides a document into several documents by page count, at its top level bookmarks or by file size.
+
+Load the document with one of the `PdfSplitManager.Load(string)` overloads (an encrypted document with its user or owner password), then call the operations. Each operation returns new `PdfDocument` objects, which can be changed further (pages added, security set, headers stamped) and must be saved and closed by the caller. The loaded document is not modified, and each extracted document keeps its document information (title, author, subject, keywords).
+
+### Split Operations
+
+- `PdfSplitManager.ExtractPages(string)` - the pages of a list such as `"1,3-5,7-"` (single pages, ranges, an open range up to the last page), in the order given.
+- `PdfSplitManager.ExtractOddPages` and `PdfSplitManager.ExtractEvenPages` - every other page, for instance to print a two-sided document on a one-sided printer.
+- `PdfSplitManager.Split(int)` - documents of a fixed number of pages; the last one holds what is left.
+- `PdfSplitManager.SplitByBookmarks` - one document per top level bookmark (a chapter), titled with the bookmark's text; the pages before the first bookmark make a document of their own.
+- `PdfSplitManager.SplitBySize(long)` - documents of at most a number of bytes, each holding as many pages as fit, for instance to stay under an email attachment limit. A single page larger than the limit makes a document of its own.
+
+### Sample Code
+
+```csharp
+using (PdfSplitManager splitter = new PdfSplitManager())
+{
+    splitter.Load("report.pdf");
+
+    // the summary: pages 1 and 3 to 5
+    PdfDocument summary = splitter.ExtractPages("1,3-5");
+    summary.Save("summary.pdf");
+    summary.Close();
+
+    // one document per chapter
+    PdfDocument[] chapters = splitter.SplitByBookmarks();
+    for (int i = 0; i < chapters.Length; i++)
+    {
+        chapters[i].Save("chapter-" + (i + 1) + ".pdf");
+        chapters[i].Close();
+    }
+
+    // pieces of at most 5 MB
+    PdfDocument[] pieces = splitter.SplitBySize(5 * 1024 * 1024);
+    for (int i = 0; i < pieces.Length; i++)
+    {
+        pieces[i].Save("piece-" + (i + 1) + ".pdf");
+        pieces[i].Close();
+    }
+}
+```
+
+```vbnet
+Using splitter As New PdfSplitManager()
+    splitter.Load("report.pdf")
+
+    ' the summary: pages 1 and 3 to 5
+    Dim summary As PdfDocument = splitter.ExtractPages("1,3-5")
+    summary.Save("summary.pdf")
+    summary.Close()
+
+    ' one document per chapter
+    Dim chapters As PdfDocument() = splitter.SplitByBookmarks()
+    For i As Integer = 0 To chapters.Length - 1
+        chapters(i).Save("chapter-" & (i + 1) & ".pdf")
+        chapters(i).Close()
+    Next
+
+    ' pieces of at most 5 MB
+    Dim pieces As PdfDocument() = splitter.SplitBySize(5 * 1024 * 1024)
+    For i As Integer = 0 To pieces.Length - 1
+        pieces(i).Save("piece-" & (i + 1) & ".pdf")
+        pieces(i).Close()
+    Next
+End Using
+```
+
+### Notes
+
+- Bookmarks and form fields come with the pages they are on. The logical structure (tags) and a PDF/A or PDF/UA claim of the source do not: the extracted documents are plain PDF documents.
+- Merging is the opposite operation: see "Merging PDFs" (edit-merge-split-stamp.md).
 
 ## Resizing pages
 
@@ -260,7 +338,7 @@ The code sample below shows how to use SelectPdf Library for .NET to resize the 
 
 ```csharp
 // the test file
-string filePdf = @"C:\Path\to\document.pdf";
+string filePdf = "document.pdf";
 
 // settings
 string pdf_page_size = pageSizeValue;
@@ -360,7 +438,7 @@ resizer.Close();
 
 ```vbnet
 ' the test file
-Dim filePdf As String = "C:\Path\to\document.pdf"
+Dim filePdf As String = "document.pdf"
 
 ' settings
 Dim pdf_page_size As String = pageSizeValue
@@ -457,75 +535,75 @@ resizer.Close()
 
 ## Stamps and watermarks
 
-Stamps and Watermarks are done using pdf templates that contain elements that repeat on each page of the pdf document.
+Stamps and Watermarks are done using "Templates" (pdf-creation-elements.md) that contain elements that repeat on each page of the pdf document.
 
 ### Pdf Stamps Sample Code
 
 This sample code shows how to create a new PDF document using Select.Pdf, how to add several pages and stamp all the pages with an image.
 
 ```csharp
-	// create a new pdf document
-    PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-    // create a new pdf font
-    PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
-    font.Size = 24;
+// create a new pdf font
+PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font.Size = 24;
 
-    // add a new page to the document
-    PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-    // create a new text element and add it to the page
-    PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
-    page.Add(text);
+// create a new text element and add it to the page
+PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
+page.Add(text);
 
-    // get image path
-    string imgFile = @"C:\Path\to\logo.png";
+// get image path
+string imgFile = "logo.png";
 
-    // stamp all pages - add a template containing an image to the bottom right of 
-    // the page the image should repeat on all pdf pages automatically
-    PdfTemplate template = doc.Templates.Add(doc.Pages[0].ClientRectangle);
-    PdfImageElement img = new PdfImageElement(
-        doc.Pages[0].ClientRectangle.Width - 300, 
-        doc.Pages[0].ClientRectangle.Height - 150, imgFile);
-    template.Add(img);
+// stamp all pages - add a template containing an image to the bottom right of 
+// the page the image should repeat on all pdf pages automatically
+PdfTemplate template = doc.Templates.Add(doc.Pages[0].ClientRectangle);
+PdfImageElement img = new PdfImageElement(
+    doc.Pages[0].ClientRectangle.Width - 300, 
+    doc.Pages[0].ClientRectangle.Height - 150, imgFile);
+template.Add(img);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' create a new pdf document
-    Dim doc As New PdfDocument()
+' create a new pdf document
+Dim doc As New PdfDocument()
 
-    ' create a new pdf font
-    Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-    font.Size = 24
+' create a new pdf font
+Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font.Size = 24
 
-    ' add a new page to the document
-    Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-    ' create a new text element and add it to the page
-    Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
-    page.Add(text)
+' create a new text element and add it to the page
+Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
+page.Add(text)
 
-    ' get image path
-    Dim imgFile As String = "C:\Path\to\logo.png"
+' get image path
+Dim imgFile As String = "logo.png"
 
-    ' stamp all pages - add a template containing an image to the bottom right of
-    ' the page the image should repeat on all pdf pages automatically
-    Dim template As PdfTemplate = doc.Templates.Add(doc.Pages(0).ClientRectangle)
-    Dim img As New PdfImageElement(doc.Pages(0).ClientRectangle.Width - 300, _
-                                   doc.Pages(0).ClientRectangle.Height - 150, imgFile)
-    template.Add(img)
+' stamp all pages - add a template containing an image to the bottom right of
+' the page the image should repeat on all pdf pages automatically
+Dim template As PdfTemplate = doc.Templates.Add(doc.Pages(0).ClientRectangle)
+Dim img As New PdfImageElement(doc.Pages(0).ClientRectangle.Width - 300, _
+                               doc.Pages(0).ClientRectangle.Height - 150, imgFile)
+template.Add(img)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ### Pdf Watermarks Sample Code
@@ -533,76 +611,76 @@ This sample code shows how to create a new PDF document using Select.Pdf, how to
 This sample code shows how to create a new PDF document using Select.Pdf, how to add several pages and watermark all the pages with a transparent image in the background.
 
 ```csharp
-	// create a new pdf document
-    PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-    // create a new pdf font
-    PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
-    font.Size = 24;
+// create a new pdf font
+PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font.Size = 24;
 
-    // add a new page to the document
-    PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-    // create a new text element and add it to the page
-    PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
-    page.Add(text);
+// create a new text element and add it to the page
+PdfTextElement text = new PdfTextElement(0, 0, Helper.SomeLongText(), font);
+page.Add(text);
 
-    // get image path
-    string imgFile = @"C:\Path\to\logo.png";
+// get image path
+string imgFile = "logo.png";
 
-    // watermark all pages - add a template containing an image 
-    // to the bottom right of the page
-    // the image should repeat on all pdf pages automatically
-    // the template should be rendered behind the rest of the page elements
-    PdfTemplate template = doc.Templates.Add(doc.Pages[0].ClientRectangle);
-    PdfImageElement img = new PdfImageElement(
-        doc.Pages[0].ClientRectangle.Width - 300, 
-        doc.Pages[0].ClientRectangle.Height - 150, imgFile);
-    img.Transparency = 50;
-    template.Background = true;
-    template.Add(img);
+// watermark all pages - add a template containing an image 
+// to the bottom right of the page
+// the image should repeat on all pdf pages automatically
+// the template should be rendered behind the rest of the page elements
+PdfTemplate template = doc.Templates.Add(doc.Pages[0].ClientRectangle);
+PdfImageElement img = new PdfImageElement(
+    doc.Pages[0].ClientRectangle.Width - 300, 
+    doc.Pages[0].ClientRectangle.Height - 150, imgFile);
+img.Transparency = 50;
+template.Background = true;
+template.Add(img);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-	' create a new pdf document
-    Dim doc As New PdfDocument()
+' create a new pdf document
+Dim doc As New PdfDocument()
 
-    ' create a new pdf font
-    Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-    font.Size = 24
+' create a new pdf font
+Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font.Size = 24
 
-    ' add a new page to the document
-    Dim page As PdfPage = doc.AddPage()
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
 
-    ' create a new text element and add it to the page
-    Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
-    page.Add(text)
+' create a new text element and add it to the page
+Dim text As New PdfTextElement(0, 0, Helper.SomeLongText(), font)
+page.Add(text)
 
-    ' get image path
-    Dim imgFile As String = "C:\Path\to\logo.png"
+' get image path
+Dim imgFile As String = "logo.png"
 
-    ' watermark all pages - add a template containing an image 
-    ' to the bottom right of the page
-    ' the image should repeat on all pdf pages automatically
-    ' the template should be rendered behind the rest of the page elements
-    Dim template As PdfTemplate = doc.Templates.Add(doc.Pages(0).ClientRectangle)
-    Dim img As New PdfImageElement(doc.Pages(0).ClientRectangle.Width - 300, _
-                                   doc.Pages(0).ClientRectangle.Height - 150, imgFile)
-    img.Transparency = 50
-    template.Background = True
-    template.Add(img)
+' watermark all pages - add a template containing an image 
+' to the bottom right of the page
+' the image should repeat on all pdf pages automatically
+' the template should be rendered behind the rest of the page elements
+Dim template As PdfTemplate = doc.Templates.Add(doc.Pages(0).ClientRectangle)
+Dim img As New PdfImageElement(doc.Pages(0).ClientRectangle.Width - 300, _
+                               doc.Pages(0).ClientRectangle.Height - 150, imgFile)
+img.Transparency = 50
+template.Background = True
+template.Add(img)
 
-    ' save pdf document
-    doc.Save("Sample.pdf")
+' save pdf document
+doc.Save("Sample.pdf")
 
-    ' close pdf document
-    doc.Close()
+' close pdf document
+doc.Close()
 ```
 
 ## PDF portfolios
@@ -611,9 +689,9 @@ A PDF Portfolio contains multiple files assembled into an integrated PDF unit. T
 
 PDF portfolios can be handled in .NET applications using SelectPdf with `PdfPortfolioManager` object. Using `PdfPortfolioManager` the following tasks can be performed:
 
-- Create new PDF portfolio from scratch. Use `PdfPortfolioManager.ctor`.
-- Manage existing PDF portfolios. Use `PdfPortfolioManager.ctor` and then `PdfPortfolioManager.Load(string)` to load the existing file.
-- Transform an existing PDF document into a PDF portfolio. The old PDF will server as a cover page for the PDF portfolio. Use `PdfPortfolioManager.ctor` and then `PdfPortfolioManager.Load(string)` to load the existing file.
+- Create new PDF portfolio from scratch. Use `PdfPortfolioManager.PdfPortfolioManager`.
+- Manage existing PDF portfolios. Use `PdfPortfolioManager.PdfPortfolioManager` and then `PdfPortfolioManager.Load(string)` to load the existing file.
+- Transform an existing PDF document into a PDF portfolio. The old PDF will server as a cover page for the PDF portfolio. Use `PdfPortfolioManager.PdfPortfolioManager` and then `PdfPortfolioManager.Load(string)` to load the existing file.
 - Manage embedded files from the PDF portfolio (list files and their properties, add new files, delete existing files). Access files through `PdfPortfolioManager.Files` property. For embedded PDF portfolio files, use `PdfPortfolioFile` objects to manage name, description, creation and modification date or get the file content using `PdfPortfolioFile.Content` and `PdfPortfolioFile.ContentAsStream` properties and save them as external files. Files are added with `PdfPortfolioFilesCollection.Add(PdfPortfolioFile)` and removed with `PdfPortfolioFilesCollection.Remove(int)` (by index).
 - Manage the PDF portfolio view mode. Use `PdfPortfolioManager.ViewMode` property - set it to `PdfPortfolioViewMode.Details` for a list view (name, description, dates) or `PdfPortfolioViewMode.Tile` for a thumbnail grid.
 - Manage the PDF portfolio startup file. Use `PdfPortfolioManager.StartupFileName` property.
@@ -624,9 +702,9 @@ The following sample code shows how to create a new PDF portfolio, add 3 embedde
 
 ```csharp
 // the test files
-string filePdf = @"C:\Path\to\document.pdf";
-string fileHtml = @"C:\Path\to\document.html";
-string fileImage = @"C:\Path\to\logo.png";
+string filePdf = "document.pdf";
+string fileHtml = "document.html";
+string fileImage = "logo.png";
 
 // instantiate the pdf portfolio manager
 PdfPortfolioManager portfolio = new PdfPortfolioManager();
@@ -658,81 +736,83 @@ portfolio.Close();
 ```
 
 ```vbnet
-	        ' the test files
-	        Dim filePdf As String = "C:\Path\to\document.pdf"
-	        Dim fileHtml As String = "C:\Path\to\document.html"
-	        Dim fileImage As String = "C:\Path\to\logo.png"
-	
-	        ' instantiate the pdf portfolio manager
-	        Dim portfolio As New PdfPortfolioManager()
-	
-	        ' add files to the portfolio
-	        Dim pdfFilePdf As New PdfPortfolioFile(filePdf)
-	        pdfFilePdf.Description = "PDF document"
-	        portfolio.Files.Add(pdfFilePdf)
-	
-	        Dim pdfFileHtml As New PdfPortfolioFile(fileHtml)
-	        pdfFileHtml.Description = "HTML document"
-	        portfolio.Files.Add(pdfFileHtml)
-	
-	        Dim pdfFileImage As New PdfPortfolioFile(fileImage)
-	        pdfFileImage.Description = "Image file"
-	        portfolio.Files.Add(pdfFileImage)
-	
-	        ' set view mode
-	        portfolio.ViewMode = PdfPortfolioViewMode.Details
-	
-	        ' set startup file
-	        portfolio.StartupFileName = "logo.png"
-	
-	        ' save pdf document
-	        portfolio.Save("Sample.pdf")
-	
-	        ' close pdf document
-	        portfolio.Close()
+' the test files
+Dim filePdf As String = "document.pdf"
+Dim fileHtml As String = "document.html"
+Dim fileImage As String = "logo.png"
+
+' instantiate the pdf portfolio manager
+Dim portfolio As New PdfPortfolioManager()
+
+' add files to the portfolio
+Dim pdfFilePdf As New PdfPortfolioFile(filePdf)
+pdfFilePdf.Description = "PDF document"
+portfolio.Files.Add(pdfFilePdf)
+
+Dim pdfFileHtml As New PdfPortfolioFile(fileHtml)
+pdfFileHtml.Description = "HTML document"
+portfolio.Files.Add(pdfFileHtml)
+
+Dim pdfFileImage As New PdfPortfolioFile(fileImage)
+pdfFileImage.Description = "Image file"
+portfolio.Files.Add(pdfFileImage)
+
+' set view mode
+portfolio.ViewMode = PdfPortfolioViewMode.Details
+
+' set startup file
+portfolio.StartupFileName = "logo.png"
+
+' save pdf document
+portfolio.Save("Sample.pdf")
+
+' close pdf document
+portfolio.Close()
 ```
 
 The following sample code shows how to go through all embedded files from a PDF portfolio and export all of them to the disk:
 
 ```csharp
-            // instantiate the pdf portfolio manager
-            PdfPortfolioManager portfolio = new PdfPortfolioManager();
+// instantiate the pdf portfolio manager
+PdfPortfolioManager portfolio = new PdfPortfolioManager();
 
-			// load existing PDF portfolio file
-			portfolio.Load("portfolio.pdf");
+// load existing PDF portfolio file
+portfolio.Load("portfolio.pdf");
 
-			// go though the file list and export all files			
-            for (int i = 0; i < portfolio.Files.Count; i++)
-            {
-                PdfPortfolioFile file = portfolio.Files[i];
+// go though the file list and export all files			
+for (int i = 0; i < portfolio.Files.Count; i++)
+{
+    PdfPortfolioFile file = portfolio.Files[i];
 
-                FileStream s = new FileStream("export\\" + file.Name, FileMode.Create);
-                s.Write(file.Content, 0, file.Content.Length);
-                s.Dispose();
-            }
+    string path = Path.Combine("export", file.Name);
+    FileStream s = new FileStream(path, FileMode.Create);
+    s.Write(file.Content, 0, file.Content.Length);
+    s.Dispose();
+}
 
-            // close pdf document
-            portfolio.Close();
+// close pdf document
+portfolio.Close();
 ```
 
 ```vbnet
-			' instantiate the pdf portfolio manager
-			Dim portfolio As New PdfPortfolioManager()
-			
-			' load existing PDF portfolio file
-			portfolio.Load("portfolio.pdf")
-			
-			' go though the file list and export all files			
-			For i As Integer = 0 To portfolio.Files.Count - 1
-				Dim file As PdfPortfolioFile = portfolio.Files(i)
-			
-				Dim s As New FileStream("export\" + file.Name, FileMode.Create)
-				s.Write(file.Content, 0, file.Content.Length)
-				s.Dispose()
-			Next
-			
-			' close pdf document
-			portfolio.Close()
+' instantiate the pdf portfolio manager
+Dim portfolio As New PdfPortfolioManager()
+
+' load existing PDF portfolio file
+portfolio.Load("portfolio.pdf")
+
+' go though the file list and export all files			
+For i As Integer = 0 To portfolio.Files.Count - 1
+    Dim file As PdfPortfolioFile = portfolio.Files(i)
+
+    Dim path As String = Path.Combine("export", file.Name)
+    Dim s As New FileStream(path, FileMode.Create)
+    s.Write(file.Content, 0, file.Content.Length)
+    s.Dispose()
+Next
+
+' close pdf document
+portfolio.Close()
 ```
 
 ## PDF compression
@@ -743,7 +823,7 @@ SelectPdf Library for .NET offers the possibility to reduce the size of newly ge
 
 Using SelectPdf Library for .NET, PDF compression can be enabled for newly created pdf documents.
 
-**Compression Levels**
+#### Compression Levels
 
 SelectPdf offers 3 compression levels that can be controlled using `PdfDocument.CompressionLevel` property of the `PdfDocument` object:
 
@@ -756,59 +836,59 @@ SelectPdf offers 3 compression levels that can be controlled using `PdfDocument.
 This sample code shows how to create a new PDF document using SelectPdf, how to add a text element to it and use compression to reduce the size of the generated pdf document.
 
 ```csharp
-	// create a new pdf document
-    PdfDocument doc = new PdfDocument();
-    doc.Margins = new PdfMargins(20, 20, 20, 20);
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
+doc.Margins = new PdfMargins(20, 20, 20, 20);
 
-    // set compression level
-    doc.CompressionLevel = (PdfCompressionLevel)Enum.Parse(
-        typeof(PdfCompressionLevel), compressionLevelValue, true);
+// set compression level
+doc.CompressionLevel = (PdfCompressionLevel)Enum.Parse(
+    typeof(PdfCompressionLevel), compressionLevelValue, true);
 
-    // create a new pdf font
-    PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
-    font.Size = 16;
+// create a new pdf font
+PdfFont font = doc.Fonts.Add(PdfStandardFont.Helvetica);
+font.Size = 16;
 
-    // add a new page to the document
-    PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-    // create a new text element and add it to the page
-    PdfTextElement text = new PdfTextElement(0, 0, 
-        Helper.SomeVeryLongText(), font);
-    page.Add(text);
+// create a new text element and add it to the page
+PdfTextElement text = new PdfTextElement(0, 0, 
+    Helper.SomeVeryLongText(), font);
+page.Add(text);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-        	' create a new pdf document
-	        Dim doc As New PdfDocument()
-	        doc.Margins = New PdfMargins(20, 20, 20, 20)
-	
-	        ' set compression level
-	        doc.CompressionLevel = DirectCast([Enum].Parse(GetType(PdfCompressionLevel), _
-	            compressionLevelValue, True), PdfCompressionLevel)
-	
-	        ' create a new pdf font
-	        Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
-	        font.Size = 16
-	
-	        ' add a new page to the document
-	        Dim page As PdfPage = doc.AddPage()
-	
-	        ' create a new text element and add it to the page
-	        Dim text As New PdfTextElement(0, 0, _
-	            Helper.SomeVeryLongText(), font)
-	        page.Add(text)
-	
-	        ' save pdf document
-	        doc.Save("Sample.pdf")
-	
-	        ' close pdf document
-	        doc.Close()
+' create a new pdf document
+Dim doc As New PdfDocument()
+doc.Margins = New PdfMargins(20, 20, 20, 20)
+
+' set compression level
+doc.CompressionLevel = DirectCast([Enum].Parse(GetType(PdfCompressionLevel), _
+    compressionLevelValue, True), PdfCompressionLevel)
+
+' create a new pdf font
+Dim font As PdfFont = doc.Fonts.Add(PdfStandardFont.Helvetica)
+font.Size = 16
+
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
+
+' create a new text element and add it to the page
+Dim text As New PdfTextElement(0, 0, _
+    Helper.SomeVeryLongText(), font)
+page.Add(text)
+
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document
+doc.Close()
 ```
 
 ### Compress existing PDF documents
@@ -826,7 +906,7 @@ This sample code shows how to load an existing PDF document using SelectPdf and 
 
 ```csharp
 // load existing file
-string file = @"C:\Path\to\document.pdf";
+string file = "document.pdf";
 PdfDocument doc = new PdfDocument(file);
 
 // set compression options
@@ -849,27 +929,27 @@ doc.Close();
 ```
 
 ```vbnet
-            ' load existing file
-		    Dim file As String = "C:\Path\to\document.pdf"
-		    Dim doc As PdfDocument = New PdfDocument(file)
+' load existing file
+Dim file As String = "document.pdf"
+Dim doc As PdfDocument = New PdfDocument(file)
 
-            ' set compression options
-		    doc.CompressionLevel = PdfCompressionLevel.Best   ' streams + fonts
-		    doc.JpegCompressionEnabled = True                 ' re-encode images as JPEG
-		    ' 0 = best quality, 100 = most compression
-		    doc.JpegCompressionLevel = 20
+' set compression options
+doc.CompressionLevel = PdfCompressionLevel.Best   ' streams + fonts
+doc.JpegCompressionEnabled = True                 ' re-encode images as JPEG
+' 0 = best quality, 100 = most compression
+doc.JpegCompressionLevel = 20
 
-            ' save compressed document (compression is applied on save)
-		    doc.Save(file & "-compressed.pdf")
+' save compressed document (compression is applied on save)
+doc.Save(file & "-compressed.pdf")
 
-			' get pdf document details
-		    Console.WriteLine("Finished compressing PDF document with {0} pages.",
-		        doc.Pages.Count)
-		    Console.WriteLine("Title: " & doc.DocumentInformation.Title)
-		    Console.WriteLine("Author: " & doc.DocumentInformation.Author)
-		    Console.WriteLine("Producer: " & doc.DocumentInformation.Producer)
+' get pdf document details
+Console.WriteLine("Finished compressing PDF document with {0} pages.",
+    doc.Pages.Count)
+Console.WriteLine("Title: " & doc.DocumentInformation.Title)
+Console.WriteLine("Author: " & doc.DocumentInformation.Author)
+Console.WriteLine("Producer: " & doc.DocumentInformation.Producer)
 
-		    doc.Close()
+doc.Close()
 ```
 
 ### Limit the resolution of images
@@ -891,3 +971,222 @@ doc.ImagesMaxResolution = 150
 doc.Save("brochure-small.pdf")
 doc.Close()
 ```
+
+## PDF layers
+
+Layers (optional content) are parts of a PDF document a viewer can show or hide, as in Acrobat's Layers panel: watermarks, translations, draft marks, the levels of a technical drawing. SelectPdf Library for .NET adds layers to new documents and draws content in them, and reads and changes the layers of loaded documents, through `PdfDocument.Layers`.
+
+### Content in layers
+
+- Add a layer with `PdfLayerCollection.Add(string, bool)`, shown or hidden when the document opens; a layer's own `Layers` nest layers under it.
+- Draw any element in a layer with `PdfPageElement.Layer`: text (on every page it runs onto), images, shapes, html and Word regions, and links and other annotations, which then show and hide with the layer too.
+- Put a whole header, footer or stamp in a layer with `PdfTemplate.Layer`: everything added to the template afterwards is drawn in it, unless an element names a layer of its own.
+- Decide when a layer prints with `PdfLayer.PrintState` (when visible, always or never), and its place in a viewer's list with `PdfLayerCollection.Move(PdfLayer, int)`.
+
+A layered element keeps its tags in an accessible document. PDF/A-2 and later and PDF/UA allow layers, with the rule that a print state is declared but does not act on its own there (the standards forbid the setting that makes it automatic); PDF/A-1 does not allow layers, and adding one to such a document is refused.
+
+```csharp
+PdfDocument document = new PdfDocument();
+PdfLayer draft = document.Layers.Add("Draft");
+// hidden when the document opens
+PdfLayer notes = document.Layers.Add("Review notes", false);
+notes.PrintState = PdfLayerPrintState.NeverPrint;
+
+PdfFont font = document.Fonts.Add(PdfStandardFont.Helvetica);
+PdfPage page = document.AddPage();
+page.Add(new PdfTextElement(50, 50, "DRAFT", font) { Layer = draft });
+page.Add(new PdfTextElement(50, 100, "Check the totals", font) { Layer = notes });
+
+PdfTemplate header = document.Templates.Add(500, 40);
+header.Layer = document.Layers.Add("Header");
+header.Add(new PdfTextElement(0, 10, "Quarterly report", font));
+document.Templates.Header = header;
+
+document.Save("layers.pdf");
+document.Close();
+```
+
+```vbnet
+Dim document As New PdfDocument()
+Dim draft As PdfLayer = document.Layers.Add("Draft")
+' hidden when the document opens
+Dim notes As PdfLayer = document.Layers.Add("Review notes", False)
+notes.PrintState = PdfLayerPrintState.NeverPrint
+
+Dim font As PdfFont = document.Fonts.Add(PdfStandardFont.Helvetica)
+Dim page As PdfPage = document.AddPage()
+page.Add(New PdfTextElement(50, 50, "DRAFT", font) With {.Layer = draft})
+page.Add(New PdfTextElement(50, 100, "Check the totals", font) With {.Layer = notes})
+
+Dim header As PdfTemplate = document.Templates.Add(500, 40)
+header.Layer = document.Layers.Add("Header")
+header.Add(New PdfTextElement(0, 10, "Quarterly report", font))
+document.Templates.Header = header
+
+document.Save("layers.pdf")
+document.Close()
+```
+
+### The layers of a loaded document
+
+- List the layers in a viewer's order; the layers nested under one are in its `Layers`.
+- Show or hide a layer when the document opens (`Visible`), lock it (`Locked`), rename it (`Name`).
+- Add a layer, and move page objects into it with `PdfPageObject.Layer`, or draw new elements in it as above.
+- Remove a layer with what it draws, or keep its content as plain, always visible page content; `Flatten` does that for every layer.
+
+Layers are a Full edition feature.
+
+### Sample Code
+
+```csharp
+PdfDocument document = new PdfDocument("drawing.pdf");
+foreach (PdfLayer layer in document.Layers)
+    Console.WriteLine(layer.Name + (layer.Visible ? "" : " (hidden)"));
+
+// hide the dimensions, drop the draft marks with what they draw
+document.Layers["Dimensions"].Visible = false;
+document.Layers.Remove(document.Layers["Draft"], true);
+
+// put the page's images on a new layer
+PdfLayer pictures = document.Layers.Add("Pictures");
+foreach (PdfImageObject image in document.Pages[0].ObjectModel.GetImageObjects())
+    image.Layer = pictures;
+
+document.Save("out.pdf");
+document.Close();
+```
+
+```vbnet
+Dim document As New PdfDocument("drawing.pdf")
+For Each layer As PdfLayer In document.Layers
+    Console.WriteLine(layer.Name & If(layer.Visible, "", " (hidden)"))
+Next
+
+' hide the dimensions, drop the draft marks with what they draw
+document.Layers("Dimensions").Visible = False
+document.Layers.Remove(document.Layers("Draft"), True)
+
+' put the page's images on a new layer
+Dim pictures As PdfLayer = document.Layers.Add("Pictures")
+For Each image As PdfImageObject In document.Pages(0).ObjectModel.GetImageObjects()
+    image.Layer = pictures
+Next
+
+document.Save("out.pdf")
+document.Close()
+```
+
+## Reading and changing page objects
+
+SelectPdf Library for .NET reads and changes what is drawn on the pages of an existing PDF document through `PdfPage.ObjectModel`: every text, image, path and group of a page, in the order it is painted, with its position, colours and opacity. Objects can be moved, rotated, resized, removed, duplicated, brought to the front or sent to the back, recoloured, and text can be replaced. Changes are written when the document is saved.
+
+Coordinates are in points with the origin at the top-left corner of the page as it is displayed (after its rotation), like every other coordinate of the library. Each change is applied to the page at once; objects obtained earlier keep pointing at the same content after changes made through the model.
+
+A text object holds the text drawn by one text instruction of the page. Documents created with the library keep each line or paragraph together, while documents converted from HTML, and many others, usually draw each character separately, so a word spans several text objects there.
+
+### Page Objects
+
+- `PdfTextObject` - the text, the font name and size, whether the font is embedded and how the glyphs are painted. `PdfTextObject.ReplaceText(string)` writes new text from the same starting point, in the object's font where it can draw every character, else in an installed font that can.
+- `PdfImageObject` - the pixel size and bits per component; `PdfImageObject.GetImageBytes` returns the picture as PNG.
+- `PdfPathObject` - lines, rectangles and curves: filled or outlined, the line width and the points.
+- `PdfFormObject` - a group of objects drawn together; its children follow it in the page's list and are in its own `Objects`.
+
+Every object has `Bounds`, `FillColor`, `StrokeColor`, `Opacity` and `Layer`, and the methods `Translate`, `Rotate`, `Scale`, `Remove`, `Duplicate`, `BringToFront` and `SendToBack`. The model finds objects with `HitTest`, `GetObjectsInRectangle` and `GetObjectsInLayer`.
+
+The object model is available for the pages of a loaded document, in the Full edition.
+
+### Sample Code
+
+```csharp
+PdfDocument document = new PdfDocument("in.pdf");
+PdfPageObjectModel model = document.Pages[0].ObjectModel;
+
+// list the text of the page
+foreach (PdfTextObject text in model.GetTextObjects())
+    Console.WriteLine(text.Text + " at " + text.Bounds);
+
+// replace a title, move the logo and remove the other images
+PdfTextObject title = model.GetTextObjects()[0];
+title.ReplaceText("Annual Report 2026");
+title.FillColor = new PdfColor(0, 70, 140);
+
+PdfImageObject[] images = model.GetImageObjects();
+images[0].Translate(0, 20);
+for (int i = 1; i < images.Length; i++)
+    images[i].Remove();
+
+document.Save("out.pdf");
+document.Close();
+```
+
+```vbnet
+Dim document As New PdfDocument("in.pdf")
+Dim model As PdfPageObjectModel = document.Pages(0).ObjectModel
+
+' list the text of the page
+For Each text As PdfTextObject In model.GetTextObjects()
+    Console.WriteLine(text.Text & " at " & text.Bounds.ToString())
+Next
+
+' replace a title, move the logo and remove the other images
+Dim title As PdfTextObject = model.GetTextObjects()(0)
+title.ReplaceText("Annual Report 2026")
+title.FillColor = New PdfColor(0, 70, 140)
+
+Dim images As PdfImageObject() = model.GetImageObjects()
+images(0).Translate(0, 20)
+For i As Integer = 1 To images.Length - 1
+    images(i).Remove()
+Next
+
+document.Save("out.pdf")
+document.Close()
+```
+
+## Fast web view (linearized PDF)
+
+SelectPdf Library for .NET can save a PDF document linearized, also called "Fast Web View": its objects are ordered first page first, and hint tables say where every page is, so a viewer reading the document over the web shows the first page before the rest has arrived and fetches any other page on its own. This helps large documents served from a web site.
+
+Set `PdfDocument.Linearize` to true before saving. It applies to a document built from code, to the result of an html or Word conversion and to a loaded document.
+
+### Code sample
+
+```csharp
+// a converted page
+HtmlToPdf converter = new HtmlToPdf();
+PdfDocument doc = converter.ConvertUrl("https://selectpdf.com");
+doc.Linearize = true;
+doc.Save("web.pdf");
+doc.Close();
+
+// an existing document
+PdfDocument report = new PdfDocument("big-report.pdf");
+report.Linearize = true;
+report.Save("big-report-web.pdf");
+report.Close();
+```
+
+```vbnet
+' a converted page
+Dim converter As New HtmlToPdf()
+Dim doc As PdfDocument = converter.ConvertUrl("https://selectpdf.com")
+doc.Linearize = True
+doc.Save("web.pdf")
+doc.Close()
+
+' an existing document
+Dim report As New PdfDocument("big-report.pdf")
+report.Linearize = True
+report.Save("big-report-web.pdf")
+report.Close()
+```
+
+### Encryption, standards and signatures
+
+- An encrypted document stays encrypted, with the same passwords and permissions.
+- PDF/A (from PDF/A-2 on) and PDF/UA documents keep their conformance; the logical structure of a tagged document is kept.
+- A signed document is not linearized: a rewrite would break its signatures, so the save throws a `PdfDocumentException` instead. Linearize, then sign. Signing a linearized file later appends a revision to it, which keeps the signature valid but leaves the file no longer linearized, as in Adobe Acrobat.
+
+### Which viewers use it
+
+A linearized file helps viewers that read it while it downloads, such as Google Chrome, Microsoft Edge and Adobe Acrobat. For a file opened from a disk, linearizing changes nothing.

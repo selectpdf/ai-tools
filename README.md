@@ -23,7 +23,7 @@ plugin, **`selectpdf`**, exposed through a plugin marketplace.
 
 | Skill | Covers | Package |
 |---|---|---|
-| **`selectpdf-lib-universal-net`** | **SelectPdf.Universal**, the cross-platform commercial library for Windows, Linux (x64, ARM64), macOS on Apple Silicon and Docker, or anywhere through the remote engine container — HTML→PDF (sync and async) with tables of contents and fillable form fields, Word to PDF, build/edit PDFs, merge, AcroForms, digital signatures (PFX, certificate store, PKCS#11 tokens and HSMs, long-term validation) and validation, redaction, encryption including AES-GCM, PDF→text/image, PDF/UA-1 and PDF/UA-2, PDF/A-1a to PDF/A-4, ZUGFeRD / Factur-X. | [`SelectPdf.Universal`](https://www.nuget.org/packages/SelectPdf.Universal/) + `SelectPdf.Universal.Native.<rid>`, or one `SelectPdf.Universal.<Platform>` package |
+| **`selectpdf-lib-universal-net`** | **SelectPdf.Universal**, the cross-platform commercial library for Windows, Linux (x64, ARM64), macOS on Apple Silicon and Docker, or anywhere through the remote engine container — HTML→PDF (sync and async) with tables of contents and fillable form fields, Word, Excel and PowerPoint to PDF, PDF to Word, Excel and PowerPoint, build/edit PDFs, merge and split, AcroForms and XFA forms, digital signatures (PFX, certificate store, PKCS#11 tokens and HSMs, long-term validation) and validation, redaction and sanitizing, encryption including AES-GCM, PDF→text/image, PDF/UA-1 and PDF/UA-2, PDF/A-1a to PDF/A-4 with validation and preflight, ZUGFeRD / Factur-X. | [`SelectPdf.Universal`](https://www.nuget.org/packages/SelectPdf.Universal/) + `SelectPdf.Universal.Native.<rid>`, or one `SelectPdf.Universal.<Platform>` package |
 | **`selectpdf-lib-htmltopdf-universal-net`** | The free cross-platform **Community Edition** — HTML→PDF only, 5 pages per document. | [`SelectPdf.HtmlToPdf.Universal`](https://www.nuget.org/packages/SelectPdf.HtmlToPdf.Universal/) + `SelectPdf.Universal.Native.<rid>`, or one `SelectPdf.HtmlToPdf.<Platform>` package |
 | **`selectpdf-lib-net`** | The classic **commercial** Select.Pdf library for Windows — HTML→PDF, build/edit PDFs, merge/split, AcroForms, digital signatures, encryption, PDF→text/image, accessible tagged PDF/UA-1, PDF/A-3, ZUGFeRD / Factur-X. | [`Select.Pdf`](https://www.nuget.org/packages/Select.Pdf/) / [`Select.Pdf.NetCore`](https://www.nuget.org/packages/Select.Pdf.NetCore/) |
 | **`selectpdf-lib-htmltopdf-net`** | The classic free **Community Edition** for Windows — HTML→PDF only, 5 pages per document. | [`Select.HtmlToPdf`](https://www.nuget.org/packages/Select.HtmlToPdf/) / [`Select.HtmlToPdf.NetCore`](https://www.nuget.org/packages/Select.HtmlToPdf.NetCore/) |
@@ -59,10 +59,10 @@ files here for depth. See [`integrations/README.md`](integrations/README.md) for
 
 ## Versioning
 
-The classic skills track **SelectPdf v26.6** and the Universal skills **SelectPdf.Universal v26.5**. API
+The classic skills track **SelectPdf v26.6** and the Universal skills **SelectPdf.Universal v26.6**. API
 signatures and feature availability are taken from the shipped SDK reference, official samples and SDK
-source. The Universal skills are converted from the shipped v26.5 help
-topics, and every C# and VB.NET sample in them was compiled against the 26.5.0 NuGet packages.
+source. The Universal skills are converted from the shipped v26.6 help
+topics, and every C# and VB.NET sample in them was compiled against the 26.6.0 NuGet packages.
 
 ## Resources
 

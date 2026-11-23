@@ -1,6 +1,6 @@
 # Security, encryption and digital signatures
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Security settings
 
@@ -129,37 +129,37 @@ security.Close();
 ```
 
 ```vbnet
-	        ' load the pdf document using the advanced security manager
-	        Dim security As New PdfSecurityManager()
-	        security.Load(file)
-	
-	        ' encryption algorithm and key length (AES-256, revision 6, is the default)
-	        security.EncryptionAlgorithm = PdfEncryptionAlgorithm.AES
-	        security.EncryptionKeySize = PdfEncryptionKeySize.EncryptKey256BitRevision6
+' load the pdf document using the advanced security manager
+Dim security As New PdfSecurityManager()
+security.Load(file)
 
-	        ' encrypt the XMP metadata too (the default)
-	        security.EncryptMetadata = True
-	
-	        ' set document passwords
-	        security.OwnerPassword = "test1"
-	        security.UserPassword = "test2"
-	
-	        'set document permissions
-	        security.CanAssembleDocument = False
-	        security.CanCopyContent = True
-	        security.CanEditAnnotations = True
-	        security.CanEditContent = True
-	        security.CanFillFields = True
-	        security.CanPrint = True
-	
-	        ' add the digital signature
-	        security.Sign(certFile, "password")
-	
-	        ' save pdf document
-	        security.Save("Sample.pdf")
-	
-	        ' close pdf document
-	        security.Close()
+' encryption algorithm and key length (AES-256, revision 6, is the default)
+security.EncryptionAlgorithm = PdfEncryptionAlgorithm.AES
+security.EncryptionKeySize = PdfEncryptionKeySize.EncryptKey256BitRevision6
+
+' encrypt the XMP metadata too (the default)
+security.EncryptMetadata = True
+
+' set document passwords
+security.OwnerPassword = "test1"
+security.UserPassword = "test2"
+
+'set document permissions
+security.CanAssembleDocument = False
+security.CanCopyContent = True
+security.CanEditAnnotations = True
+security.CanEditContent = True
+security.CanFillFields = True
+security.CanPrint = True
+
+' add the digital signature
+security.Sign(certFile, "password")
+
+' save pdf document
+security.Save("Sample.pdf")
+
+' close pdf document
+security.Close()
 ```
 
 ### Digital Signature Overloads
@@ -286,6 +286,43 @@ The TSA call happens at `Save` time, after the document has been signed in memor
 
 Because all four cases throw before any file is written, the application can safely catch the exception, switch to a backup TSA, and retry without producing a partial or unsigned output.
 
+### Inspecting and Removing Security
+
+`PdfSecurityManager.GetSecurityInfo` reports the security of the loaded document as it arrived, in a `PdfSecurityInfo`: whether it is encrypted, the algorithm, key size and revision, whether the metadata is encrypted, whether a password is needed to open it or for full access, every permission, and the signatures it carries (count, and the certification level of a certified document).
+
+`PdfSecurityManager.RemoveSecurity` clears both passwords, grants every permission and saves the document without encryption. Load an encrypted document with its owner password (or its user password, when it has no owner password) first. Removing the security rewrites the file, so signatures the document carries no longer verify; setting a password afterwards encrypts it again.
+
+```csharp
+using (PdfSecurityManager manager = new PdfSecurityManager())
+{
+    manager.Load("protected.pdf", "owner456");
+    PdfSecurityInfo info = manager.GetSecurityInfo();
+    Console.WriteLine("Encrypted: " + info.IsEncrypted);
+    Console.WriteLine("Algorithm: " + info.Algorithm + ", " +
+        info.KeyLength + " bits");
+    Console.WriteLine("Can print: " + info.CanPrint);
+    Console.WriteLine("Signatures: " + info.SignatureCount);
+
+    manager.RemoveSecurity();
+    manager.Save("unprotected.pdf");
+}
+```
+
+```vbnet
+Using manager As New PdfSecurityManager()
+    manager.Load("protected.pdf", "owner456")
+    Dim info As PdfSecurityInfo = manager.GetSecurityInfo()
+    Console.WriteLine("Encrypted: " & info.IsEncrypted)
+    Console.WriteLine("Algorithm: " & info.Algorithm.ToString() & ", " &
+        info.KeyLength & " bits")
+    Console.WriteLine("Can print: " & info.CanPrint)
+    Console.WriteLine("Signatures: " & info.SignatureCount)
+
+    manager.RemoveSecurity()
+    manager.Save("unprotected.pdf")
+End Using
+```
+
 ## Encrypting regulated data
 
 Regulations that cover personal, medical or financial data - HIPAA, GDPR, PCI DSS - do not certify file formats or libraries. Where they ask for encryption they point to current guidance, which names AES (NIST SP 800-111 for stored data). This topic says how to produce pdf documents that meet that bar, and what pdf encryption does and does not protect.
@@ -358,11 +395,11 @@ existing.Close()
 
 Digital signatures can be added to a PDF document using `PdfDigitalSignatureElement` objects. Adding a digital signature requires a PKCS#12 certificate (provided as a .pfx or a .p12 file).
 
-A certificate read from a file carries its private key, which the operating system keeps until the certificate is released - on Windows as a key file in the user profile, on macOS in a temporary keychain. Dispose of the `PdfDigitalCertificatesCollection` (and of a `PdfCertificateStoreSigner`) with a `using` statement, AFTER the documents it signs are saved: a document is signed when it is saved, and a certificate disposed before that fails the save. `PdfSecurityManager` releases the certificates its `Sign` loads when it is closed or disposed.
+A certificate read from a file carries its private key, which the operating system keeps until the certificate is released - on Windows as a key file in the user profile, on macOS in a temporary keychain. Dispose of the `PdfDigitalCertificatesCollection` (and of a `PdfCertificateStoreSigner`) with a `using` statement, AFTER the documents it signs are saved: a document is signed when it is saved, and a certificate disposed before that fails the save. `PdfSecurityManager` releases the certificates its `PdfSecurityManager.Sign` loads when it is closed or disposed.
 
 ### Long-term validation (LTV)
 
-A signature can be validated only as long as its certificate can be checked: once the certificate has expired, or the issuer's revocation services are gone, a validator has nothing to go on. Set `PdfDigitalSignatureElement.EnableLtv` (or `PdfSecurityManager.EnableLtv` before `Sign`) and the revocation data of the signing certificate and of its issuers - an OCSP response or a certificate revocation list for each, from the addresses the certificates name - is embedded in the document when it is saved, together with the issuer certificates (PAdES B-LT). The signature can then be validated offline, years later.
+A signature can be validated only as long as its certificate can be checked: once the certificate has expired, or the issuer's revocation services are gone, a validator has nothing to go on. Set `PdfDigitalSignatureElement.EnableLtv` (or `PdfSecurityManager.EnableLtv` before `PdfSecurityManager.Sign`) and the revocation data of the signing certificate and of its issuers - an OCSP response or a certificate revocation list for each, from the addresses the certificates name - is embedded in the document when it is saved, together with the issuer certificates (PAdES B-LT). The signature can then be validated offline, years later.
 
 The data is added in a revision of its own after the signature, so the signature still covers everything it signed, and each signer of a document signed in turn adds the data for their own signature. The issuer certificates are taken from the certificate file the signing certificate came from and from the system certificate stores. Saving fails when a certificate of the chain names no OCSP responder or revocation list, or when they cannot be reached, so a document is never handed back without the data it was asked to carry. `PdfSignatureValidationResult.IsLtvEnabled` reports whether a signature has it.
 
@@ -398,7 +435,7 @@ End Using
 
 ### Signing a form's signature field
 
-A form often arrives with an empty signature field - a "sign here" box. Pass that field's name to `Sign` and the signature goes into it, on the field's own page and in its own rectangle (the page index and rectangle given to `Sign` are then not used). A field that is already signed is never overwritten: a new signature with the same name gets a field of its own.
+A form often arrives with an empty signature field - a "sign here" box. Pass that field's name to `PdfSecurityManager.Sign` and the signature goes into it, on the field's own page and in its own rectangle (the page index and rectangle given to `PdfSecurityManager.Sign` are then not used). A field that is already signed is never overwritten: a new signature with the same name gets a field of its own.
 
 ```csharp
 PdfSecurityManager manager = new PdfSecurityManager();
@@ -420,7 +457,7 @@ manager.Close()
 
 ### Hash algorithm and key types
 
-Signatures are computed with SHA-256 by default. Set `PdfDigitalSignatureElement.DigestAlgorithm` (or `PdfSecurityManager.DigestAlgorithm` before `Sign`) to `PdfSignatureDigest.SHA384` or `PdfSignatureDigest.SHA512` when a signature policy asks for them. Both RSA and elliptic-curve (ECDSA) certificates can sign; SHA-384 is the usual pairing for a P-384 key.
+Signatures are computed with SHA-256 by default. Set `PdfDigitalSignatureElement.DigestAlgorithm` (or `PdfSecurityManager.DigestAlgorithm` before `PdfSecurityManager.Sign`) to `PdfSignatureDigest.SHA384` or `PdfSignatureDigest.SHA512` when a signature policy asks for them. Both RSA and elliptic-curve (ECDSA) certificates can sign; SHA-384 is the usual pairing for a P-384 key.
 
 ```csharp
 PdfDigitalSignatureElement signature = new PdfDigitalSignatureElement(
@@ -452,7 +489,8 @@ using (var manager = new PdfSecurityManager())
     manager.Save("contract-signed.pdf");
 }
 
-// The same token, or an HSM, through the vendor's PKCS#11 library.
+// The same token, or an HSM, through the vendor's PKCS#11 library
+// (on Linux a path such as /usr/lib/libeTPkcs11.so).
 using (var pkcs11Signer = new PdfPkcs11Signer(
     @"C:\Windows\System32\eTPKCS11.dll", "1234", "My Token", "Signing key"))
 {
@@ -475,7 +513,8 @@ Using storeSigner As New PdfCertificateStoreSigner(
     manager.Save("contract-signed.pdf")
 End Using
 
-' The same token, or an HSM, through the vendor's PKCS#11 library.
+' The same token, or an HSM, through the vendor's PKCS#11 library
+' (on Linux a path such as /usr/lib/libeTPkcs11.so).
 Using pkcs11Signer As New PdfPkcs11Signer(
     "C:\Windows\System32\eTPKCS11.dll", "1234", "My Token", "Signing key")
     Dim doc As New PdfDocument("invoice.pdf")
@@ -510,7 +549,7 @@ page.Add(signature)
 
 ### Signing with a key held outside: HSMs, smart cards and key services
 
-When the private key lives in a hardware security module, a smart card, a PKCS#11 token or a cloud key service, it cannot be handed to the library as a certificate file. Implement `IPdfExternalSigner` instead: it gives the signer's certificates (DER-encoded, the signing certificate first, then its issuers) and signs one `PdfExternalSigningRequest`. The library builds the whole signature - certificates, signed attributes, timestamp, long-term validation data - and asks the signer only for the raw signature value, so the key never leaves the device or service. Pass the signer to `Sign` or to a `PdfDigitalSignatureElement`.
+When the private key lives in a hardware security module, a smart card, a PKCS#11 token or a cloud key service, it cannot be handed to the library as a certificate file. Implement `IPdfExternalSigner` instead: it gives the signer's certificates (DER-encoded, the signing certificate first, then its issuers) and signs one `PdfExternalSigningRequest`. The library builds the whole signature - certificates, signed attributes, timestamp, long-term validation data - and asks the signer only for the raw signature value, so the key never leaves the device or service. Pass the signer to `PdfSecurityManager.Sign` or to a `PdfDigitalSignatureElement`.
 
 The request carries the data to sign and its digest: sign the data with a service that hashes it itself, or the digest with one that expects a hash. An RSA key returns a PKCS#1 v1.5 signature (RSA-PSS is not supported); an ECDSA key may return the DER-encoded signature or r and s concatenated, the form .NET and most key services produce. The value is checked against the signing certificate before it is written, so a value from another key or another hash algorithm makes the save fail instead of producing a document that looks signed and does not verify. `PdfSecurityManager.DigestAlgorithm`, `PdfSecurityManager.EnableLtv`, a time-stamp authority and signing a form's named field work as they do with a certificate file.
 
@@ -578,7 +617,7 @@ manager.Save("contract-signed.pdf")
 manager.Close()
 ```
 
-**Signing in two steps.** A remote signing service where the signer approves on another device, or a smart card in a user's browser, cannot answer while the document is being saved. `PrepareExternalSignature` gives the document a signature field with an empty, reserved signature and returns the request; save the prepared document as it is, have the request signed, then `CompleteExternalSignature` writes the value into it, with the same signature name, certificates and hash algorithm. The two steps can run in different processes, hours apart. The completed document is validated before it is returned. Long-term validation and a time-stamp authority are not available in this mode.
+**Signing in two steps.** A remote signing service where the signer approves on another device, or a smart card in a user's browser, cannot answer while the document is being saved. `PdfSecurityManager.PrepareExternalSignature` gives the document a signature field with an empty, reserved signature and returns the request; save the prepared document as it is, have the request signed, then `PdfSecurityManager.CompleteExternalSignature` writes the value into it, with the same signature name, certificates and hash algorithm. The two steps can run in different processes, hours apart. The completed document is validated before it is returned. Long-term validation and a time-stamp authority are not available in this mode.
 
 ```csharp
 // step one: reserve the signature and hand out what must be signed
@@ -666,86 +705,132 @@ manager.Close()
 The following sample code shows how to add a digital signature to a pdf document using Select.Pdf Library for .NET.
 
 ```csharp
-	// create a new pdf document
-    PdfDocument doc = new PdfDocument();
+// create a new pdf document
+PdfDocument doc = new PdfDocument();
 
-    // add a new page to the document
-    PdfPage page = doc.AddPage();
+// add a new page to the document
+PdfPage page = doc.AddPage();
 
-    // get image path 
-    // the image will be used to display the digital signature over it
-    string imgFile = @"C:\Path\to\logo.png";
+// get image path 
+// the image will be used to display the digital signature over it
+string imgFile = "logo.png";
 
-    // get certificate path
-    string certFile = @"C:\Path\to\certificate.pfx";
+// get certificate path
+string certFile = "certificate.pfx";
 
-    // define a rendering result object
-    PdfRenderingResult result;
+// define a rendering result object
+PdfRenderingResult result;
 
-    // create image element from file path 
-    PdfImageElement img = new PdfImageElement(0, 0, imgFile);
-    result = page.Add(img);
+// create image element from file path 
+PdfImageElement img = new PdfImageElement(0, 0, imgFile);
+result = page.Add(img);
 
-    // get the #PKCS12 certificate from file; dispose of it after the save,
-    // since the document is signed when it is saved
-    using PdfDigitalCertificatesCollection certificates =
-        PdfDigitalCertificatesStore.GetCertificates(certFile, "selectpdf");
-    PdfDigitalCertificate certificate = certificates[0];
+// get the #PKCS12 certificate from file; dispose of it after the save,
+// since the document is signed when it is saved
+using PdfDigitalCertificatesCollection certificates =
+    PdfDigitalCertificatesStore.GetCertificates(certFile, "selectpdf");
+PdfDigitalCertificate certificate = certificates[0];
 
-    // create the digital signature object
-    PdfDigitalSignatureElement signature = 
-        new PdfDigitalSignatureElement(result.PdfPageLastRectangle, certificate);
-    signature.Reason = "SelectPdf";
-    signature.ContactInfo = "SelectPdf";
-    signature.Location = "SelectPdf";
-    page.Add(signature);
+// create the digital signature object
+PdfDigitalSignatureElement signature = 
+    new PdfDigitalSignatureElement(result.PdfPageLastRectangle, certificate);
+signature.Reason = "SelectPdf";
+signature.ContactInfo = "SelectPdf";
+signature.Location = "SelectPdf";
+page.Add(signature);
 
-    // save pdf document
-    doc.Save("Sample.pdf");
+// save pdf document
+doc.Save("Sample.pdf");
 
-    // close pdf document
-    doc.Close();
+// close pdf document
+doc.Close();
 ```
 
 ```vbnet
-        	' create a new pdf document
-	        Dim doc As New PdfDocument()
-	
-	        ' add a new page to the document
-	        Dim page As PdfPage = doc.AddPage()
-	
-	        ' get image path 
-	        ' the image will be used to display the digital signature over it
-	        Dim imgFile As String = "C:\Path\to\logo.png"
-	
-	        ' get certificate path
-	        Dim certFile As String = "C:\Path\to\certificate.pfx"
-	
-	        ' define a rendering result object
-	        Dim result As PdfRenderingResult
-	
-	        ' create image element from file path 
-	        Dim img As New PdfImageElement(0, 0, imgFile)
-	        result = page.Add(img)
-	
-	        ' get the #PKCS12 certificate from file; dispose of it after the save,
-	        ' since the document is signed when it is saved
-	        Dim certificates As PdfDigitalCertificatesCollection = _
-	            PdfDigitalCertificatesStore.GetCertificates(certFile, "selectpdf")
-	        Dim certificate As PdfDigitalCertificate = certificates(0)
-	
-	        ' create the digital signature object
-	        Dim signature As New PdfDigitalSignatureElement( _
-	            result.PdfPageLastRectangle, certificate)
-	        signature.Reason = "SelectPdf"
-	        signature.ContactInfo = "SelectPdf"
-	        signature.Location = "SelectPdf"
-	        page.Add(signature)
-	
-	        ' save pdf document
-	        doc.Save("Sample.pdf")
-	
-	        ' close pdf document and release the certificates
-	        doc.Close()
-	        certificates.Dispose()
+' create a new pdf document
+Dim doc As New PdfDocument()
+
+' add a new page to the document
+Dim page As PdfPage = doc.AddPage()
+
+' get image path 
+' the image will be used to display the digital signature over it
+Dim imgFile As String = "logo.png"
+
+' get certificate path
+Dim certFile As String = "certificate.pfx"
+
+' define a rendering result object
+Dim result As PdfRenderingResult
+
+' create image element from file path 
+Dim img As New PdfImageElement(0, 0, imgFile)
+result = page.Add(img)
+
+' get the #PKCS12 certificate from file; dispose of it after the save,
+' since the document is signed when it is saved
+Dim certificates As PdfDigitalCertificatesCollection = _
+    PdfDigitalCertificatesStore.GetCertificates(certFile, "selectpdf")
+Dim certificate As PdfDigitalCertificate = certificates(0)
+
+' create the digital signature object
+Dim signature As New PdfDigitalSignatureElement( _
+    result.PdfPageLastRectangle, certificate)
+signature.Reason = "SelectPdf"
+signature.ContactInfo = "SelectPdf"
+signature.Location = "SelectPdf"
+page.Add(signature)
+
+' save pdf document
+doc.Save("Sample.pdf")
+
+' close pdf document and release the certificates
+doc.Close()
+certificates.Dispose()
+```
+
+### Signature fields to sign later, and certification
+
+`PdfSecurityManager.AddSignatureField(string, int, RectangleF)` adds an empty signature field at a place on a page; a `Sign` overload that names the field signs it there. Add the fields before the first signature: a signed document takes no new field, because it would invalidate the signatures.
+
+`PdfSecurityManager.CertificationLevel` makes the next signature made with a certificate file a certification: the author's signature that states which changes are allowed afterwards - none, form filling and signing, or those plus comments (`PdfCertificationLevel`). A certification must be the first signature of a document, so certifying a signed document throws an exception, and so does any signature of a document certified with no changes allowed. `PdfSecurityManager.GetSecurityInfo` reports the certification level of a certified document.
+
+```csharp
+// the author prepares the form and certifies it, allowing form filling and signing
+using (PdfSecurityManager author = new PdfSecurityManager())
+{
+    author.Load("contract.pdf");
+    author.AddSignatureField("Buyer", 0, new RectangleF(50, 700, 200, 50));
+    author.AddSignatureField("Seller", 0, new RectangleF(300, 700, 200, 50));
+    author.CertificationLevel = PdfCertificationLevel.FormFillingAllowed;
+    author.Sign("author.pfx", "authorPassword", "Author");
+    author.Save("contract-certified.pdf");
+}
+
+// the buyer signs the field prepared for them
+using (PdfSecurityManager buyer = new PdfSecurityManager())
+{
+    buyer.Load("contract-certified.pdf");
+    buyer.Sign("buyer.pfx", "buyerPassword", "Buyer");
+    buyer.Save("contract-buyer-signed.pdf");
+}
+```
+
+```vbnet
+' the author prepares the form and certifies it, allowing form filling and signing
+Using author As New PdfSecurityManager()
+    author.Load("contract.pdf")
+    author.AddSignatureField("Buyer", 0, New RectangleF(50, 700, 200, 50))
+    author.AddSignatureField("Seller", 0, New RectangleF(300, 700, 200, 50))
+    author.CertificationLevel = PdfCertificationLevel.FormFillingAllowed
+    author.Sign("author.pfx", "authorPassword", "Author")
+    author.Save("contract-certified.pdf")
+End Using
+
+' the buyer signs the field prepared for them
+Using buyer As New PdfSecurityManager()
+    buyer.Load("contract-certified.pdf")
+    buyer.Sign("buyer.pfx", "buyerPassword", "Buyer")
+    buyer.Save("contract-buyer-signed.pdf")
+End Using
 ```

@@ -1,19 +1,19 @@
 # Headers and footers
 
-Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.HtmlToPdf.Universal (Community Edition) v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Headers and footers
 
 Select.Pdf Html To Pdf Converter can add headers and footers to the generated pdf document using the `HtmlToPdf.Header` and `HtmlToPdf.Footer` properties of the `HtmlToPdf` converter object.
 
-#### Header Options
+### Header Options
 
 To display a custom header in the generated pdf, the `HtmlToPdfOptions.DisplayHeader` property of the `HtmlToPdfOptions` object must be set to *true*. If the DisplayHeader property of the Options object is false, the header will not be displayed and all the options set for the header will have no effect.
 
 The header of the pdf document generated from the html to pdf conversion can be customized using the `HtmlToPdf.Header` property of the `HtmlToPdf` converter object. That is an instance of `PdfHeader` class and has the following properties:
 
 - `PdfHeader.Height` - The height of the pdf document header.
-- `PdfHeader.DisplayOnFirstPage` - Controls the visibility of the header on the first page of the generated pdf document.
+- `PdfHeader.DisplayOnFirstPage` - Controls the visibility of the header on the first page of the generated pdf document. When the header is hidden on the first page only, that page's content starts where the header would have been.
 - `PdfHeader.DisplayOnOddPages` - Controls the visibility of the header on the odd numbered pages of the generated pdf document.
 - `PdfHeader.DisplayOnEvenPages` - Controls the visibility of the header on the even numbered pages of the generated pdf document.
 - `PdfHeader.FirstPageNumber` - Controls the page number for the first page being rendered.
@@ -70,7 +70,7 @@ The following code sample shows how to add a custom header to the pdf document g
 			' add some html content to the header
             Dim headerHtml As New PdfHtmlSection(headerUrl)
             converter.Header.Add(headerHtml)
-            
+
             ' create a new pdf document converting an url
             Dim doc As PdfDocument = converter.ConvertUrl(url)
 
@@ -81,7 +81,7 @@ The following code sample shows how to add a custom header to the pdf document g
             doc.Close()
 ```
 
-#### Footer Options
+### Footer Options
 
 To display a custom footer in the generated pdf, the `HtmlToPdfOptions.DisplayFooter` property of the `HtmlToPdfOptions` object must be set to *true*. If the DisplayFooter property of the Options object is false, the footer will not be displayed and all the options set for the footer will have no effect.
 
@@ -152,14 +152,14 @@ The following code sample shows how to add a custom footer to the pdf document g
 			' add some html content to the footer
             Dim footerHtml As New PdfHtmlSection(footerUrl)
             converter.Footer.Add(footerHtml)
-            
+
             ' page numbers can be added using a PdfTextSection object
             Dim text As New PdfTextSection(0, 10,
                 "Page: {page_number} of {total_pages}  ",
                 PdfFont.CreateFromSystemFont("Arial", 8F))
             text.HorizontalAlign = PdfTextHorizontalAlign.Right
             converter.Footer.Add(text)
-            
+
             ' create a new pdf document converting an url
             Dim doc As PdfDocument = converter.ConvertUrl(url)
 

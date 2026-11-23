@@ -1,6 +1,6 @@
-# Redaction
+# Redaction and sanitizing
 
-Converted from the shipped SelectPdf.Universal v26.5 help topics. C# and VB.NET samples are the official ones.
+Converted from the shipped SelectPdf.Universal v26.6 help topics. C# and VB.NET samples are the official ones.
 
 ## Redaction
 
@@ -122,3 +122,104 @@ Next
 manager.Save("contract-redacted.pdf")
 manager.Close()
 ```
+
+## Sanitizing PDFs from untrusted sources
+
+SelectPdf PDF Library for .NET can sanitize a PDF document that comes from an untrusted source - an upload, an e-mail attachment - and return one that carries nothing that runs, launches, phones home or hides data, while its pages look the same. It can also only scan a document and report what it holds, so a server can refuse a file instead of cleaning it.
+
+The work is done with `PdfSanitizeManager`:
+
+- `PdfSanitizeManager.Load(string)` - loads the PDF document, password protected or not, from a file, Stream, byte array or `PdfDocument` object.
+- `PdfSanitizeManager.Scan` - reports what the document holds, and changes nothing.
+- `PdfSanitizeManager.Sanitize` - sanitizes it and reports what was removed.
+- `PdfSanitizeManager.Save(string)` - saves the sanitized document to a file, Stream or byte array (sanitizing it first when that was not done), and `PdfSanitizeManager.GetDocument` returns it as a `PdfDocument` object.
+
+### Two ways to sanitize
+
+|  | Clean (default) | Rasterize |
+|---|---|---|
+| How | The dangerous objects are removed and the file is written again. | Each page is rendered as an image and a new document is built from the images. |
+| Keeps | Searchable text, vector graphics, fonts, internal links, bookmarks, the tags of an accessible document. | The look of the pages only. |
+| Set with | `PdfSanitizeManager.Options` | `PdfSanitizeManager.Rasterize` and `PdfSanitizeManager.Resolution` (150 dpi by default) |
+
+### What is removed
+
+`PdfSanitizeOptions` says what Clean mode removes; the members combine. `PdfSanitizeOptions.Default` removes:
+
+- **JavaScript** everywhere: the document's scripts, its open action, and the additional actions of the document, its pages, annotations and form fields.
+- **Actions** that leave the document or change it: launching a file, submitting or importing form data, going to another file, playing media, hiding fields, changing layers. Links within the document are kept.
+- **Embedded files**, file attachment annotations and associated files.
+- **Multimedia**: 3D, rich media, screen, movie and sound annotations.
+- The **XFA** form, whose scripts and data live outside the pages.
+- **Hidden layers**, with what they draw.
+- **Private data**: application data and page thumbnails.
+
+These are kept by default and removed when added to the options: `PdfSanitizeOptions.ExternalLinks` (web links), `PdfSanitizeOptions.InvisibleText` (the recognized text of a scanned document is invisible text), `PdfSanitizeOptions.Metadata` (the document information and XMP metadata; a PDF/A or PDF/UA identification is kept) and `PdfSanitizeOptions.FlattenFormFields` (form fields burnt into the pages). `PdfSanitizeOptions.All` removes everything.
+
+In both modes the document is written whole, so earlier revisions kept in the file are gone too, and its signatures are removed: no signature survives a rewrite, so they are reported rather than left to claim what is no longer true.
+
+### The report
+
+`PdfSanitizeManager.Scan` and `PdfSanitizeManager.Sanitize` return a `PdfSanitizeReport`: `PdfSanitizeReport.Findings` lists each thing found (its kind, its page, what it is), `PdfSanitizeReport.Count(PdfSanitizeOptions)` counts them by kind, `PdfSanitizeReport.HasActiveContent` says whether anything runs, launches, submits, embeds or plays, and `PdfSanitizeReport.Signatures` names the signed fields.
+
+### Code sample
+
+```csharp
+using (PdfSanitizeManager sanitizer = new PdfSanitizeManager())
+{
+    sanitizer.Load("upload.pdf");
+
+    // refuse, or clean
+    PdfSanitizeReport found = sanitizer.Scan();
+    if (found.HasActiveContent)
+    {
+        sanitizer.Options =
+            PdfSanitizeOptions.Default | PdfSanitizeOptions.ExternalLinks;
+        PdfSanitizeReport removed = sanitizer.Sanitize();
+        foreach (PdfSanitizeFinding finding in removed.Findings)
+            Console.WriteLine(finding);
+    }
+
+    sanitizer.Save("clean.pdf");
+}
+
+// or nothing of the original at all: an image of every page
+using (PdfSanitizeManager sanitizer = new PdfSanitizeManager())
+{
+    sanitizer.Load("upload.pdf");
+    sanitizer.Rasterize = true;
+    sanitizer.Resolution = 200;
+    sanitizer.Save("flat.pdf");
+}
+```
+
+```vbnet
+Using sanitizer As New PdfSanitizeManager()
+    sanitizer.Load("upload.pdf")
+
+    Dim found As PdfSanitizeReport = sanitizer.Scan()
+    If found.HasActiveContent Then
+        sanitizer.Options =
+            PdfSanitizeOptions.Default Or PdfSanitizeOptions.ExternalLinks
+        Dim removed As PdfSanitizeReport = sanitizer.Sanitize()
+        For Each finding As PdfSanitizeFinding In removed.Findings
+            Console.WriteLine(finding)
+        Next
+    End If
+
+    sanitizer.Save("clean.pdf")
+End Using
+
+Using sanitizer As New PdfSanitizeManager()
+    sanitizer.Load("upload.pdf")
+    sanitizer.Rasterize = True
+    sanitizer.Resolution = 200
+    sanitizer.Save("flat.pdf")
+End Using
+```
+
+### Encryption, PDF/A and accessibility
+
+- Cleaned, an encrypted document stays encrypted with the same passwords and permissions; rasterized, it is not encrypted.
+- Cleaned, a PDF/A or PDF/UA document keeps its declaration and its tags; rasterized, it has neither (the pages are images).
+- Rasterize renders each page as an image, like `PdfRasterizer`, so it needs the same native package.
