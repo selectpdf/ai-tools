@@ -805,8 +805,8 @@ portfolio.Load("portfolio.pdf")
 For i As Integer = 0 To portfolio.Files.Count - 1
     Dim file As PdfPortfolioFile = portfolio.Files(i)
 
-    Dim path As String = Path.Combine("export", file.Name)
-    Dim s As New FileStream(path, FileMode.Create)
+    Dim filePath As String = Path.Combine("export", file.Name)
+    Dim s As New FileStream(filePath, FileMode.Create)
     s.Write(file.Content, 0, file.Content.Length)
     s.Dispose()
 Next
